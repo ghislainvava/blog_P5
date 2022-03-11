@@ -1,0 +1,8 @@
+{
+    "name": "blog/p5",
+    "description": "projet php",
+    "minimum-stability": "stable",
+    "require": {
+        "twig/twig": "^3.3"
+    }
+}
