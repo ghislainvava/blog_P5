@@ -39,3 +39,5 @@ switch ($page) {              //switch pour afficher la bonne page
 }
 
 // require 'header.php';
+
+

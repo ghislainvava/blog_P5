@@ -69,11 +69,40 @@
                 <div class="row">
                     <div class="col-xl-9 mx-auto">
                         <div class="cta-inner bg-faded text-center rounded">
-                            <h2 class="section-heading mb-4">
-                                <span class="section-heading-upper">Our Promise</span>
-                                <span class="section-heading-lower">To You</span>
-                            </h2>
-                            <p class="mb-0">When you walk into our shop to start your day, we are dedicated to providing you with friendly service, a welcoming atmosphere, and above all else, excellent products made with the highest quality ingredients. If you are not satisfied, please let us know and we will do whatever we can to make things right!</p>
+                            <section id="contact">
+			<div class="section-content">
+				<h1 class="section-header">Contactez-moi!</h1>
+				
+			</div>
+			<div class="contact-section">
+			<div class="container">
+				<form action="contact.php" method="POST">
+					<div class="col-md-6 form-line">
+			  			<div class="form-group">
+			  				<label for="exampleInputUsername">Votre Nom</label>
+					    	<input type="text" name="name" class="form-control mb-2" id="" placeholder=" Entrez votre nom" required>
+				  		</div>
+				  		<div class="form-group">
+					    	<label for="exampleInputEmail">Adresse Email</label>
+					    	<input type="email" name="email" class="form-control mb-2" id="exampleInputEmail" placeholder=" Entrez votre adresse Email" required>
+					  	</div>	
+					  
+			  		</div>
+			  		<div class="col-md-6">
+			  			<div class="form-group">
+			  				<label for ="description"> Message</label>
+			  			 	<textarea  name="message" class="form-control mb-2" id="description" placeholder="Entrez votre message" required></textarea>
+			  			</div>
+			  			<div>
+
+			  				<button type="submit" class="btn btn-default submit"><i class="fa fa-paper-plane" ></i>  Envoyez</button>
+			  			</div>
+			  			
+					</div>
+				</form>
+			</div>
+		</section>
+                            <p class="mb-0 mt-3">N'hésitez pas à me contacter, je vous répondrais le plus rapidement possible !</p>
                         </div>
                     </div>
                 </div>

@@ -3,6 +3,7 @@
     "description": "projet php",
     "minimum-stability": "stable",
     "require": {
-        "twig/twig": "^3.3"
+        "twig/twig": "^3.3",
+        "mailjet/mailjet-apiv3-php": "^1.5"
     }
 }
