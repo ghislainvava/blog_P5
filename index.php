@@ -10,11 +10,18 @@ if (isset($_GET['p'])) {
     $page = $_GET['p'];
 }
 
+// if($page === 'home')  {
+//     require 'cookie.php';  //solution pour afficher une page php a la place du twig avec le switch
+// }
+
 // Rendu du template
 $loader = new \Twig\Loader\FilesystemLoader('templates');
 $twig = new \Twig\Environment($loader, [
     'cache' => false, //__DIR__, '/tmp'
 ]);
+
+
+
 
 // if ($page === 'home') {  condition a utiliser sans le switch case 
 //     echo $twig->render('layout.twig');  
@@ -25,6 +32,7 @@ $twig = new \Twig\Environment($loader, [
 switch ($page) {              //switch pour afficher la bonne page
 
     case 'contact':
+    
         echo $twig->render('contact.twig');
         break;
     
