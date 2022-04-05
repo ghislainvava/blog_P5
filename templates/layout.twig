@@ -5,7 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <meta name="description" content="" />
         <meta name="author" content="" />
-        <title>Business Casual - Start Bootstrap Theme</title>
+        <title>Blog Ghislain Vachet</title>
         <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
         <!-- Font Awesome icons (free version)-->
         <script src="https://use.fontawesome.com/releases/v5.15.4/js/all.js" crossorigin="anonymous"></script>
@@ -22,14 +22,7 @@
                 <span class="site-heading-upper text-primary mb-3">GHISLAIN VACHET</span>
                 <span class="site-heading-lower">Mon premier Blog</span>
             </h1>
-           <nav class="navbar ">
-            <a href="/">Home</a>
-            <a href="/login.php">Login</a>
-            <a href="/logout.php">Logout</a>
-            <a href="/profil.php">profil</a>
-            <a href="/register.php">inscription</a>
 
-           </nav>
         
         </header>
         <!-- Navigation-->
@@ -39,10 +32,24 @@
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav mx-auto">
-                        <li class="nav-item px-lg-4"><a class="nav-link text-uppercase" href="index.html">Home</a></li>
-                        <li class="nav-item px-lg-4"><a class="nav-link text-uppercase" href="about.html">About</a></li>
-                        <li class="nav-item px-lg-4"><a class="nav-link text-uppercase" href="products.html">Products</a></li>
-                        <li class="nav-item px-lg-4"><a class="nav-link text-uppercase" href="store.html">Store</a></li>
+                        <li class="nav-item px-lg-4" <?= $_SERVER['REQUEST_URI'] === '/.php' ? 'active' : '' ?>>
+                            <a class="nav-link text-uppercase" href="/">Home</a>
+                        </li>
+                        <li class="nav-item px-lg-4" <?= $_SERVER['REQUEST_URI'] === '/register.php' ? 'active' : '' ?>>
+                            <a class="nav-link text-uppercase" href="register.php">Inscription</a>
+                        </li>
+                        <li class="nav-item px-lg-4" <?= $_SERVER['REQUEST_URI'] === '/login.php' ? 'active' : '' ?>>
+                            <a class="nav-link text-uppercase" href="login.php">Connection</a>
+                        </li>
+                        <li class="nav-item px-lg-4" <?= $_SERVER['REQUEST_URI'] === '/logout.php' ? 'active' : '' ?>>
+                            <a class="nav-link text-uppercase" href="logout.php">Déconnection</a>
+                        </li>
+                        <li class="nav-item px-lg-4" <?= $_SERVER['REQUEST_URI'] === '/profile.php' ? 'active' : '' ?>>
+                            <a class="nav-link text-uppercase" href="profil.php">Ma page</a>
+                        </li>
+                        <li class="nav-item px-lg-4" <?= $_SERVER['REQUEST_URI'] === '/form-article.php' ? 'active' : '' ?>>
+                            <a class="nav-link text-uppercase" href="form-article.php">Mes articles</a>
+                        </li>
                     </ul>
                 </div>
             </div>

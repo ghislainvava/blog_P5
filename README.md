@@ -1,0 +1,1 @@
+pour lancer le projet taper dans le terminal php -S localhost:8080 aller sur la page http://localhost:8080
