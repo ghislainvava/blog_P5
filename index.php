@@ -1,5 +1,13 @@
 
-<?php include_once 'includes/head.php' ?>
+<?php
+
+
+require './Database/security.php';
+
+$currentUser = isLoggedIn();
+
+include 'includes/header.php';
+?>
     <body>
         <header>
             <h1 class="site-heading text-center text-faded d-none d-lg-block">
@@ -9,7 +17,7 @@
 
         
         </header>
-<?php include_once 'includes/header.php' ?>
+
         <section class="page-section clearfix">
             <div class="container">
                 <div class="intro">

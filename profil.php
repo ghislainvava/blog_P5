@@ -1,7 +1,7 @@
 <?php
-require_once 'MesExtensions.php';
+require 'includes/header.php';
 
-require_once './database.php';
+
 $currentUser = isLoggedIn();
 
 $sessionId = $_COOKIE['session'] ?? '';
@@ -18,13 +18,12 @@ if (!$currentUser) {
 
 
 <head>
-  <?php require_once 'includes/head.php' ?>
       <title>Mon profil</title>
 </head>
 
 <body>
   <div class="container">
-    <?php require_once 'includes/header.php' ?>
+   
       <div class="content">
 
       </div>

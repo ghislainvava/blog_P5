@@ -1,6 +1,8 @@
 <?php
-require_once "Database.php";
-include "db_config.php";
+
+
+require './Database/Database.php';
+
   const ERROR_REQUIRED = "Veuillez renseigner ce champ";
   const ERROR_EMAIL_INVALID ="L'email n'est pas valide";
   const ERROR_EMAIL_NO_RECORD ="l'email n'est pas enregistré";
@@ -67,15 +69,16 @@ include "db_config.php";
   }
 
 
-include_once 'includes/head.php'
+
 ?>
 
-<header>
-  <?= include_once 'includes/header.php' ?>
-  
-</header>
+
 <body>
-   
+   <header>
+   <?php include 'includes/header.php'; ?>
+   <title>Connection</title>
+   </header>
+
 
     <h1>Connection</h1>
 

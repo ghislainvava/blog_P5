@@ -1,5 +1,7 @@
 <?php
-require_once "Database.php";
+
+require 'includes/header.php';
+require './Database/Database.php';
 
   const ERROR_REQUIRED = "Veuillez renseigner ce champ";
   const ERROR_TOO_SHORT ='Ce champ est trop court';
@@ -80,12 +82,10 @@ require_once "Database.php";
     
   }
 
-include_once 'includes/head.php'
+
 ?>
 
-<header>
-  <?= include_once 'includes/header.php' ?>
-</header>
+
 <body>
    
 
