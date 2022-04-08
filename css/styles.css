@@ -79,7 +79,19 @@
 .moi{
   width: 100px;
 }
+#header-profile {
+  font-weight: 700;
+  background-color: #E6A756;
+  border-radius: 50%;
+  height:40px;
+  width: 40px;
+  flex-flow: row;
+  justify-content: center;
 
+}
+#header-profile:hover{
+  background-color:#351E16;
+}
 body {
   margin: 0;
   font-family: var(--bs-body-font-family);

@@ -1,7 +1,7 @@
 
 <?php
 
-
+require './Database/Database.php';
 require './Database/security.php';
 
 $currentUser = isLoggedIn();

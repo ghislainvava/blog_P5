@@ -1,8 +1,9 @@
 <?php
 
+
 function isLoggedIn(): array | false
 {
-   require 'Database/Database.php';
+    global $pdo;
     $sessionId = $_COOKIE['session'] ?? '';
     if ($sessionId) {
         $statementSession = $pdo->prepare('SELECT * FROM session WHERE session.id=:id');

@@ -1,6 +1,5 @@
 <?php
-
-
+$pdo = require_once './Database/Database.php';
 $sessionId = $_COOKIE['session'] ?? '';
 if ($sessionId) {
     $statement = $pdo->prepare('DELETE FROM session where id=?');
@@ -9,5 +8,6 @@ if ($sessionId) {
     setcookie('session','', time() -1);
 
     header('Location: /login.php');
+    exit;
 }
 

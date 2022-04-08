@@ -1,12 +1,21 @@
 <?php
-require_once './Database/models/ArticleDB.php';
+$pdo = require_once './Database/Database.php';
+require_once './Database/security.php';
+include './Database/models/ArticleDB.php';
+
+$currentUser = isLoggedIn();
+if (!$currentUser) {
+    header('Location: /');
+    exit;
+}
+$articleDB = new ArticleDB($pdo);
 
 
 const ERROR_REQUIRED = 'Veuillez renseigner ce champ';
 const ERROR_TITLE_TOO_SHORT = 'Le titre est trop court';
 const ERROR_CONTENT_TOO_SHORT = "L'article est trop court";
 const ERROR_IMAGE_URL = "L'image doit être une url valide";
-$filename = __DIR__ . '/data/articles.json';
+
 $errors = [
     'title' => '',
     'image' => '',
@@ -23,6 +32,8 @@ if ($id) {
     $title = $article['title'];
     $image = $article['image'];
     $content = $article['content'];
+    $author = $article’['author'];
+
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -67,18 +78,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($id) {
            $article['title'] = $title;
            $article['image'] = $image;
-           $article['author'] = $author;
            $article['content'] = $content;
+           $article['author'] = $currentUser['id'];
            $articleDB->updateOne($article);
         } else {
             $articleDB->createOne([
                 'title' => $title,
-                'content' => $content,
                 'image' => $image,
-                'author' => $author
+                'content' => $content,
+                'author' => $currentUser['id']
             ]);
         }
         header('Location: /');
+        exit;
     }
 }
 

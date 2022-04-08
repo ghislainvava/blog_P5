@@ -14,4 +14,4 @@
         <!-- <script src="js/scripts.js"></script>
 </footer> -->
 
-<h1>PAPA</h1>
+<h1>Footer</h1>

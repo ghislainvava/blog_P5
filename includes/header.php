@@ -19,14 +19,15 @@ $currentUser  = $currentUser ?? false;
                     <li class="nav-item px-lg-4" <?= $_SERVER['REQUEST_URI'] === '/logout.php' ? 'active' : '' ?>>
                         <a class="nav-link text-uppercase" href="logout.php">Déconnection</a>
                     </li>
-                    <li class="nav-item px-lg-4" <?= $_SERVER['REQUEST_URI'] === '/profile.php' ? 'active' : '' ?>>
-                        <a class="nav-link text-uppercase" href="profil.php">Ma page</a>
-                    </li>
-                    <li class="nav-item px-lg-4" <?= $_SERVER['REQUEST_URI'] === '/form-article.php' ? 'active' : '' ?>>
+                 
+                    <li class="nav-item px-lg-4" <?= $_SERVER['REQUEST_URI'] === '/articles.php' ? 'active' : '' ?>>
                         <a class="nav-link text-uppercase" href="articles.php">Articles</a>
                     </li>
-                    <li class="nav-item px-lg-4" <?= $_SERVER['REQUEST_URI'] === '/add-article.php' ? 'active' : '' ?>>
-                        <a class="nav-link text-uppercase" href="add-article.php">Ajouter un article</a>
+                    <li class="nav-item px-lg-4" <?= $_SERVER['REQUEST_URI'] === '/form-article.php' ? 'active' : '' ?>>
+                        <a class="nav-link text-uppercase" href="form-article.php">Ajouter un article</a>
+                    </li>
+                    <li class="nav-item px-lg-4 " id="header-profile" <?= $_SERVER['REQUEST_URI'] === '/profile.php' ? 'active' : '' ?>>
+                        <a class="nav-link text-uppercase" href="profil.php"><?= $currentUser['firstname'][0].$currentUser['lastname'][0]?></a>
                     </li>
 
                 <?php else : ?>

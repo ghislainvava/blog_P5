@@ -1,7 +1,7 @@
 <?php
 
 
-require './Database/Database.php';
+$pdo = require_once './Database/Database.php';
 
   const ERROR_REQUIRED = "Veuillez renseigner ce champ";
   const ERROR_EMAIL_INVALID ="L'email n'est pas valide";
@@ -20,7 +20,7 @@ require './Database/Database.php';
     $input = filter_input_array(INPUT_POST, [
       'email' => FILTER_SANITIZE_EMAIL,
     ]);
-    $error = '';
+   
     $email = $input['email'] ?? '';
     $password = $_POST['password'] ?? '';
  
@@ -42,14 +42,13 @@ require './Database/Database.php';
       $statementUser->execute();
       $user = $statementUser->fetch();
 
-      $hashedPassword = password_hash($password, PASSWORD_ARGON2I);  //argon2i pour hasher le mot de passe
-
       if(!$user) {
         $errors['email'] = ERROR_EMAIL_NO_RECORD;
       } else {
-          if (password_verify($hashedPassword, $user['password'])){
+          if (!password_verify($password, $user['password'])){
     
             $errors['password'] = ERROR_PASSWORD_MISMATCH;
+
           } else {
             $StatementSession = $pdo->prepare('INSERT INTO session VALUES(
                 DEFAULT,
@@ -57,14 +56,16 @@ require './Database/Database.php';
 
               )');
               $StatementSession->bindValue(':userid', $user['id']);
-              echo  $StatementSession->bindValue;
               $StatementSession->execute();
               $sessionId = $pdo->lastInsertId();
               setcookie('session', $sessionId, time() + 60 * 60 *24 *14, '', '', false , true);
               header('Location: /');
+              exit;
           }
       }
 
+    } else {
+      echo "il y a une erreur";
     }
   }
 

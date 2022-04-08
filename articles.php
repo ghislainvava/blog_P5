@@ -1,5 +1,10 @@
 <?php
-$articleDB = include './Database/models/ArticleDB.php';
+
+
+require './Database/models/ArticleDB.php';
+$pdo = require_once './Database/Database.php';
+$articleDB = new ArticleDB($pdo);
+require './Database/security.php';
 
 $currentUser = isLoggedIn();
 
@@ -11,10 +16,11 @@ $_GET = filter_input_array(INPUT_GET, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 ?>
 
 <head>
+    <?php include 'includes/header.php'; ?>
     <title>articles</title>
 </head>
 <body>
-<?php include 'includes/header.php'; ?>
+
 <div class="container">
     <div class="content">
         <?php foreach($articles as $article) : ?>
