@@ -1,15 +1,20 @@
 <?php
 
-$pdo = require './Database/Database.php';
-require './Database/security.php';
-include './Database/models/ArticleDB.php';
-$articleDB = new ArticleDB($pdo);
+$pdo = require_once './Database/Database.php';
+require_once './Database/security.php';
 
-$currentUser = isLoggedIn();
+
+
+$articleDB = new ArticleDB($pdo);
+$authDB = new AuthDB($pdo);
+
+$currentUser = $authDB->isLoggedIn();
 if (!$currentUser) {
   header('Location: /');
   exit;
 }
+echo $currentUser['id'];
+
 $articles = $articlesDB->fetchUserArticle($currentUser['id']);
 
 $sessionId = $_COOKIE['session'] ?? '';
@@ -61,8 +66,8 @@ if (!$currentUser) {
             <li>
                 <span><?= $article['title']?></span>
                 <div>
-                  <button class="btn btn-primary">Modifier</button>
-                  <button class="btn btn-secondary">Supprimer</button>
+                  <a href="/form-article.php?=<?= $article['id'] ?>" class="btn btn-primary">Modifier</a>
+                  <a href="/delete-article.php?id=<? $article['id'] ?>" class="btn btn-secondary">Supprimer</a>
                 </div>
 
             </li>

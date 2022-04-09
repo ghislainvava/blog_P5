@@ -1,12 +1,16 @@
 <?php
 
-include 'includes/header.php';
+
 $pdo = require './Database/Database.php';
+require_once './Database/security.php';
+require_once './Database/models/ArticleDB.php';
+$authDB = new AuthDB($pdo);
 
 const ERROR_REQUIRED = "Veuillez renseigner ce champ";
 const ERROR_TOO_SHORT = 'Ce champ est trop court';
 const ERROR_PASSWORD_TOO_SHORT = 'Le mot de passe doit faire au moins 6 caractéres';
 const ERROR_EMAIL_INVALID = "L'email n'est pas valide";
+
 
 
 $errors = [
@@ -24,7 +28,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     'lastname' => FILTER_SANITIZE_SPECIAL_CHARS,
     'email' => FILTER_SANITIZE_EMAIL,
   ]);
-  $error = '';
+
   $email = $input['email'] ?? '';
   $password = $_POST['password'] ?? '';
   $firstname = $input['firstname'] ?? '';
@@ -56,24 +60,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   }
 
   if (empty(array_filter($errors, fn ($e) => $e !== ''))) {
-
-    $statement = $pdo->prepare('INSERT INTO user VALUES (
-      DEFAULT,
-      :email,
-      :password,
-      :firstname,
-      :lastname
-      
-    )');
-
-    $hashedPassword = password_hash($password, PASSWORD_ARGON2I);  //argon2i pour hasher le mot de passe
-    $statement->bindValue(':email', $email);
-    $statement->bindValue(':firstname', $firstname);
-    $statement->bindValue(':lastname', $lastname);
-    $statement->bindValue(':password', $hashedPassword);
-
-    $statement->execute();
-    header('Location: /login.php');
+    $authDB->register([
+      'firstname' => $firstname,
+      'lastname' => $lastname,
+      'email' => $email,
+      'password' => $password
+    ]);
+    header('Location: /');
     exit;
   }
 }
@@ -83,7 +76,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 
 <body>
-
+  <header><?php include 'includes/header.php';?></header>
 
   <h1>Inscription</h1>
 

@@ -1,9 +1,11 @@
 <?php
-$pdo = require_once './Database/Database.php';
+$pdo = require './Database/Database.php';
 require_once './Database/security.php';
-include './Database/models/ArticleDB.php';
+require_once './Database/models/ArticleDB.php';
+$authDB = new AuthDB($pdo);
 
-$currentUser = isLoggedIn();
+
+$currentUser = $authDB->isLoggedIn();
 if (!$currentUser) {
     header('Location: /');
     exit;
@@ -29,6 +31,10 @@ $id = $_GET['id'] ?? '';
 if ($id) {
  
     $article = $articleDB->fetchOne($id);
+    if(!$article['author'] !== $currentUser['id']){
+        header('Location: /');
+        exit;
+    }
     $title = $article['title'];
     $image = $article['image'];
     $content = $article['content'];

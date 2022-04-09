@@ -3,6 +3,7 @@
 require 'includes/head.php';
 
 $currentUser  = $currentUser ?? false;
+session_start();
 
 ?>
 <!-- Navigation-->

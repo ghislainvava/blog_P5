@@ -1,14 +1,13 @@
 <?php
 
-
-require './Database/models/ArticleDB.php';
 $pdo = require_once './Database/Database.php';
+require_once './Database/security.php';
+require_once './Database/models/ArticleDB.php';
 $articleDB = new ArticleDB($pdo);
-require './Database/security.php';
 
-$currentUser = isLoggedIn();
+$authDB = new AuthDB($pdo);
 
-
+$currentUser = $authDB->isLoggedIn();
 $articles = $articleDB->fetchAll();
 
 $_GET = filter_input_array(INPUT_GET, FILTER_SANITIZE_FULL_SPECIAL_CHARS);

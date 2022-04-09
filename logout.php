@@ -1,12 +1,12 @@
 <?php
+
 $pdo = require_once './Database/Database.php';
+require_once './Database/security.php';
+$authDB = new AuthDB($pdo);
+
 $sessionId = $_COOKIE['session'] ?? '';
 if ($sessionId) {
-    $statement = $pdo->prepare('DELETE FROM session where id=?');
-    $statement->bindValue(':id', $sessionId);
-    $statement->execute([$sessionId]);
-    setcookie('session','', time() -1);
-
+    $authDB->logout($sessionId);
     header('Location: /login.php');
     exit;
 }

@@ -92,7 +92,7 @@ class ArticleDB
     return $article;
   }
 
-  public function fetchUserArticle(string $authorId): array
+  public function fetchUserArticle($authorId)
   {
     $this->statementReadUserAll->bindValue(":authorId", $authorId);
     $this->statementReadUserAll->execute();

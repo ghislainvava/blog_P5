@@ -1,10 +1,12 @@
 
 <?php
 
-require './Database/Database.php';
-require './Database/security.php';
+$pdo = require_once './Database/Database.php';
+require_once './Database/security.php';
 
-$currentUser = isLoggedIn();
+$authDB = new AuthDB($pdo);
+
+$currentUser = $authDB->isLoggedIn();
 
 include 'includes/header.php';
 ?>
