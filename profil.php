@@ -1,6 +1,7 @@
 <?php
 
 $pdo = require_once './Database/Database.php';
+require_once './Database/models/ArticleDB.php';
 require_once './Database/security.php';
 
 

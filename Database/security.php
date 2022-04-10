@@ -26,6 +26,7 @@ class AuthDB
               $this->statementReadUser = $pdo->prepare('SELECT * FROM user WHERE id=:id');
               $this->statementReadUserFromEmail = $pdo->prepare('SELECT * FROM user WHERE email=:email');
               $this->statementCreateSession = $pdo->prepare('INSERT INTO session VALUES (
+                -- :sessionid,
                 DEFAULT,
                 :userid
                 )');
@@ -33,11 +34,22 @@ class AuthDB
         }
 
         function login(string $userId): void
-        {
+        {   
+           
             $this->statementCreateSession->bindValue(':userid', $userId);
             $this->statementCreateSession->execute();
             $sessionId = $this->pdo->lastInsertId();
-            setcookie('session', $sessionId, time() + 60 *60 *24 *14 ,'','',false, true);
+            setcookie('session', $sessionId, time() + 60 *60 *24 * 14 ,'','',false, true);
+           
+
+
+            // $sessionId = bin2hex(random_bytes(32));
+            // $this->statementCreateSession->bindValue(':userid', $userId);
+            // $this->statementCreateSession->bindValue(':sessionid', $sessionId);
+            // $this->statementCreateSession->execute();
+            // $signature = hash_hmac('sha256', $sessionId, 'il etait une fois');
+            // setcookie('session', $sessionId, time() + 60 * 60 * 24 * 14, '', '', false, true);
+            // setcookie('signature', $signature, time() + 60 * 60 * 24 * 14, "", "", false, true);
             return;
         }
         function register(array $user): void
@@ -56,24 +68,51 @@ class AuthDB
         function isLoggedIn(): array | false
         {
             $sessionId = $_COOKIE['session'] ?? '';
-                if ($sessionId) {
-                    $this->statementReadSession->bindvalue(':id', $sessionId);
+                if($sessionId) {
+                    $this->statementReadSession->bindValue(':id', $sessionId);
                     $this->statementReadSession->execute();
-                    $session = $this->statementReadSession->fetch();
-                    if ($session) {
+                    $session =  $this->statementReadSession->fetch();
+                    if($session) {
                         $this->statementReadUser->bindValue(':id', $session['userid']);
                         $this->statementReadUser->execute();
                         $user = $this->statementReadUser->fetch();
                     }
-
                 }
+
+
+                // $sessionId = $_COOKIE['session'] ?? '';
+                // $signature = $_COOKIE['signature'] ?? '';
+                // echo $sessionId;
+                // echo '----';
+                // echo $signature;
+                // if ($sessionId  && $signature) {
+                //     $hash = hash_hmac('sha256', $sessionId, 'il etait une fois');
+                //     echo '---';
+                //     echo $hash;
+                //     if (hash_equals($hash, $signature)) {
+                //         $this->statementReadSession->bindValue(':id', $sessionId);
+                //         $this->statementReadSession->execute();
+                //         $session =  $this->statementReadSession->fetch();
+                //         echo 'je suis connecté2';
+                //         if ($session) {
+                //             $this->statementReadUser->bindValue(':id', $session['userid']);
+                //             $this->statementReadUser->execute();
+                //             $user = $this->statementReadUser->fetch();
+                            
+                //         }
+                //     }
+                // }
+              
                 return $user ?? false;
+              
         }
         function logout(string $sessionId): void
         {
             $this->statementDeleteSession->bindValue(':id', $sessionId);
             $this->statementDeleteSession->execute();
             setcookie('session','', time() -1);
+            //setcookie('signature','', time() -1);
+
             return;
             
         }

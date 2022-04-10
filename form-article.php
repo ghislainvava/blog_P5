@@ -38,7 +38,7 @@ if ($id) {
     $title = $article['title'];
     $image = $article['image'];
     $content = $article['content'];
-    $author = $article’['author'];
+    
 
 }
 
@@ -55,7 +55,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $title = $_POST['title'] ?? '';
     $image = $_POST['image'] ?? '';
     $content = $_POST['content'] ?? '';
-    $author = $_Post['author'] ?? '';
+   
 
 
     if (!$title) {
@@ -64,11 +64,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $errors['title'] = ERROR_TITLE_TOO_SHORT;
     }
 
-    if (!$image) {
-        $errors['image'] = ERROR_REQUIRED;
-    } elseif (!filter_var($image, FILTER_VALIDATE_URL)) {
-        $errors['image'] = ERROR_IMAGE_URL;
-    }
+    // if (!$image) {
+    //     $errors['image'] = ERROR_REQUIRED;
+    // } elseif (!filter_var($image, FILTER_VALIDATE_URL)) {
+    //     $errors['image'] = ERROR_IMAGE_URL;
+    // }
 
     if (!$content) {
         $errors['content'] = ERROR_REQUIRED;
@@ -76,9 +76,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $errors['content'] = ERROR_CONTENT_TOO_SHORT;
     }
 
-    if(!$author) {
-        $errors['author'] = ERROR_REQUIRED;
-    }
 
     if (empty(array_filter($errors, fn ($e) => $e !== ''))) {
         if ($id) {
@@ -89,6 +86,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
            $articleDB->updateOne($article);
         } else {
             $articleDB->createOne([
+                
                 'title' => $title,
                 'image' => $image,
                 'content' => $content,

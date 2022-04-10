@@ -1,9 +1,6 @@
 
 <?php
 
-// require './Database/security.php';
-// require './Database/Database.php';
-
 class ArticleDB
 {
   private PDOStatement $statementCreateOne;
@@ -18,15 +15,13 @@ class ArticleDB
   {
     $this->statementCreateOne = $pdo->prepare('
       INSERT INTO article (
-        DEFAULT,
         title,
         image,
         content,
         author
         
        
-      ) VALUES (
-        DEFAULT,
+      ) VALUES (   
         :title,
         :image,
         :content,
@@ -102,4 +97,3 @@ class ArticleDB
 }
 
 
-// return new ArticleDB($pdo);

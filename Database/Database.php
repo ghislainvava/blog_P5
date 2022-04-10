@@ -6,6 +6,6 @@ try {
  [ PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC]);
       echo "le pdo fonctionne ";
 } catch(PDOException $e) {
-    echo $e->getMessage();
+    throw new Exception ($e->getMessage()); //on utilise ici le try/catch avant le throw pour pas que les identifiants de connection apparaissent dans le message d'erreur
 };
 return $pdo;
