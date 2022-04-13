@@ -81,7 +81,8 @@
 }
 #header-profile {
   font-weight: 700;
-  background-color: #E6A756;
+ 
+  background-color:#351E16;
   border-radius: 50%;
   height:40px;
   width: 40px;
@@ -90,7 +91,7 @@
 
 }
 #header-profile:hover{
-  background-color:#351E16;
+  background-color: #E6A756;
 }
 body {
   margin: 0;

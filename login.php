@@ -40,7 +40,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     if (empty(array_filter($errors, fn ($e) => $e !== ''))) {
-      echo 'yes';
+    
       $user = $authDB->getUserFromEmail($email);
       if (!$user) {
         $errors['email'] = ERROR_EMAIL_NO_RECORD;

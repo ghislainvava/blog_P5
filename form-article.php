@@ -8,7 +8,7 @@ $authDB = new AuthDB($pdo);
 $currentUser = $authDB->isLoggedIn();
 if (!$currentUser) {
     header('Location: /');
-    exit;
+    exit();
 }
 $articleDB = new ArticleDB($pdo);
 
@@ -29,11 +29,11 @@ $errors = [
 $_GET = filter_input_array(INPUT_GET, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 $id = $_GET['id'] ?? '';
 if ($id) {
- 
+
     $article = $articleDB->fetchOne($id);
     if(!$article['author'] !== $currentUser['id']){
         header('Location: /');
-        exit;
+        exit();
     }
     $title = $article['title'];
     $image = $article['image'];
@@ -72,7 +72,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if (!$content) {
         $errors['content'] = ERROR_REQUIRED;
-    } elseif (mb_strlen($content) < 50) {
+    } elseif (mb_strlen($content) < 20) {
         $errors['content'] = ERROR_CONTENT_TOO_SHORT;
     }
 
@@ -85,16 +85,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
            $article['author'] = $currentUser['id'];
            $articleDB->updateOne($article);
         } else {
-            $articleDB->createOne([
-                
+            $articleDB->createOne([         
                 'title' => $title,
                 'image' => $image,
                 'content' => $content,
                 'author' => $currentUser['id']
             ]);
         }
-        header('Location: /');
-        exit;
+        
+
+        // header('Location: /');
+        // exit();
     }
 }
 

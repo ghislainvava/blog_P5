@@ -1,34 +1,20 @@
 <?php
-
 $pdo = require_once './Database/Database.php';
-require_once './Database/models/ArticleDB.php';
 require_once './Database/security.php';
-
-
-
-$articleDB = new ArticleDB($pdo);
+require_once './Database/models/ArticleDB.php';
 $authDB = new AuthDB($pdo);
 
 $currentUser = $authDB->isLoggedIn();
 if (!$currentUser) {
-  header('Location: /');
-  exit;
+    header('Location: /');
+    exit();
 }
-echo $currentUser['id'];
+$articleDB = new ArticleDB($pdo);
 
-$articles = $articlesDB->fetchUserArticle($currentUser['id']);
 
-$sessionId = $_COOKIE['session'] ?? '';
-if ($sessionId) {
-  $sessionUserStatement = $pdo->prepare('SELECT * FROM session JOIN user on user.id=session.userid WHERE session.id=?');
-  $sessionUserStatement->execute([$sessionId]);
-  $user = $sessionUserStatement->fetch();
-}
+$articles = $articleDB->fetchUserArticle($currentUser['id']);
 
-if (!$currentUser) {
-  header('Location: /login.php');
-  exit;
-}
+
 ?>
 
 
@@ -42,7 +28,7 @@ if (!$currentUser) {
    
       <div class="d-flex row justify-content-start">
         <h1>mon espace</h1>
-        <h2>Mes iformations</h2>
+        <h2>Mes informations</h2>
         <div>
           <ul>
             <li class="d-flex">
@@ -68,7 +54,7 @@ if (!$currentUser) {
                 <span><?= $article['title']?></span>
                 <div>
                   <a href="/form-article.php?=<?= $article['id'] ?>" class="btn btn-primary">Modifier</a>
-                  <a href="/delete-article.php?id=<? $article['id'] ?>" class="btn btn-secondary">Supprimer</a>
+                  <a class="btn btn-secondary" href="/delete-article.php?id=<?= $article['id'] ?>">Supprimer</a>
                 </div>
 
             </li>

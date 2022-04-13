@@ -4,15 +4,20 @@ require_once './Database/security.php';
 require_once './Database/models/ArticleDB.php';
 $authDB = new AuthDB($pdo);
 
+$currentUser = $authDB->isLoggedIn();
+if (!$currentUser) {
+    header('Location: /');
+    exit();
+}
 $articleDB = new ArticleDB($pdo);
-$currentUser = $auth->isLoggedIn();
+
 
 $_GET = filter_input_array(INPUT_GET, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 $id = $_GET['id'] ?? '';
 
 if (!$id) {
   header('Location: /');
-  exit;
+  exit();
 } else {
   $article = $articleDB->fetchOne($id);
 }
@@ -31,15 +36,16 @@ if (!$id) {
     <?php require_once 'includes/header.php' ?>
     <div class="content">
       <div class="article-container">
-        <a class="article-back" href="/">Retour à la liste des articles</a>
+        <a class="article-back" href="/articles.php">Retour à la liste des articles</a>
         <div class="article-cover-img" style="background-image:url(<?= $article['image'] ?>)"></div>
         <h1 class="article-title"><?= $article['title'] ?></h1>
         <div class="separator"></div>
         <p class="article-content"><?= $article['content'] ?></p>
-        <p class="article-author"><?= $article['firstname'] . ' ' . $article['lastname'] ?></p>
+        <p class="article-author">Post émis part : <?= $article['firstname'] . ' ' . $article['lastname'] ?></p>
         <?php if($currentUser && $currentUser['id'] === $article['author']) : ?>
         <div class="action">
           <a class="btn btn-secondary" href="/delete-article.php?id=<?= $article['id'] ?>">Supprimer</a>
+          <!-- <a class="btn btn-primary" href="/form-article.php?=<?= $article['id'] ?>" >Modifier</a> -->
           <a class="btn btn-primary" href="/form-article.php?id=<?= $article['id'] ?>">Editer l'article</a>
         </div>
         <?php endif; ?>

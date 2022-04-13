@@ -21,12 +21,14 @@ $_GET = filter_input_array(INPUT_GET, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 <body>
 
 <div class="container">
+   
     <div class="content">
         <?php foreach($articles as $article) : ?>
         
         <div class="article">
             <div class="img-container" style="background-image:url(<?= $article['image'] ?>"></div>
-                <h2><?= $article['title'] ?></h2>
+                <h2> <a href="/show-article.php?id=<?= $article['id'] ?>"> <?= $article['title'] ?></a></h2>
+                <p><?=$article['content']?></p>
         </div>
         <?php endforeach; ?>
     </div>
