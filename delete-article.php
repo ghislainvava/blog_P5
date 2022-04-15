@@ -3,11 +3,11 @@
 $pdo = require_once './Database/Database.php';
 require_once './Database/security.php';
 require_once './Database/models/ArticleDB.php';
-$authDB = new AuthDB($pdo);
+$userDB = new AuthDB($pdo);
 $articleDB = new ArticleDB($pdo);
 
 
-$currentUser = $authDB->isLoggedIn();
+$currentUser = $userDB->isLoggedIn();
 if (!$currentUser) {
     header('Location: /');
     exit();

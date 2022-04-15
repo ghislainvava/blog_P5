@@ -1,10 +1,11 @@
 <?php
+session_start();
 $pdo = require_once './Database/Database.php';
 require_once './Database/security.php';
 require_once './Database/models/ArticleDB.php';
-$authDB = new AuthDB($pdo);
+$userDB = new AuthDB($pdo);
 
-$currentUser = $authDB->isLoggedIn();
+$currentUser = $userDB->isLoggedIn();
 if (!$currentUser) {
     header('Location: /');
     exit();
@@ -53,7 +54,7 @@ $articles = $articleDB->fetchUserArticle($currentUser['id']);
             <li>
                 <span><?= $article['title']?></span>
                 <div>
-                  <a href="/form-article.php?=<?= $article['id'] ?>" class="btn btn-primary">Modifier</a>
+                  <a href="/form-article.php?id=<?= $article['id'] ?>" class="btn btn-primary">Modifier</a>
                   <a class="btn btn-secondary" href="/delete-article.php?id=<?= $article['id'] ?>">Supprimer</a>
                 </div>
 

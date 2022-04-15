@@ -1,18 +1,19 @@
 <?php
-
+session_start();
 $pdo = require_once './Database/Database.php';
 require_once './Database/security.php';
 require_once './Database/models/ArticleDB.php';
 $articleDB = new ArticleDB($pdo);
 
-$authDB = new AuthDB($pdo);
+$userDB = new AuthDB($pdo);
 
-$currentUser = $authDB->isLoggedIn();
+$currentUser = $userDB->isLoggedIn();
 $articles = $articleDB->fetchAll();
 
 $_GET = filter_input_array(INPUT_GET, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 
 ?>
+
 
 <head>
     <?php include 'includes/header.php'; ?>

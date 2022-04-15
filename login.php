@@ -1,11 +1,9 @@
 <?php
-
+session_start();
 
 $pdo = require_once './Database/Database.php';
 require_once './Database/security.php';
-$authDB = new AuthDB($pdo);
-
-
+$userDB = new AuthDB($pdo);
 
 const ERROR_REQUIRED = "Veuillez renseigner ce champ";
 const ERROR_EMAIL_INVALID = "L'email n'est pas valide";
@@ -17,7 +15,20 @@ $errors = [
   'email' => '',
   'password' => ''
 ];
+if (isset($_SESSION['email'])){
+  $errors = $_SESSION['email'];
+}
+if (isset($_SESSION['password'])) {
+  $errors = $_SESSION['password'];
+}
+if (isset($_SESSION['input_email'])) {
+  $email = $_SESSION['input_email'];
+}
+if (isset($_SESSION['post_email'])) {
+  $password = $_SESSION['post_email'];
+}
 
+session_unset();
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
@@ -41,22 +52,36 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if (empty(array_filter($errors, fn ($e) => $e !== ''))) {
     
-      $user = $authDB->getUserFromEmail($email);
+      $user = $userDB->getUserFromEmail($email);
       if (!$user) {
         $errors['email'] = ERROR_EMAIL_NO_RECORD;
       } else {
         if (!password_verify($password, $user['password'])) {
           $errors['password'] = ERROR_PASSWORD_MISMATCH;
         } else {
-          $authDB->login($user['id']);
+          $userDB->login($user['id']);
           header('Location: /articles.php');
           exit();
         }
       }
     } else {
-      echo "il y a une erreur";
-    }
+      if (!empty($errors['email'])){
+        $_SESSION['email'] = $errors['email'];
+        }
+        if (!empty($errors['password'])){
+          $_SESSION['password'] = $errors['password'];
+      }
+      if ($email !== ''){
+        $_SESSION['input_email'] = $email;
+      }
+      if ($password !== ''){
+        $_SESSION['post_password'] = $password;
+      }
+        header( "Location: /login.php");
+        exit();
+     }
 }
+
 
 
 
@@ -83,7 +108,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <br>
 
 
-    <input type="text" placeholder="Mot de passe" name="password">
+    <input type="text" placeholder="Mot de passe" name="password" value="<?= $password ?? '' ?>">
     <?php if ($errors['password']) : ?>
       <p class="text-danger"><?= $errors['password'] ?></p>
     <?php endif; ?>

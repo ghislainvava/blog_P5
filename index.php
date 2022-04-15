@@ -4,9 +4,9 @@
 $pdo = require_once './Database/Database.php';
 require_once './Database/security.php';
 
-$authDB = new AuthDB($pdo);
+$userDB = new AuthDB($pdo);
 
-$currentUser = $authDB->isLoggedIn();
+$currentUser = $userDB->isLoggedIn();
 
 include 'includes/header.php';
 ?>

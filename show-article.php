@@ -1,10 +1,11 @@
 <?php
+session_start();
 $pdo = require_once './Database/Database.php';
 require_once './Database/security.php';
 require_once './Database/models/ArticleDB.php';
-$authDB = new AuthDB($pdo);
+$userDB = new AuthDB($pdo);
 
-$currentUser = $authDB->isLoggedIn();
+$currentUser = $userDB->isLoggedIn();
 if (!$currentUser) {
     header('Location: /');
     exit();
@@ -35,13 +36,13 @@ if (!$id) {
   <div class="container">
     <?php require_once 'includes/header.php' ?>
     <div class="content">
-      <div class="article-container">
-        <a class="article-back" href="/articles.php">Retour à la liste des articles</a>
-        <div class="article-cover-img" style="background-image:url(<?= $article['image'] ?>)"></div>
-        <h1 class="article-title"><?= $article['title'] ?></h1>
-        <div class="separator"></div>
-        <p class="article-content"><?= $article['content'] ?></p>
-        <p class="article-author">Post émis part : <?= $article['firstname'] . ' ' . $article['lastname'] ?></p>
+      <div >
+        <a  href="/articles.php">Retour à la liste des articles</a>
+        <div  style="background-image:url(<?= $article['image'] ?>)"></div>
+        <h1 ><?= $article['title'] ?></h1>
+        
+        <p ><?= $article['content'] ?></p>
+        <p >Post émis part : <?= $article['firstname'] . ' ' . $article['lastname'] ?></p>
         <?php if($currentUser && $currentUser['id'] === $article['author']) : ?>
         <div class="action">
           <a class="btn btn-secondary" href="/delete-article.php?id=<?= $article['id'] ?>">Supprimer</a>
