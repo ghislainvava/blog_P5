@@ -72,11 +72,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $image = $_POST['image'] ?? '';
     $content = $_POST['content'] ?? '';
    
-        if (isset($_FILES['fichier']) && is_uploaded_file($_FILES['image']['tmp_name'])) {
-              $origine = $_FILES['image']['tmp_name'];
-              $destination = './images/'.$_FILES['fichier']['name'];
-              move_uploaded_file($origine,$destination);
-     }
+    //     if (isset($_FILES['image']) && is_uploaded_file($_FILES['image']['tmp_name'])) {
+    //           $origine = $_FILES['image']['tmp_name'];
+    //           $destination = './images/'.$_FILES['fichier']['name'];
+    //           move_uploaded_file($origine,$destination);
+    //  }
+    if(isset($_FILES['image'])){
+        $tmpName = $_FILES['image']['tmp_name'];
+        $name = $_FILES['image']['name'];
+        $size = $_FILES['image']['size'];
+        $error = $_FILES['image']['error'];
+    }
+    move_uploaded_file($tmpName, './images/'.$name);
+    var_dump($_FILES);
+    
 
     if (!$title) {
         $errors['title'] = ERROR_REQUIRED;   
