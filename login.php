@@ -18,7 +18,7 @@ $errors = [
 if (isset($_SESSION['email'])){
   $errors = $_SESSION['email'];
 }
-if (isset($_SESSION['password'])) {
+  if (isset($_SESSION['password'])) {
   $errors = $_SESSION['password'];
 }
 if (isset($_SESSION['input_email'])) {
@@ -28,7 +28,7 @@ if (isset($_SESSION['post_email'])) {
   $password = $_SESSION['post_email'];
 }
 
-session_unset();
+unset($_SESSION['email'], $_SESSION['password'], $_SESSION['input_email'], $_SESSION['post_email'] );
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
@@ -65,21 +65,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
       }
     } else {
-      if (!empty($errors['email'])){
-        $_SESSION['email'] = $errors['email'];
-        }
-        if (!empty($errors['password'])){
-          $_SESSION['password'] = $errors['password'];
-      }
-      if ($email !== ''){
-        $_SESSION['input_email'] = $email;
-      }
-      if ($password !== ''){
-        $_SESSION['post_password'] = $password;
-      }
-        header( "Location: /login.php");
-        exit();
-     }
+            if (!empty($errors['email'])){
+              $_SESSION['email'] = $errors['email'];
+            }
+            if (!empty($errors['password'])){
+                $_SESSION['password'] = $errors['password'];
+            }
+            if ($email !== ''){
+              $_SESSION['input_email'] = $email;
+            }
+            if ($password !== ''){
+              $_SESSION['post_password'] = $password;
+            }
+            header( "Location: /login.php");
+            exit();
+            }
 }
 
 

@@ -1,5 +1,5 @@
 <?php
-
+session_start();
 $pdo = require_once './Database/Database.php';
 require_once './Database/security.php';
 require_once './Database/models/ArticleDB.php';
@@ -18,11 +18,13 @@ if (!$currentUser) {
         $article = $articleDB->fetchOne($id);
         if ($article['author'] === $currentUser['id']) {
           $articleDB->deleteOne($id);
+          $_SESSION['message'] = "l'article a bien été supprimé";
+         
         }
     }
-      header('Location: /form-article.php');
+    
+      header('Location: /message.php');
       exit();
-      //if($_SERVER['HTTP_REFERER'] == "page1.php")
 }
 
 

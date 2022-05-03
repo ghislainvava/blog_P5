@@ -46,7 +46,7 @@ if (!$id) {
         <?php if($currentUser && $currentUser['id'] === $article['author']) : ?>
         <div class="action">
           <a class="btn btn-secondary" href="/delete-article.php?id=<?= $article['id'] ?>">Supprimer</a>
-          <!-- <a class="btn btn-primary" href="/form-article.php?=<?= $article['id'] ?>" >Modifier</a> -->
+         
           <a class="btn btn-primary" href="/form-article.php?id=<?= $article['id'] ?>">Editer l'article</a>
         </div>
         <?php endif; ?>
