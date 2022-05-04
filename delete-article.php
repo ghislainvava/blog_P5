@@ -5,8 +5,6 @@ require_once './Database/security.php';
 require_once './Database/models/ArticleDB.php';
 $userDB = new AuthDB($pdo);
 $articleDB = new ArticleDB($pdo);
-
-
 $currentUser = $userDB->isLoggedIn();
 if (!$currentUser) {
     header('Location: /');
@@ -21,8 +19,7 @@ if (!$currentUser) {
           $_SESSION['message'] = "l'article a bien été supprimé";
          
         }
-    }
-    
+    }  
       header('Location: /message.php');
       exit();
 }

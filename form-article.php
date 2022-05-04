@@ -38,9 +38,9 @@ if (isset($_SESSION['post_content'])) {
     $content = $_SESSION['post_content'];
 }
 unset($_SESSION['title'], $_SESSION['image'], $_SESSION['content'],$_SESSION['post_title'], $_SESSION['post_image'], $_SESSION['post_content'] ); //On reinitialise les var $_SESSION utilisés
-
 $_GET = filter_input_array(INPUT_GET, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 $id = $_GET['id'] ?? '';
+
 
 if ($id) {  //si id de l'article on envoye les données
     $article = $articleDB->fetchOne($id);
@@ -55,7 +55,6 @@ if ($id) {  //si id de l'article on envoye les données
 }
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $image = '';
-
     if(isset($_FILES['image'])){
         $tmpName = $_FILES['image']['tmp_name'];
         $name = $_FILES['image']['name'];
@@ -64,7 +63,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         move_uploaded_file($tmpName, './images/'.$name);
         $image = $name;
     }
-
     $_POST = filter_input_array(INPUT_POST, [
         'title' => FILTER_SANITIZE_FULL_SPECIAL_CHARS,
         'content' => [
@@ -72,10 +70,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             'flags' => FILTER_FLAG_NO_ENCODE_QUOTES
         ]
     ]);
-
     $title = $_POST['title'] ?? '';
     $content = $_POST['content'] ?? '';
-
     if (!$title) {
         $errors['title'] = ERROR_REQUIRED;   
     } elseif (mb_strlen($title) < 5) {
@@ -83,13 +79,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
           } else{
         $errors['title'] ='';
     }
-
     // if (!$image) {
     //     $errors['image'] = ERROR_REQUIRED;
     // } elseif (!filter_var($image, FILTER_VALIDATE_URL)) {
     //     $errors['image'] = ERROR_IMAGE_URL;
     // }
-
     if (!$content) {
         $errors['content'] = ERROR_REQUIRED;
     } elseif (mb_strlen($content) < 20) {
@@ -105,21 +99,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
            $article['author'] = $currentUser['id'];
            $articleDB->updateOne($article);
            $_SESSION['message'] = "l'article a bien été modifié";
-           
-
         } else {
             $articleDB->createOne([         
                 'title' => $title,
                 'image' => $image,
                 'content' => $content,
                 'author' => $currentUser['id']
+
             ]);
-            $_SESSION['message'] = "l'article a bien été ajouté";
         }
         header('Location: /message.php');
-        exit();
-        
+        exit();    
     } else {  //si erreur je crée des Session pour garder en mémoire les erreurs avant le PRG
+        
+            if (isset($_GET['id'])) {
+                $name = $_SESSION['post_image'];
+            }
+            var_dump($name );
+            exit;
             if (!empty($errors['title'])){
                 $_SESSION['title'] = $errors['title'];
             }
@@ -148,7 +145,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <link rel="stylesheet" href="/public/css/form-article.css">
     <title><?= $id ? 'Modifier' : 'Créer' ?> un article</title>
 </head>
-
 <body>
     <div class="container">
         <?php require_once 'includes/header.php' ?>
@@ -167,9 +163,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <label for="image">Image</label>
                         <?php if($image === '') : ?>
                         <input type="file" name="image" id="image" value="<?= $image ?? '' ?>">
-                        <?php else : ?>
+                        <!-- condition image -->
+                        <?php else : ?>                
                             <img src="images/<?=$image?>"/> 
-                            <button class="btn btn-primary" type="submit">Modifier</button>
                             <?php endif; ?>   
                         <?php if ($errors['image']) : ?>
                             <p class="text-danger"><?= $errors['image'] ?></p>

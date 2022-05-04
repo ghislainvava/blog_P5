@@ -1,6 +1,5 @@
 <?php
 include 'includes/header.php';
-
 ?>
 <head>
     <title>Page d'erreur</title>
