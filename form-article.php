@@ -19,6 +19,7 @@ $errors = [             //tableau d'erreur
     'image' => '',
     'content' => ''
 ];
+
 if (isset($_SESSION['title'])){    //on rapelle les erreurs enregistré sur les cookies sessions
     $errors['title'] = $_SESSION['title'];
 }
@@ -51,10 +52,10 @@ if ($id) {  //si id de l'article on envoye les données
     $title = $article['title'];
     $image = $article['image'];
     $content = $article['content'];
-    echo $image;
+    
 }
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $image = '';
+    // $image = '';
     if(isset($_FILES['image'])){
         $tmpName = $_FILES['image']['tmp_name'];
         $name = $_FILES['image']['name'];
@@ -63,6 +64,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         move_uploaded_file($tmpName, './images/'.$name);
         $image = $name;
     }
+   
     $_POST = filter_input_array(INPUT_POST, [
         'title' => FILTER_SANITIZE_FULL_SPECIAL_CHARS,
         'content' => [
@@ -105,18 +107,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 'image' => $image,
                 'content' => $content,
                 'author' => $currentUser['id']
-
             ]);
         }
         header('Location: /message.php');
         exit();    
     } else {  //si erreur je crée des Session pour garder en mémoire les erreurs avant le PRG
-        
-            if (isset($_GET['id'])) {
-                $name = $_SESSION['post_image'];
-            }
-            var_dump($name );
-            exit;
+ 
             if (!empty($errors['title'])){
                 $_SESSION['title'] = $errors['title'];
             }
@@ -127,16 +123,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $_SESSION['content'] = $errors['content'];
             }
             // Session pour garder les post envoyé
-            if ($title !== ''){
-                $_SESSION['post_title'] = $title;
-            }
-            if ($image !== ''){
-                $_SESSION['post_image'] = $image;
-            }
-            if ($content !== ''){
-                $_SESSION['post_content'] = $content;
+            
+            if (isset($_GET['id'])){
+                header('Location: /form-article.php?id='.$_GET['id']);
+                exit();
+            } else {
+                if ($title !== ''){
+                    $_SESSION['post_title'] = $title;
+                }
+                if ($image !== ''){
+                    $_SESSION['post_image'] = $image;
+                }
+                if ($content !== ''){
+                    $_SESSION['post_content'] = $content;
+                } 
             }
             header('Location: /form-article.php');
+            exit();
         }
     }
 ?>
@@ -161,11 +164,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     </div>
                     <div class="form-control">
                         <label for="image">Image</label>
-                        <?php if($image === '') : ?>
-                        <input type="file" name="image" id="image" value="<?= $image ?? '' ?>">
+                        <?php if(isset($image )) : ?>
+                            <img src="images/<?=$image?>"/> 
+                        
                         <!-- condition image -->
                         <?php else : ?>                
-                            <img src="images/<?=$image?>"/> 
+                            <input type="file" name="image" id="image" value="<?=$image ?? '' ?>">
                             <?php endif; ?>   
                         <?php if ($errors['image']) : ?>
                             <p class="text-danger"><?= $errors['image'] ?></p>
