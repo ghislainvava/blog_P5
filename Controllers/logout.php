@@ -6,7 +6,8 @@ $authDB = new AuthDB($pdo);
 $sessionId = $_COOKIE['session'] ?? '';
 if ($sessionId) {
     $authDB->logout($sessionId);
-    header('Location: /login.php');
+    session_destroy();
+    header('Location: /Views/login.php');
     exit;
 }
 

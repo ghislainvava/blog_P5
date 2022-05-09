@@ -1,11 +1,13 @@
 <?php
-
-require 'includes/head.php';
-
 $currentUser  = $currentUser ?? false;
-
-
+// if($headTitle == "Presentation"){
+//     $redirection = "Views/";
+// }else {
+//         $redirection = "";
+//     }
+   
 ?>
+
 <!-- Navigation-->
 <nav class="navbar navbar-expand-lg navbar-dark py-lg-4" id="mainNav">
     <div class="container">
@@ -15,32 +17,31 @@ $currentUser  = $currentUser ?? false;
             <ul class="navbar-nav mx-auto">
                 <?php if ($currentUser) : ?>
                     <li class="nav-item px-lg-4" <?= $_SERVER['REQUEST_URI'] === '/.php' ? 'active' : '' ?>>
-                        <a class="nav-link text-uppercase" href="/">Home</a>
+                        
+                        <a class="nav-link text-uppercase" href="<?= $router->generate('home') ?>">Home</a>
                     </li>
                     <li class="nav-item px-lg-4" <?= $_SERVER['REQUEST_URI'] === '/logout.php' ? 'active' : '' ?>>
-                        <a class="nav-link text-uppercase" href="logout.php">Déconnection</a>
-                    </li>
-                 
+                        <a class="nav-link text-uppercase" href="/Controllers/logout.php"?>Déconnection</a>
+                    </li>           
                     <li class="nav-item px-lg-4" <?= $_SERVER['REQUEST_URI'] === '/articles.php' ? 'active' : '' ?>>
-                        <a class="nav-link text-uppercase" href="articles.php">Articles</a>
+                       
+                        <a class="nav-link text-uppercase" href="<?= $router->generate('articles') ?>">Articles</a>
                     </li>
                     <li class="nav-item px-lg-4" <?= $_SERVER['REQUEST_URI'] === '/form-article.php' ? 'active' : '' ?>>
-                        <a class="nav-link text-uppercase" href="form-article.php">Ajouter un article</a>
+                        
+                        <a class="nav-link text-uppercase" href="<?= $router->generate('form-article') ?>">form-article</a>
                     </li>
-                    <li class="nav-item px-lg-4 " id="header-profile" <?= $_SERVER['REQUEST_URI'] === '/profile.php' ? 'active' : '' ?>>
-                        <a class="nav-link text-uppercase" href="profil.php"><?= $currentUser['firstname'][0].$currentUser['lastname'][0]?></a>
+                    <li class="nav-item px-lg-4 " id="header-profil" <?= $_SERVER['REQUEST_URI'] === '/profil.php' ? 'active' : '' ?>>
+                        <a class="nav-link text-uppercase" href=<?=$redirection."profil.php"?>><?= $currentUser['firstname'][0].$currentUser['lastname'][0]?></a>
                     </li>
-
                 <?php else : ?>
                     <li class="nav-item px-lg-4" <?= $_SERVER['REQUEST_URI'] === '/register.php' ? 'active' : '' ?>>
-                        <a class="nav-link text-uppercase" href="register.php">Inscription</a>
+                        <a class="nav-link text-uppercase" href=<?=$redirection."register.php"?>>Inscription</a>
                     </li>
                     <li class="nav-item px-lg-4" <?= $_SERVER['REQUEST_URI'] === '/login.php' ? 'active' : '' ?>>
-                        <a class="nav-link text-uppercase" href="login.php">Connection</a>
+                        <a class="nav-link text-uppercase" href=<?=$redirection."login.php"?>>Connection</a>
                     </li>
-
                 <?php endif; ?>
-
             </ul>
         </div>
     </div>

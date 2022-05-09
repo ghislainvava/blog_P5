@@ -29,7 +29,7 @@
             ];
             $response = $mj->post(Resources::$Email, ['body' => $body]);
             $response->success() && var_dump($response->getData());
-            echo "Email réussi"
+            echo "Email réussi";
         }else{
             echo "Email non valide";
         }

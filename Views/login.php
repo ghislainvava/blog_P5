@@ -1,7 +1,7 @@
 <?php
 session_start();
-$pdo = require_once './Database/Database.php';
-require_once './Database/security.php';
+$pdo = require_once '.././Database/Database.php';
+require_once '.././Database/security.php';
 $userDB = new AuthDB($pdo);
 
 const ERROR_REQUIRED = "Veuillez renseigner ce champ";
@@ -27,7 +27,6 @@ if (isset($_SESSION['post_email'])) {
 }
 unset($_SESSION['email'], $_SESSION['password'], $_SESSION['input_email'], $_SESSION['post_email'] );
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-
     $input = filter_input_array(INPUT_POST, [
       'email' => FILTER_SANITIZE_EMAIL,
     ]);
@@ -37,7 +36,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       $errors['email'] = ERROR_REQUIRED;
     } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
       $errors['email'] = ERROR_EMAIL_INVALID;
-    }s
+    }
     if (!$password) {
       $errors['password'] = ERROR_REQUIRED;
     }
@@ -50,7 +49,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
               $errors['password'] = ERROR_PASSWORD_MISMATCH;
             } else {
               $userDB->login($user['id']);
-              header('Location: /articles.php');
+              header('Location: articles.php');
               exit();
             }
           }
@@ -67,18 +66,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       if ($password !== ''){
         $_SESSION['post_password'] = $password;
       }
-      header( "Location: /login.php");
+      header( "Location: /Views/login.php");
       exit();
       }
 }
+$currentPage = "login";
+$headTitle = "Connection";
+ob_start();
 ?>
 <body>
-  <header>
-    <?php include 'includes/header.php'; ?>
-    <title>Connection</title>
-  </header>
   <h1>Connection</h1>
-  <form action="/login.php" method="POST">
+  <form action="/Views/login.php" method="POST">
     <input type="email" placeholder="Email" name="email" value="<?= $email ?? '' ?>">
     <?php if ($errors['email']) : ?>
       <p class="text-danger"><?= $errors['email'] ?></p>
@@ -94,3 +92,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <button type="submit">Valider</button>
   </form>
 </body>
+
+<?php $contentView = ob_get_clean();
+
+require('template.php'); ?>

@@ -1,8 +1,8 @@
 <?php
 session_start();
-$pdo = require './Database/Database.php'; //appel du PDO
-require_once './Database/security.php'; //sert à l'authentification
-require_once './Database/models/ArticleDB.php'; //Crud pour article
+$pdo = require '.././Database/Database.php'; //appel du PDO
+require_once '.././Database/security.php'; //sert à l'authentification
+require_once '.././Database/models/ArticleDB.php'; //Crud pour article
 $userDB = new AuthDB($pdo);     //initialisation utilisateur
 $articleDB = new ArticleDB($pdo); //initialisation article
 $currentUser = $userDB->isLoggedIn(); //authentification 
@@ -13,13 +13,14 @@ if (!$currentUser) {  //vérifaction si l'utilisateur est connecté
 const ERROR_REQUIRED = 'Veuillez renseigner ce champ';  //divers message d'erreurs
 const ERROR_TITLE_TOO_SHORT = 'Le titre est trop court';
 const ERROR_CONTENT_TOO_SHORT = "L'article est trop court";
-const ERROR_IMAGE_URL = "L'image doit être une url valide";
-$errors = [             //tableau d'erreur
-    'title' => '',
-    'image' => '',
-    'content' => ''
-];
+const ERROR_SIZE_IMAGE = "L'image doit faire moins de 6 MO";
+const ERROR_EXTENSIONS = "Veuillez sélectionner un format de fichier valide";
 
+    $errors = [             //tableau d'erreur
+        'title' => '',
+        'image' => '',
+        'content' => ''
+    ];
 if (isset($_SESSION['title'])){    //on rapelle les erreurs enregistré sur les cookies sessions
     $errors['title'] = $_SESSION['title'];
 }
@@ -38,11 +39,10 @@ if (isset($_SESSION['post_image'])) {
 if (isset($_SESSION['post_content'])) {
     $content = $_SESSION['post_content'];
 }
-unset($_SESSION['title'], $_SESSION['image'], $_SESSION['content'],$_SESSION['post_title'], $_SESSION['post_image'], $_SESSION['post_content'] ); //On reinitialise les var $_SESSION utilisés
+unset($_SESSION['title'], $_SESSION['image'], $_SESSION['content'],$_SESSION['post_title'], $_SESSION['post_content'] ); //On reinitialise les var $_SESSION utilisés
+
 $_GET = filter_input_array(INPUT_GET, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 $id = $_GET['id'] ?? '';
-
-
 if ($id) {  //si id de l'article on envoye les données
     $article = $articleDB->fetchOne($id);
     if($article['author'] !== $currentUser['id']){
@@ -52,19 +52,25 @@ if ($id) {  //si id de l'article on envoye les données
     $title = $article['title'];
     $image = $article['image'];
     $content = $article['content'];
-    
 }
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // $image = '';
+     $image = '';
+     $extension ='';
     if(isset($_FILES['image'])){
         $tmpName = $_FILES['image']['tmp_name'];
         $name = $_FILES['image']['name'];
         $size = $_FILES['image']['size'];
         $error = $_FILES['image']['error'];
-        move_uploaded_file($tmpName, './images/'.$name);
-        $image = $name;
+        $fileInfo = pathinfo($name);
+        $extension = $fileInfo['extension'];
+        $allowedExtensions = ['jpg', 'jpeg', 'gif', 'png'];
+        if (in_array($extension, $allowedExtensions)){
+            move_uploaded_file($tmpName, './images/'.$size.$name );
+            $image = $size.$name ;        
+        }else{          
+            $errors['image'] = ERROR_EXTENSIONS;
+        }
     }
-   
     $_POST = filter_input_array(INPUT_POST, [
         'title' => FILTER_SANITIZE_FULL_SPECIAL_CHARS,
         'content' => [
@@ -81,11 +87,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
           } else{
         $errors['title'] ='';
     }
-    // if (!$image) {
-    //     $errors['image'] = ERROR_REQUIRED;
-    // } elseif (!filter_var($image, FILTER_VALIDATE_URL)) {
-    //     $errors['image'] = ERROR_IMAGE_URL;
-    // }
+    if ($size > 600000) {
+        $errors['image'] = ERROR_SIZE_IMAGE;
+    } 
     if (!$content) {
         $errors['content'] = ERROR_REQUIRED;
     } elseif (mb_strlen($content) < 20) {
@@ -108,11 +112,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 'content' => $content,
                 'author' => $currentUser['id']
             ]);
+            $_SESSION['message'] = "l'article a bien été ajouté";
         }
-        header('Location: /message.php');
+        unset($_SESSION['post_image']);
+        
+        header('Location: /Views/message.php');
         exit();    
-    } else {  //si erreur je crée des Session pour garder en mémoire les erreurs avant le PRG
- 
+    } else {
+         //si erreur je crée des Session pour garder en mémoire les erreurs avant le PRG
             if (!empty($errors['title'])){
                 $_SESSION['title'] = $errors['title'];
             }
@@ -125,7 +132,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // Session pour garder les post envoyé
             
             if (isset($_GET['id'])){
-                header('Location: /form-article.php?id='.$_GET['id']);
+                header('Location: /Views/form-article.php?id='.$_GET['id']);
                 exit();
             } else {
                 if ($title !== ''){
@@ -137,24 +144,28 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 if ($content !== ''){
                     $_SESSION['post_content'] = $content;
                 } 
-            }
-            header('Location: /form-article.php');
+            }            
+            header('Location: /Views/form-article.php');
             exit();
-        }
     }
+}
+
+if (isset($id)){
+    $headTitle ="Modifier un article";
+}else{
+    $headitle ="Créer un article";
+}
+ob_start();
 ?>
-<head>
-    <?php require_once 'includes/head.php' ?>
+<head>  
     <link rel="stylesheet" href="/public/css/form-article.css">
-    <title><?= $id ? 'Modifier' : 'Créer' ?> un article</title>
 </head>
-<body>
     <div class="container">
-        <?php require_once 'includes/header.php' ?>
+    
         <div class="content">
             <div class="block p-20 form-container">
                 <h1><?= $id ? 'Modifier' : 'Écrire' ?> un article</h1>
-                <form action="/form-article.php<?= $id ? "?id=$id" : '' ?>"  method="POST" enctype='multipart/form-data'>
+                <form action="/Views/form-article.php<?= $id ? "?id=$id" : '' ?>"  method="POST" enctype='multipart/form-data'>
                     <div class="form-control">
                         <label for="title">Titre</label>
                         <input type="text" name="title" id="title" value="<?= $title ?? '' ?>">
@@ -183,13 +194,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <?php endif; ?>
                     </div>
                     <div class="form-actions">
-                        <a href="/" class="btn btn-secondary" type="button">Annuler</a>
+                        <a href="/Views/form-article.php" class="btn btn-secondary" type="button">Annuler</a>
                         <button class="btn btn-primary" type="submit"><?= $id ? 'Modifier' : 'Sauvegarder' ?></button>
                     </div>
                 </form>
             </div>
         </div>
-        <?php require_once 'includes/footer.php' ?>
+       
     </div>
-</body>
+    <?php 
+        $contentView = ob_get_clean();
+        require_once('template.php');
+
 

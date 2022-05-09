@@ -1,8 +1,8 @@
 <?php
 session_start();
-$pdo = require_once './Database/Database.php';
-require_once './Database/security.php';
-require_once './Database/models/ArticleDB.php';
+$pdo = require_once '.././Database/Database.php';
+require_once '.././Database/security.php';
+require_once '.././Database/models/ArticleDB.php';
 $userDB = new AuthDB($pdo);
 $currentUser = $userDB->isLoggedIn();
 if (!$currentUser) {
@@ -11,13 +11,10 @@ if (!$currentUser) {
 }
 $articleDB = new ArticleDB($pdo);
 $articles = $articleDB->fetchUserArticle($currentUser['id']);
-?>
 
-<head>
-      <title>Mon profil</title>
-</head>
-<body>
- <?= include 'includes/header.php';?>
+$headTitle = "Mon profil";
+ob_start();
+?>
   <div class="container">
     <div class="d-flex row justify-content-start">
       <h1>mon espace</h1>
@@ -45,8 +42,8 @@ $articles = $articleDB->fetchUserArticle($currentUser['id']);
           <li>
               <span><?= $article['title']?></span>
               <div>
-                <a href="/form-article.php?id=<?= $article['id'] ?>" class="btn btn-primary">Modifier</a>
-                <a class="btn btn-secondary" href="/delete-article.php?id=<?= $article['id'] ?>">Supprimer</a>
+                <a href="/Views/form-article.php?id=<?= $article['id'] ?>" class="btn btn-primary">Modifier</a>
+                <a class="btn btn-secondary" href="/Controllers/delete-article.php?id=<?= $article['id'] ?>">Supprimer</a>
               </div>
           </li>
           <?php endforeach; ?>
@@ -54,7 +51,7 @@ $articles = $articleDB->fetchUserArticle($currentUser['id']);
       </div>
     </div>
   </div>
-  <?php require_once 'includes/footer.php' ?>
-</body>
+  <?php $contentView = ob_get_clean();
+  require 'template.php';
 
 

@@ -1,8 +1,8 @@
 <?php
 session_start();
-$pdo = require './Database/Database.php';
-require_once './Database/security.php';
-require_once './Database/models/ArticleDB.php';
+$pdo = require '.././Database/Database.php';
+require_once '.././Database/security.php';
+require_once '.././Database/models/ArticleDB.php';
 $authDB = new AuthDB($pdo);
 
 const ERROR_REQUIRED = "Veuillez renseigner ce champ";
@@ -59,13 +59,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     exit;
   }
 }
+
+$headtitle ="Articles";
+ob_start();
 ?>
-<body>
-  <header>
-    <?php include 'includes/header.php';?>
-    <title>Incription</title>
-  </header>
-  <h1>Inscription</h1>
+
   <form action="/register.php" method="POST">
     <div>
       <input type="text" name="lastname" placeholder="Veuillez saisir votre nom" value="<?= $lastname ?? '' ?>">
@@ -95,4 +93,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <br>
     <button type="submit">Valider</button>
   </form>
-</body>
+
+  <?php $contentView = ob_get_clean();
+  require('template.php');

@@ -1,8 +1,8 @@
 <?php
 session_start();
-$pdo = require_once './Database/Database.php';
-require_once './Database/security.php';
-require_once './Database/models/ArticleDB.php';
+$pdo = require_once '.././Database/Database.php';
+require_once '.././Database/security.php';
+require_once '.././Database/models/ArticleDB.php';
 $userDB = new AuthDB($pdo);
 
 $currentUser = $userDB->isLoggedIn();
@@ -20,27 +20,28 @@ if (!$id) {
 } else {
   $article = $articleDB->fetchOne($id);
 }
+$headTitle ='Article';
+ob_start();
 ?>
-<head>
-  <?php require_once 'includes/head.php' ?>
-  <title>Article seul</title>
-</head>
-<body>
+
   <div class="container">
-    <?php require_once 'includes/header.php' ?>
     <div class="content">
         <a  href="/articles.php">Retour à la liste des articles</a>
         <div  style="background-image:url(<?= $article['image'] ?>)"></div>
         <h1 ><?= $article['title'] ?></h1>
+        <?php if ($article['image'] !== '') :?>
+                    <img  style="width: 300px;" src="images/<?= $article['image'] ?>" />
+        <?php endif; ?>
         <p ><?= $article['content'] ?></p>
         <p >Post émis part : <?= $article['firstname'] . ' ' . $article['lastname'] ?></p>
         <?php if($currentUser && $currentUser['id'] === $article['author']) : ?>
         <div class="action">
-          <a class="btn btn-secondary" href="/delete-article.php?id=<?= $article['id'] ?>">Supprimer</a> 
-          <a class="btn btn-primary" href="/form-article.php?id=<?= $article['id'] ?>">Editer l'article</a>
+          <a class="btn btn-secondary" href="/Controllers/delete-article.php?id=<?= $article['id'] ?>">Supprimer</a> 
+          <a class="btn btn-primary" href="/Views/form-article.php?id=<?= $article['id'] ?>">Editer l'article</a>
         </div>
         <?php endif; ?>
     </div>
-    <?php require_once 'includes/footer.php' ?>
   </div>
-</body>
+
+<?php $contentView = ob_get_clean();
+require 'template.php'; ?>
