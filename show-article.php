@@ -1,13 +1,13 @@
 <?php
 session_start();
-$pdo = require_once '.././Database/Database.php';
-require_once '.././Database/security.php';
-require_once '.././Database/models/ArticleDB.php';
+$pdo = require_once './Database/Database.php';
+require_once './Database/security.php';
+require_once './Database/models/ArticleDB.php';
 $userDB = new AuthDB($pdo);
 
 $currentUser = $userDB->isLoggedIn();
 if (!$currentUser) {
-    header('Location: /');
+    header('Location: /home.php');
     exit();
 }
 $articleDB = new ArticleDB($pdo);
@@ -15,7 +15,7 @@ $_GET = filter_input_array(INPUT_GET, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 $id = $_GET['id'] ?? '';
 
 if (!$id) {
-  header('Location: /');
+  header('Location: /home.php');
   exit();
 } else {
   $article = $articleDB->fetchOne($id);
@@ -37,7 +37,7 @@ ob_start();
         <?php if($currentUser && $currentUser['id'] === $article['author']) : ?>
         <div class="action">
           <a class="btn btn-secondary" href="/Controllers/delete-article.php?id=<?= $article['id'] ?>">Supprimer</a> 
-          <a class="btn btn-primary" href="/Views/form-article.php?id=<?= $article['id'] ?>">Editer l'article</a>
+          <a class="btn btn-primary" href="/form-article.php?id=<?= $article['id'] ?>">Editer l'article</a>
         </div>
         <?php endif; ?>
     </div>

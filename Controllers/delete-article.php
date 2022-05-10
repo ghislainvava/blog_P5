@@ -1,5 +1,4 @@
 <?php
-session_start();
 $pdo = require_once '../Database/Database.php';
 require_once '../Database/security.php';
 require_once '../Database/models/ArticleDB.php';
@@ -10,7 +9,7 @@ $headTitle = 'Suppression Article';
 
 
 if (!$currentUser) {
-  header('Location: /');
+  header('Location: /home.php');
   exit();
 } else{
     $_GET = filter_input_array(INPUT_GET, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
@@ -23,7 +22,7 @@ if (!$currentUser) {
        
       }
   }  
-    header('Location: /Views/message.php');
+    header('Location: /message.php');
     exit();
 }
 

@@ -1,12 +1,14 @@
 <?php
 $pdo = require_once './Database/Database.php';
 require_once './Database/security.php';
+
 $userDB = new AuthDB($pdo);
 $currentUser = $userDB->isLoggedIn();
 
 $headTitle ='Presentation';
 // $currentPage = "index";
 ob_start();
+
 ?>
 
 <!-- <header>
@@ -79,7 +81,7 @@ ob_start();
 </section>
   <?php 
     $contentView = ob_get_clean();
-    require('Views/template.php');
+    require('template.php');
     ?>
       
 

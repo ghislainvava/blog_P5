@@ -1,12 +1,12 @@
 <?php
 session_start();
-$pdo = require_once '.././Database/Database.php';
-require_once '.././Database/security.php';
-require_once '.././Database/models/ArticleDB.php';
+$pdo = require_once './Database/Database.php';
+require_once './Database/security.php';
+require_once './Database/models/ArticleDB.php';
 $userDB = new AuthDB($pdo);
 $currentUser = $userDB->isLoggedIn();
 if (!$currentUser) {
-    header('Location: /');
+    header('Location: /home.php');
     exit();
 }
 $articleDB = new ArticleDB($pdo);

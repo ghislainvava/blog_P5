@@ -1,8 +1,8 @@
 <?php
 session_start();
-$pdo = require '.././Database/Database.php';
-require_once '.././Database/security.php';
-require_once '.././Database/models/ArticleDB.php';
+$pdo = require './Database/Database.php';
+require_once './Database/security.php';
+require_once './Database/models/ArticleDB.php';
 $authDB = new AuthDB($pdo);
 
 const ERROR_REQUIRED = "Veuillez renseigner ce champ";
@@ -55,7 +55,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       'email' => $email,
       'password' => $password
     ]);
-    header('Location: /');
+    header('Location: /home.php');
     exit;
   }
 }

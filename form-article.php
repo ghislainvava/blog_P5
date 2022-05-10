@@ -1,13 +1,12 @@
 <?php
-session_start();
-$pdo = require '.././Database/Database.php'; //appel du PDO
-require_once '.././Database/security.php'; //sert à l'authentification
-require_once '.././Database/models/ArticleDB.php'; //Crud pour article
+$pdo = require './Database/Database.php'; //appel du PDO
+require_once './Database/security.php'; //sert à l'authentification
+require_once './Database/models/ArticleDB.php'; //Crud pour article
 $userDB = new AuthDB($pdo);     //initialisation utilisateur
 $articleDB = new ArticleDB($pdo); //initialisation article
 $currentUser = $userDB->isLoggedIn(); //authentification 
 if (!$currentUser) {  //vérifaction si l'utilisateur est connecté
-    header('Location: /');
+    header('Location: /home.php');
     exit();
 } 
 const ERROR_REQUIRED = 'Veuillez renseigner ce champ';  //divers message d'erreurs
@@ -23,30 +22,36 @@ const ERROR_EXTENSIONS = "Veuillez sélectionner un format de fichier valide";
     ];
 if (isset($_SESSION['title'])){    //on rapelle les erreurs enregistré sur les cookies sessions
     $errors['title'] = $_SESSION['title'];
+    unset($_SESSION['title']);
 }
 if (isset($_SESSION['image'])){
     $errors['image'] = $_SESSION['image'];
+    unset($_SESSION['image']);
 }
 if (isset($_SESSION['content'])){
     $errors['content'] = $_SESSION['content'] ;
+    unset($_SESSION['content']);
 }
 if (isset($_SESSION['post_title'])) {  //on rapelle les saisies 
     $title = $_SESSION['post_title'];
+    unset($_SESSION['post_title']);
 }
 if (isset($_SESSION['post_image'])) {
     $image = $_SESSION['post_image'];
+  
 }
 if (isset($_SESSION['post_content'])) {
     $content = $_SESSION['post_content'];
+    unset($_SESSION['post_content']);
 }
-unset($_SESSION['title'], $_SESSION['image'], $_SESSION['content'],$_SESSION['post_title'], $_SESSION['post_content'] ); //On reinitialise les var $_SESSION utilisés
+
 
 $_GET = filter_input_array(INPUT_GET, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 $id = $_GET['id'] ?? '';
 if ($id) {  //si id de l'article on envoye les données
     $article = $articleDB->fetchOne($id);
     if($article['author'] !== $currentUser['id']){
-        header('Location: /');
+        header('Location: /home.php');
         exit();
     }
     $title = $article['title'];
@@ -56,7 +61,9 @@ if ($id) {  //si id de l'article on envoye les données
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
      $image = '';
      $extension ='';
-    if(isset($_FILES['image'])){
+     
+    if($_FILES['image']['name'] !== ''){
+    
         $tmpName = $_FILES['image']['tmp_name'];
         $name = $_FILES['image']['name'];
         $size = $_FILES['image']['size'];
@@ -64,12 +71,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $fileInfo = pathinfo($name);
         $extension = $fileInfo['extension'];
         $allowedExtensions = ['jpg', 'jpeg', 'gif', 'png'];
-        if (in_array($extension, $allowedExtensions)){
-            move_uploaded_file($tmpName, './images/'.$size.$name );
-            $image = $size.$name ;        
-        }else{          
-            $errors['image'] = ERROR_EXTENSIONS;
+        if ($size < 600000) {
+            if (in_array($extension, $allowedExtensions)){
+                move_uploaded_file($tmpName, './images/'.$size.$name );
+                $image = $size.$name ;        
+            }elseif ($_name !== '' ){          
+                $errors['image'] = ERROR_EXTENSIONS;
+            }
+        } else{
+            $errors['image'] = ERROR_SIZE_IMAGE;
         }
+      
     }
     $_POST = filter_input_array(INPUT_POST, [
         'title' => FILTER_SANITIZE_FULL_SPECIAL_CHARS,
@@ -87,9 +99,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
           } else{
         $errors['title'] ='';
     }
-    if ($size > 600000) {
-        $errors['image'] = ERROR_SIZE_IMAGE;
-    } 
+
     if (!$content) {
         $errors['content'] = ERROR_REQUIRED;
     } elseif (mb_strlen($content) < 20) {
@@ -116,7 +126,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
         unset($_SESSION['post_image']);
         
-        header('Location: /Views/message.php');
+        header('Location: /message.php');
         exit();    
     } else {
          //si erreur je crée des Session pour garder en mémoire les erreurs avant le PRG
@@ -132,7 +142,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // Session pour garder les post envoyé
             
             if (isset($_GET['id'])){
-                header('Location: /Views/form-article.php?id='.$_GET['id']);
+                header('Location: /form-article.php?id='.$_GET['id']);
                 exit();
             } else {
                 if ($title !== ''){
@@ -145,7 +155,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $_SESSION['post_content'] = $content;
                 } 
             }            
-            header('Location: /Views/form-article.php');
+            header('Location: /form-article.php');
             exit();
     }
 }
@@ -165,7 +175,7 @@ ob_start();
         <div class="content">
             <div class="block p-20 form-container">
                 <h1><?= $id ? 'Modifier' : 'Écrire' ?> un article</h1>
-                <form action="/Views/form-article.php<?= $id ? "?id=$id" : '' ?>"  method="POST" enctype='multipart/form-data'>
+                <form action="/form-article.php<?= $id ? "?id=$id" : '' ?>"  method="POST" enctype='multipart/form-data'>
                     <div class="form-control">
                         <label for="title">Titre</label>
                         <input type="text" name="title" id="title" value="<?= $title ?? '' ?>">
@@ -194,7 +204,7 @@ ob_start();
                         <?php endif; ?>
                     </div>
                     <div class="form-actions">
-                        <a href="/Views/form-article.php" class="btn btn-secondary" type="button">Annuler</a>
+                        <a href="/form-article.php" class="btn btn-secondary" type="button">Annuler</a>
                         <button class="btn btn-primary" type="submit"><?= $id ? 'Modifier' : 'Sauvegarder' ?></button>
                     </div>
                 </form>

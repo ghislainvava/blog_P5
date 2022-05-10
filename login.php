@@ -1,8 +1,8 @@
 <?php
-session_start();
-$pdo = require_once '.././Database/Database.php';
-require_once '.././Database/security.php';
-$userDB = new AuthDB($pdo);
+
+$pdo = require_once './Database/Database.php';
+require_once './Database/security.php';
+ $userDB = new AuthDB($pdo);
 
 const ERROR_REQUIRED = "Veuillez renseigner ce champ";
 const ERROR_EMAIL_INVALID = "L'email n'est pas valide";
@@ -15,17 +15,21 @@ $errors = [
 ];
 if (isset($_SESSION['email'])){
   $errors = $_SESSION['email'];
+  unset($_SESSION['email']);
 }
 if (isset($_SESSION['password'])) {
   $errors = $_SESSION['password'];
+  unset($_SESSION['password']);
 }
 if (isset($_SESSION['input_email'])) {
   $email = $_SESSION['input_email'];
+  unset($_SESSION['input_email']);
 }
 if (isset($_SESSION['post_email'])) {
   $password = $_SESSION['post_email'];
+  unset($_SESSION['post_email']);
 }
-unset($_SESSION['email'], $_SESSION['password'], $_SESSION['input_email'], $_SESSION['post_email'] );
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $input = filter_input_array(INPUT_POST, [
       'email' => FILTER_SANITIZE_EMAIL,
@@ -66,7 +70,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       if ($password !== ''){
         $_SESSION['post_password'] = $password;
       }
-      header( "Location: /Views/login.php");
+      header( "Location: /login.php");
       exit();
       }
 }
@@ -76,7 +80,7 @@ ob_start();
 ?>
 <body>
   <h1>Connection</h1>
-  <form action="/Views/login.php" method="POST">
+  <form action="/login.php" method="POST">
     <input type="email" placeholder="Email" name="email" value="<?= $email ?? '' ?>">
     <?php if ($errors['email']) : ?>
       <p class="text-danger"><?= $errors['email'] ?></p>
