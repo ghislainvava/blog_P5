@@ -10,7 +10,7 @@ $page = $_GET['page'];
 $contentView = '';
 
 switch ($page) {
-    case 'home';
+    case '/';
         require_once 'home.php';
     
        
@@ -20,6 +20,8 @@ switch ($page) {
         require_once 'login.php';
         break;
     case 'articles':
+        
+        
         require_once 'articles.php';
         break;
     case 'register':
@@ -32,15 +34,17 @@ switch ($page) {
         require_once 'form-article.php';
         break;
     case 'logout':
-        require_once 'logout.php';
+        require_once 'Controllers/logout.php';
         break;
     case 'profil':
         require_once 'profil.php';
         break;
     case 'delete-article':
-        require_once 'delete-article.php';
+        require_once 'Database/models/ArticleDB.php';
+        require_once 'Controllers/delete-article.php';
         break;
     default :
+        include('head.php');
         require_once 'message.php';
         break;
 }

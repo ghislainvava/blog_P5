@@ -1,7 +1,6 @@
 <?php
-session_start();
-$pdo = require './Database/Database.php';
-require_once './Database/security.php';
+// $pdo = require './Database/Database.php';
+// require_once './Database/security.php';
 require_once './Database/models/ArticleDB.php';
 $authDB = new AuthDB($pdo);
 
@@ -55,7 +54,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       'email' => $email,
       'password' => $password
     ]);
-    header('Location: /home.php');
+    header('Location: /index.php?page=/');
     exit;
   }
 }
@@ -64,7 +63,7 @@ $headtitle ="Articles";
 ob_start();
 ?>
 
-  <form action="/register.php" method="POST">
+  <form action="index.php?page=register" method="POST">
     <div>
       <input type="text" name="lastname" placeholder="Veuillez saisir votre nom" value="<?= $lastname ?? '' ?>">
       <?php if ($errors['lastname']) : ?>

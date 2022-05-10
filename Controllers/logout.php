@@ -1,12 +1,12 @@
 <?php
-$pdo = require_once '.././Database/Database.php';
-require_once '.././Database/security.php';
-$authDB = new AuthDB($pdo);
+// $pdo = require_once '.././Database/Database.php';
+// require_once '.././Database/security.php';
+// $authDB = new AuthDB($pdo);
 $sessionId = $_COOKIE['session'] ?? '';
 if ($sessionId) {
-    $authDB->logout($sessionId);
+    $userDB->logout($sessionId);
     session_destroy();
-    header('Location: /login.php');
+    header('Location: /index.php?page=login');
     exit;
 }
 

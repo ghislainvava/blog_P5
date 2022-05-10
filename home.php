@@ -2,7 +2,7 @@
 $pdo = require_once './Database/Database.php';
 require_once './Database/security.php';
 
-$userDB = new AuthDB($pdo);
+//$userDB = new AuthDB($pdo);
 $currentUser = $userDB->isLoggedIn();
 
 $headTitle ='Presentation';

@@ -17,7 +17,7 @@ $currentUser  = $currentUser ?? false;
         <ul class="navbar-nav mx-auto">
                  <?php if ($currentUser) : ?>
                      <li class="nav-item px-lg-4" <?= $_SERVER['REQUEST_URI'] === '/.php' ? 'active' : '' ?>>
-                         <a class="nav-link text-uppercase" href="index.php?page=home">Home</a>
+                         <a class="nav-link text-uppercase" href="index.php?page=/">Home</a>
                      </li>
                      <li class="nav-item px-lg-4" <?= $_SERVER['REQUEST_URI'] === '/logout.php' ? 'active' : '' ?>>
                          <a class="nav-link text-uppercase" href="index.php?page=logout">Déconnection</a>

@@ -1,8 +1,8 @@
 <?php
 
-$pdo = require_once './Database/Database.php';
-require_once './Database/security.php';
- $userDB = new AuthDB($pdo);
+// $pdo = require_once './Database/Database.php';
+// require_once './Database/security.php';
+//  $userDB = new AuthDB($pdo);
 
 const ERROR_REQUIRED = "Veuillez renseigner ce champ";
 const ERROR_EMAIL_INVALID = "L'email n'est pas valide";
@@ -53,7 +53,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
               $errors['password'] = ERROR_PASSWORD_MISMATCH;
             } else {
               $userDB->login($user['id']);
-              header('Location: articles.php');
+              header('Location: index.php?page=articles');
               exit();
             }
           }
@@ -70,7 +70,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       if ($password !== ''){
         $_SESSION['post_password'] = $password;
       }
-      header( "Location: /login.php");
+      header( "Location: /index.php?page=login");
       exit();
       }
 }
@@ -80,7 +80,7 @@ ob_start();
 ?>
 <body>
   <h1>Connection</h1>
-  <form action="/login.php" method="POST">
+  <form action="index.php?page=login" method="POST">
     <input type="email" placeholder="Email" name="email" value="<?= $email ?? '' ?>">
     <?php if ($errors['email']) : ?>
       <p class="text-danger"><?= $errors['email'] ?></p>

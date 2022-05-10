@@ -1,12 +1,12 @@
 <?php
-$pdo = require './Database/Database.php'; //appel du PDO
-require_once './Database/security.php'; //sert à l'authentification
+// $pdo = require './Database/Database.php'; //appel du PDO
+// require_once './Database/security.php'; //sert à l'authentification
 require_once './Database/models/ArticleDB.php'; //Crud pour article
-$userDB = new AuthDB($pdo);     //initialisation utilisateur
+//$userDB = new AuthDB($pdo);     //initialisation utilisateur
 $articleDB = new ArticleDB($pdo); //initialisation article
 $currentUser = $userDB->isLoggedIn(); //authentification 
 if (!$currentUser) {  //vérifaction si l'utilisateur est connecté
-    header('Location: /home.php');
+    header('Location: /index.php?page=/');
     exit();
 } 
 const ERROR_REQUIRED = 'Veuillez renseigner ce champ';  //divers message d'erreurs
@@ -51,7 +51,7 @@ $id = $_GET['id'] ?? '';
 if ($id) {  //si id de l'article on envoye les données
     $article = $articleDB->fetchOne($id);
     if($article['author'] !== $currentUser['id']){
-        header('Location: /home.php');
+        header('Location: /index.php?page=/');
         exit();
     }
     $title = $article['title'];
@@ -71,7 +71,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $fileInfo = pathinfo($name);
         $extension = $fileInfo['extension'];
         $allowedExtensions = ['jpg', 'jpeg', 'gif', 'png'];
-        if ($size < 600000) {
+        if ($size < 6000000) {
             if (in_array($extension, $allowedExtensions)){
                 move_uploaded_file($tmpName, './images/'.$size.$name );
                 $image = $size.$name ;        
@@ -126,7 +126,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
         unset($_SESSION['post_image']);
         
-        header('Location: /message.php');
+        header('Location: /index.php?page=message');
         exit();    
     } else {
          //si erreur je crée des Session pour garder en mémoire les erreurs avant le PRG
@@ -142,7 +142,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // Session pour garder les post envoyé
             
             if (isset($_GET['id'])){
-                header('Location: /form-article.php?id='.$_GET['id']);
+                header('Location: /index.php?=form-article&id='.$_GET['id']);
                 exit();
             } else {
                 if ($title !== ''){
@@ -155,7 +155,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $_SESSION['post_content'] = $content;
                 } 
             }            
-            header('Location: /form-article.php');
+            header('Location: /index.php?page=form-article');
             exit();
     }
 }
@@ -175,7 +175,7 @@ ob_start();
         <div class="content">
             <div class="block p-20 form-container">
                 <h1><?= $id ? 'Modifier' : 'Écrire' ?> un article</h1>
-                <form action="/form-article.php<?= $id ? "?id=$id" : '' ?>"  method="POST" enctype='multipart/form-data'>
+                <form action = "index.php?page=form-article<?= $id ? "?id=$id" : '' ?>"  method="POST" enctype='multipart/form-data'>
                     <div class="form-control">
                         <label for="title">Titre</label>
                         <input type="text" name="title" id="title" value="<?= $title ?? '' ?>">
@@ -204,7 +204,7 @@ ob_start();
                         <?php endif; ?>
                     </div>
                     <div class="form-actions">
-                        <a href="/form-article.php" class="btn btn-secondary" type="button">Annuler</a>
+                        <a href="/index.php?page=form-article" class="btn btn-secondary" type="button">Annuler</a>
                         <button class="btn btn-primary" type="submit"><?= $id ? 'Modifier' : 'Sauvegarder' ?></button>
                     </div>
                 </form>

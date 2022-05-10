@@ -1,12 +1,11 @@
 <?php
-session_start();
-$pdo = require_once './Database/Database.php';
-require_once './Database/security.php';
+// $pdo = require_once './Database/Database.php';
+// require_once './Database/security.php';
 require_once './Database/models/ArticleDB.php';
-$userDB = new AuthDB($pdo);
+// $userDB = new AuthDB($pdo);
 $currentUser = $userDB->isLoggedIn();
 if (!$currentUser) {
-    header('Location: /home.php');
+    header('Location: /index.php?page=/');
     exit();
 }
 $articleDB = new ArticleDB($pdo);
@@ -42,8 +41,8 @@ ob_start();
           <li>
               <span><?= $article['title']?></span>
               <div>
-                <a href="/Views/form-article.php?id=<?= $article['id'] ?>" class="btn btn-primary">Modifier</a>
-                <a class="btn btn-secondary" href="/Controllers/delete-article.php?id=<?= $article['id'] ?>">Supprimer</a>
+                <a href="/index.php?page=form-article&id=<?= $article['id'] ?>" class="btn btn-primary">Modifier</a>
+                <a class="btn btn-secondary" href="/index.php?page=delete-article&id=<?= $article['id'] ?>">Supprimer</a>
               </div>
           </li>
           <?php endforeach; ?>

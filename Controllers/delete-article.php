@@ -1,15 +1,15 @@
 <?php
-$pdo = require_once '../Database/Database.php';
-require_once '../Database/security.php';
-require_once '../Database/models/ArticleDB.php';
-$userDB = new AuthDB($pdo);
+// $pdo = require_once '../Database/Database.php';
+// require_once '../Database/security.php';
+//require_once '../../Database/models/ArticleDB.php';
+//$userDB = new AuthDB($pdo);
 $articleDB = new ArticleDB($pdo);
 $currentUser = $userDB->isLoggedIn();
 $headTitle = 'Suppression Article';
 
 
 if (!$currentUser) {
-  header('Location: /home.php');
+  header('Location: /index.php?page=/');
   exit();
 } else{
     $_GET = filter_input_array(INPUT_GET, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
@@ -22,7 +22,8 @@ if (!$currentUser) {
        
       }
   }  
-    header('Location: /message.php');
+ 
+    header('Location: /index.php?page=message');
     exit();
 }
 
