@@ -30,7 +30,7 @@ ob_start();
 
 <?php
   $contentView = ob_get_clean();
-  require('template.php');
+  //require('template.php');
 ?>
 
 

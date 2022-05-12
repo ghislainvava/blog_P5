@@ -1,69 +1,5 @@
-<?php
-// $pdo = require './Database/Database.php';
-// require_once './Database/security.php';
-require_once './Database/models/ArticleDB.php';
-$authDB = new AuthDB($pdo);
 
-const ERROR_REQUIRED = "Veuillez renseigner ce champ";
-const ERROR_TOO_SHORT = 'Ce champ est trop court';
-const ERROR_PASSWORD_TOO_SHORT = 'Le mot de passe doit faire au moins 6 caractéres';
-const ERROR_EMAIL_INVALID = "L'email n'est pas valide";
-$errors = [
-  'firstname' => '',
-  'lastname' => '',
-  'email' => '',
-  'password' => ''
-];
-
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-  $input = filter_input_array(INPUT_POST, [
-    'firstname' => FILTER_SANITIZE_SPECIAL_CHARS,
-    'lastname' => FILTER_SANITIZE_SPECIAL_CHARS,
-    'email' => FILTER_SANITIZE_EMAIL,
-  ]);
-
-  $email = $input['email'] ?? '';
-  $password = $_POST['password'] ?? '';
-  $firstname = $input['firstname'] ?? '';
-  $lastname = $input['lastname'] ?? '';
-
-  if (!$firstname) {
-    $errors['firstname'] = ERROR_REQUIRED;
-  } elseif (mb_strlen($firstname) < 2) {
-    $errors['firstname'] = ERROR_TOO_SHORT;
-  }
-  if (!$lastname) {
-    $errors['lastname'] = ERROR_REQUIRED;
-  } elseif (mb_strlen($lastname) < 2) {
-    $errors['lastname'] = ERROR_TOO_SHORT;
-  }
-  if (!$email) {
-    $errors['email'] = ERROR_REQUIRED;
-  } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-    $errors['email'] = ERROR_EMAIL_INVALID;
-  }
-  if (!$email) {
-    $errors['password'] = ERROR_REQUIRED;
-  } elseif (mb_strlen($password) < 6) {
-    $errors['password'] = ERROR_PASSWORD_TOO_SHORT;
-  }
-  if (empty(array_filter($errors, fn ($e) => $e !== ''))) {
-    $authDB->register([
-      'firstname' => $firstname,
-      'lastname' => $lastname,
-      'email' => $email,
-      'password' => $password
-    ]);
-    header('Location: /index.php?page=/');
-    exit;
-  }
-}
-
-$headtitle ="Articles";
-ob_start();
-?>
-
-  <form action="index.php?page=register" method="POST">
+  <form action="/index.php?page=register" method="POST">
     <div>
       <input type="text" name="lastname" placeholder="Veuillez saisir votre nom" value="<?= $lastname ?? '' ?>">
       <?php if ($errors['lastname']) : ?>
@@ -93,5 +29,3 @@ ob_start();
     <button type="submit">Valider</button>
   </form>
 
-  <?php $contentView = ob_get_clean();
-  require('template.php');

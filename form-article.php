@@ -214,6 +214,6 @@ ob_start();
     </div>
     <?php 
         $contentView = ob_get_clean();
-        require_once('template.php');
+      //  require_once('template.php');
 
 
