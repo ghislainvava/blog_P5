@@ -1,15 +1,8 @@
 <?php
+require './Models/MsgError.php';
 
 class UsersController
 {
-    const ERROR_REQUIRED = "Veuillez renseigner ce champ";
-    const ERROR_EMAIL_INVALID = "L'email n'est pas valide";
-    const ERROR_EMAIL_NO_RECORD = "l'email n'est pas enregistré";
-    const ERROR_PASSWORD_MISMATCH = "erreur sur mot de passe";
-    const ERROR_TOO_SHORT = 'Ce champ est trop court';
-    const ERROR_PASSWORD_TOO_SHORT = 'Le mot de passe doit faire au moins 6 caractéres';
-    
-
     private $userDB;
 
     public function __construct($userDB)
@@ -17,163 +10,122 @@ class UsersController
         $this->userDB = $userDB;
     }
 
-    public function login()
-    {
-        $errors = [
-            'email' => '',
-            'password' => ''
-        ];
-        if (isset($_SESSION['email'])){
-            $errors = $_SESSION['email'];
-        }
-        if (isset($_SESSION['password'])) {
-            $errors = $_SESSION['password'];
-        }
-        if (isset($_SESSION['input_email'])) {
-            $email = $_SESSION['input_email'];
-        }
-        if (isset($_SESSION['post_email'])) {
-            $password = $_SESSION['post_email'];
-        }
-        unset($_SESSION['email'], $_SESSION['password'], $_SESSION['input_email'], $_SESSION['post_email'] );
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $input = filter_input_array(INPUT_POST, [
-                'email' => FILTER_SANITIZE_EMAIL,
-            ]);
+    function affichage_erreur() {
+       
+        $objet= new MsgError();
+        $msgError = $objet->msgError;
+        $msgError = $objet->prgPush($msgError);
+            if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $email = $input['email'] ?? '';
             $password = $_POST['password'] ?? '';
-            if (!$email) {
-                $errors['email'] = ERROR_REQUIRED;
-            } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-                $errors['email'] = ERROR_EMAIL_INVALID;
-            }
-            if (!$password) {
-                $errors['password'] = ERROR_REQUIRED;
-            }
-            if (empty(array_filter($errors, fn ($e) => $e !== ''))) {
-                $user = $this->userDB->getUserFromEmail($email);
-                if (!$user) {
-                    $errors['email'] = ERROR_EMAIL_NO_RECORD;
-                } else {
-                    if (!password_verify($password, $user['password'])) {
-                        $errors['password'] = ERROR_PASSWORD_MISMATCH;
-                    } else {
-                        $this->userDB->login($user['id']);
-                        header('Location: index.php?page=articles');
-                        exit();
-                    }
+            $firstname = $input['firstname'] ?? '';
+            $lastname = $input['lastname'] ?? '';
+                if (!$firstname) {
+                    $msgError['errors']['name']['firstname'] = $msgError['ERROR_REQUIRED'];  //$erors est variable dans le form
+                } elseif (mb_strlen($firstname) < 2) {
+                    $msgError['errors']['name']['firstname'] = $msgError['ERROR_TOO_SHORT'];
                 }
-            } else {
-                if (!empty($errors['email'])){
-                    $_SESSION['email'] = $errors['email'];
+                if (!$lastname) {
+                    $msgError['errors']['name']['lastname'] = $msgError['ERROR_REQUIRED'];
+                } elseif (mb_strlen($lastname) < 2) {
+                    $msgError['errors']['name']['lastname'] = $msgError['ERROR_TOO_SHORT'];
                 }
-                if (!empty($errors['password'])){
-                    $_SESSION['password'] = $errors['password'];
-                }
-                if ($email !== ''){
-                    $_SESSION['input_email'] = $email;
-                }
-                if ($password !== ''){
-                    $_SESSION['post_password'] = $password;
-                }
-                header( "Location: /index.php?page=login");
-                exit();
-            }
+            $msgError = $this->loginEror($email, $password, $msgError); //remplir erreur identifiants 
         }
-
-    
-        // $formData
-        // $errors
-
-        ob_start();
-
-        ///// AU DESSUS : CONTROLLER
-        ///
-        ///
-        ///
-        /// AU DESSOUS : VUE
-
-        require './login.php';
-
-        return ob_get_clean();
+        return $erors = $msgError['errors'];   
+   }
+   function loginEror($email, $password, $msgError){
+    if (!$email) {
+        $msgError['errors']['login']['email'] = $msgError['ERROR_REQUIRED'];
+    } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        $msgError['errors']['login']['email'] = $msgError['ERROR_EMAIL_INVALID'];
     }
-
-   
-    function affichage_erreur(){
-    $errors = [
-        'firstname' => '',
-        'lastname' => '',
-        'email' => '',
-        'password' => ''
-    ];
-            if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if (!$password) {
+        $msgError['errors']['login']['password'] = $msgError['ERROR_REQUIRED'];
+    } elseif (mb_strlen($password) < 6) {
+        $msgError['errors']['login']['password'] = $msgError['ERROR_PASSWORD_TOO_SHORT'];
+    }
+    return $msgError;
+   }
+   function enregistrement($erors,$cas,$objet){
+       if($cas === 'register'){ 
+        $erorsRegister = array_merge( $errors['login'], $errors['name']);
+        
+        if ($_SERVER['REQUEST_METHOD'] === 'POST'){
             $input = filter_input_array(INPUT_POST, [
                 'firstname' => FILTER_SANITIZE_SPECIAL_CHARS,
                 'lastname' => FILTER_SANITIZE_SPECIAL_CHARS,
                 'email' => FILTER_SANITIZE_EMAIL,
             ]);
+            //recuperer le tableau errors car besoin pour fonctionner
+        if (empty(array_filter($erorsRegister, fn ($e) => $e !== ''))) {
+            $this->userDB->register([
+            'firstname' => $firstname,
+            'lastname' => $lastname,
+            'email' => $email,
+            'password' => $password
+            ]);
+            header('Location: /index.php?page=/');
+            exit();
+            }
+            header('Location: /index.php.page=register');
+            exit();
+          } 
+        } else {
+            if($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $input = filter_input_array(INPUT_POST, [
+                'email' => FILTER_SANITIZE_EMAIL,
+            ]);
             $email = $input['email'] ?? '';
             $password = $_POST['password'] ?? '';
-            $firstname = $input['firstname'] ?? '';
-            $lastname = $input['lastname'] ?? '';
-
-            if (!$firstname) {
-                $errors['firstname'] = ERROR_REQUIRED;
-            } elseif (mb_strlen($firstname) < 2) {
-                $errors['firstname'] = ERROR_TOO_SHORT;
-            }
-            if (!$lastname) {
-                $errors['lastname'] = ERROR_REQUIRED;
-            } elseif (mb_strlen($lastname) < 2) {
-                $errors['lastname'] = ERROR_TOO_SHORT;
-            }
-            if (!$email) {
-                $errors['email'] = ERROR_REQUIRED;
-            } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-                $errors['email'] = ERROR_EMAIL_INVALID;
-            }
-            if (!$email) {
-                $errors['password'] = ERROR_REQUIRED;
-            } elseif (mb_strlen($password) < 6) {
-                $errors['password'] = ERROR_PASSWORD_TOO_SHORT;
-            }
-            if (empty(array_filter($errors, fn ($e) => $e !== ''))) {
-                $this->userDB->register([
-                'firstname' => $firstname,
-                'lastname' => $lastname,
-                'email' => $email,
-                'password' => $password
-                ]);
-                header('Location: /index.php?page=/');
-            
+            $erorLogin = $erors['login'];
+           
+            if (empty(array_filter($erorLogin, fn ($e) => $e !== ''))) {  
+                
+                $user = $this->userDB->getUserFromEmail($email);
+                if (!$user) {
+                    $erorLogin['email'] = $msgError['ERROR_EMAIL_NO_RECORD'];
+                } else {
+                    if (!password_verify($password, $user['password'])) {
+                        $erorLogin['password'] = $msgError['ERROR_PASSWORD_MISMATCH'];
+                    } else {
+                        $this->userDB->login($user['id']);
+                        header('Location: index.php?page=articles');
+                        $erors = $erorLogin;
+                        return $erors;
+                    }
+                }
+            } else { 
+                
+           $objet->fillPRG($erorLogin, $email, $password);
+            header( "Location: /index.php?page=login");
+            return $msgError['errors'];
+                }
             }
         }
-
-        return $errors;
-        
-   }
-
-   function enregistrement($errors){ 
-    if ($_SERVER['REQUEST_METHOD'] === 'POST'){
-        //recuperer le tableau errors car besoin pour fonctionner
-    if (empty(array_filter($errors, fn ($e) => $e !== ''))) {
-        $this->userDB->register([
-        'firstname' => $firstname,
-        'lastname' => $lastname,
-        'email' => $email,
-        'password' => $password
-        ]);
-        header('Location: /index.php?page=/');
-    
     }
-   }
-}
+    
     public function register()
     {
         ob_start();
-        $errors = $this->affichage_erreur();
-        $this->enregistrement($errors);
+        $erors['password'] = '';
+        $erors['email'] = '';
+        $erors = $this->affichage_erreur();
+        $this->enregistrement($erors,'register',null);
         require_once 'register.php';
         return ob_get_clean();
-    }              
+    } 
+
+     public function login()
+    {
+        ob_start();
+        $erors = $this->affichage_erreur();
+        $this->enregistrement($erors,'login',new MsgError());
+        
+
+        require_once 'login.php';
+        return ob_get_clean();
+    }
+    
 }
+

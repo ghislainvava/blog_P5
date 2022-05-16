@@ -1,10 +1,6 @@
 <?php
 $currentUser  = $currentUser ?? false;
-// if($headTitle == "Presentation"){
-//     $redirection = "Views/";
-// }else {
-//         $redirection = "";
-//     }
+
    
 ?>
 

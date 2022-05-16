@@ -1,18 +1,19 @@
-<body>
-  <h1>Connection</h1>
-  <form action="index.php?page=login" method="POST">
+
+  <form action="/index.php?page=login" method="POST">
+   
+    <br>
     <input type="email" placeholder="Email" name="email" value="<?= $email ?? '' ?>">
-    <?php if ($errors['email']) : ?>
-      <p class="text-danger"><?= $errors['email'] ?></p>
+    <?php if ($erors['login']['email']) : ?>
+      <p class="text-danger"><?= $erors['login']['email'] ?></p>
     <?php endif; ?>
     <br>
     <br>
-    <input type="text" placeholder="Mot de passe" name="password" value="<?= $password ?? '' ?>">
-    <?php if ($errors['password']) : ?>
-      <p class="text-danger"><?= $errors['password'] ?></p>
+    <input type="text" placeholder="Mot de passe" name="password" >
+    <?php if ($erors['login']['password']) : ?>
+      <p class="text-danger"><?= $erors['login']['password'] ?></p>
     <?php endif; ?>
     <br>
     <br>
     <button type="submit">Valider</button>
   </form>
-</body>
+
