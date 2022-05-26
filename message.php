@@ -20,7 +20,7 @@ if (isset($_SESSION['message'])){
             Articles</a>
             
             <?php endif; 
-    
+    unset($_SESSION['message']);
         }
     
     

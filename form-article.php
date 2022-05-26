@@ -10,8 +10,8 @@
                     <div class="form-control">
                         <label for="title">Titre</label>
                         <input type="text" name="title" id="title" value="<?= $title ?? '' ?>">
-                        <?php if ($msgError['errors']['title']) : ?>
-                            <p class="text-danger"><?= $msgError['errors']['title'] ?></p>
+                        <?php if ($msgError['errors']['attribut']['title']) : ?>['attribut']
+                            <p class="text-danger"><?= $msgError['errors']['attribut']['title'] ?></p>
                         <?php endif; ?>
                     </div>
                     <div class="form-control">
@@ -23,15 +23,15 @@
                         <?php else : ?>                
                             <input type="file" name="image" id="image" value="<?=$image ?? '' ?>">
                             <?php endif; ?>   
-                        <?php if ($msgError['errors']['image']) : ?>
-                            <p class="text-danger"><?= $msgError['errors']['image'] ?></p>
+                        <?php if ($msgError['errors']['attribut']['image']) : ?>
+                            <p class="text-danger"><?= $msgError['errors']['attribut']['image'] ?></p>
                         <?php endif; ?>
                     </div>
                     <div class="form-control">
                         <label for="content">Content</label>
                         <textarea name="content" id="content"><?= $content ?? '' ?></textarea>
-                        <?php if ($msgError['errors']['content']) : ?>
-                            <p class="text-danger"><?= $msgError['errors']['content'] ?></p>
+                        <?php if ($msgError['errors']['attribut']['content']) : ?>
+                            <p class="text-danger"><?= $msgError['errors']['attribut']['content'] ?></p>
                         <?php endif; ?>
                     </div>
                     <div class="form-actions">

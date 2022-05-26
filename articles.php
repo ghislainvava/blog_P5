@@ -1,17 +1,15 @@
-<?php
+<!-- <?php
 
-// $pdo = require_once './Database/Database.php';
-// require_once './Database/security.php';
-require_once './Database/models/ArticleDB.php';
-$articleDB = new ArticleDB($pdo);
-//$userDB = new AuthDB($pdo);
-$currentUser = $userDB->isLoggedIn();
-$articles = $articleDB->fetchAll();
-$_GET = filter_input_array(INPUT_GET, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 
-$headTitle ='Articles';
-ob_start();
-?>
+// require_once './Database/models/ArticleDB.php';
+// $articleDB = new ArticleDB($pdo);
+// $currentUser = $userDB->isLoggedIn();
+// $articles = $articleDB->fetchAll();
+// $_GET = filter_input_array(INPUT_GET, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+
+// $headTitle ='Articles';
+// ob_start();
+?> -->
 
     <div class="container"> 
         <div class="content">
@@ -29,7 +27,7 @@ ob_start();
     </div>
 
 <?php
-  $contentView = ob_get_clean();
+ // $contentView = ob_get_clean();
   //require('template.php');
 ?>
 

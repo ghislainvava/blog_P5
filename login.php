@@ -3,14 +3,14 @@
    
     <br>
     <input type="email" placeholder="Email" name="email" value="<?= $email ?? '' ?>">
-    <?php if ($erors['login']['email']) : ?>
-      <p class="text-danger"><?= $erors['login']['email'] ?></p>
+    <?php if ($msgError['errors']['login']['email']) : ?>
+      <p class="text-danger"><?= $msgError['errors']['login']['email'] ?></p>
     <?php endif; ?>
     <br>
     <br>
     <input type="text" placeholder="Mot de passe" name="password" >
-    <?php if ($erors['login']['password']) : ?>
-      <p class="text-danger"><?= $erors['login']['password'] ?></p>
+    <?php if ($msgError['errors']['login']['password']) : ?>
+      <p class="text-danger"><?= $msgError['errors']['login']['password'] ?></p>
     <?php endif; ?>
     <br>
     <br>

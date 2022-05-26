@@ -1,21 +1,24 @@
 <?php
+
 session_start();
-$pdo = require_once './Database/Database.php';
-require_once './Database/security.php';
-$userDB = new AuthDB($pdo);
-$page = $_GET['page'];
-require './Controllers/UsersController.php';
-require_once 'Database/models/ArticleDB.php';
-require_once './Controllers/ArticlesController.php';
-$articleDB = new ArticleDB($pdo);
-
-
+$currentUser ;
 $contentView = '';
-
-
-function userConnect(){
-   
+$pdo = require_once './Database/Database.php';
+require_once 'Database/models/ArticleDB.php';
+require_once './Database/security.php';
+require './Controllers/UsersController.php';
+require_once './Controllers/ArticlesController.php';
+$userDB = new AuthDB($pdo);
+$articleDB = new ArticleDB($pdo);
+$page = $_GET['page'];
+if ($page !== 'register' and $page !== 'login'){
+    $currentUser = $userDB->isLoggedIn();
+    if (!$currentUser) {
+        header('Location: /');
+        exit();
+    }
 }
+
 switch ($page) {
     case '/';
         require_once 'home.php'; 
@@ -24,49 +27,46 @@ switch ($page) {
         $headTitle = "Connection";
         $usersController = new UsersController($userDB);
         $contentView = $usersController->login();
-        break;
-    case 'articles':
-        $headTitle = "Articles";
-        require_once 'articles.php';
-        break;
+        break; 
     case 'register':
-        $headTitle = "Register";
+        $headTitle = "Enregistrement";
         $usersController = new UsersController($userDB);
         $contentView = $usersController->register();
         break;
+    case 'articles':
+        $headTitle = "Articles";
+        $currentUser = $userDB->isLoggedIn();
+        $articlesController = new ArticlesController($articleDB, $currentUser);
+        $contentView = $articlesController->getAllArticle($articleDB, $currentUser); 
+        break;
+    case 'profil':
+        $headTitle = "Profile";
+        $currentUser = $userDB->isLoggedIn();
+        $articlesController = new ArticlesController($articleDB, $currentUser);
+        $contentView = $articlesController->getProfil($articleDB, $currentUser); 
+        break;
     case 'show-article':
-        $headTitle = "Show-article";
-        $currentUser = $userDB->isLoggedIn(); //authentification 
-        if (!$currentUser) {  //vérifaction si l'utilisateur est connecté
-            header('Location: /index.php?page=/');
-            exit();
-        } 
+        $headTitle = "Article";
+        $currentUser = $userDB->isLoggedIn(); //authentification
+        $articlesController = new ArticlesController($articleDB, $currentUser);
+        $contentView = $articlesController->getArticle($articleDB, $currentUser);
         require_once 'show-article.php';
         break;
     case 'form-article':
-        $headTitle = "form-article";
-        $currentUser = $userDB->isLoggedIn(); //authentification 
-        if (!$currentUser) {  //vérifaction si l'utilisateur est connecté
-            header('Location: /index.php?page=/');
-            exit();
-        } 
-        $articlesController = new ArticlesController($articleDB);
-        $contentView = $articlesController->moveArticle(); 
+        $currentUser = $userDB->isLoggedIn(); //authentification   
+        $articlesController = new ArticlesController($articleDB, $currentUser);
+        $contentView = $articlesController->moveArticle($articleDB, $currentUser); 
         break;
     case 'logout':
-        $headTitle = "Logout";
+        $headTitle = "Déconnection";
         require_once 'Controllers/logout.php';
         break;
-    case 'profil':
-        $headTitle = "Profil";
-        require_once 'profil.php';
-        break;
     case 'delete-article':
-        $headTitle = "delete-article";
+        $headTitle = "Suppression-article";
         require_once 'Controllers/delete-article.php';
         break;
     default :
         require_once 'message.php';
         break;
 }
-include('template.php');
+include('template.php');//sert à structure la page
