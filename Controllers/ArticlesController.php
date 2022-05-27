@@ -39,7 +39,7 @@ class ArticlesController
        if ($id) {  //si id de l'article on envoye les données
            $article = $articleDB->fetchOne($id);
            if($article['author'] !== $currentUser['id']){
-               header('Location: /index.php?page=/');
+               header('Location: /index.php?page=home');
                exit();
            }
        }
@@ -58,7 +58,7 @@ class ArticlesController
         if ($id) {  //si id de l'article on envoye les données
             $article = $articleDB->fetchOne($id);
             if($article['author'] !== $currentUser['id']){
-                header('Location: /index.php?page=/');
+                header('Location: /index.php?page=home');
                 exit();
             }
             $title = $article['title'];

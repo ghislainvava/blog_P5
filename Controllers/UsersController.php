@@ -30,9 +30,8 @@ class UsersController
    }
    
    function enregistrement($msgError, $page, $objet){
-        // $erorsRegister = array_merge( $msgError['errors']['login'], $msgError['errors']['name']);
+       
         if ($_SERVER['REQUEST_METHOD'] === 'POST'){
-            var_dump($firstname); 
             $input = filter_input_array(INPUT_POST, [
                 'firstname' => FILTER_SANITIZE_SPECIAL_CHARS,
                 'lastname' => FILTER_SANITIZE_SPECIAL_CHARS,
@@ -44,9 +43,7 @@ class UsersController
             $lastname = $input['lastname'] ?? '';
            
             //recuperer le tableau errors car besoin pour fonctionner
-            //if (empty(array_filter($msgError['errors'], fn ($e) => $e !== ''))) {
             if ($msgError['errors']['login']['email'] === '' and $msgError['errors']['login']['password'] === ''  ){
-           
                 if($page === 'login'){ 
                     $user = $this->userDB->getUserFromEmail($email);
                     if (!$user) {
@@ -69,7 +66,7 @@ class UsersController
                             'email' => $email,
                             'password' => $password
                             ]);
-                            header('Location: /index.php?page=/');
+                            header('Location: /index.php?page=login');
                             exit();
                         } 
                 }
