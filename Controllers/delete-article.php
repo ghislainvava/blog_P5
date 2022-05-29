@@ -1,12 +1,12 @@
 <?php
-// $pdo = require_once '../Database/Database.php';
-// require_once '../Database/security.php';
-//require_once '../../Database/models/ArticleDB.php';
-//$userDB = new AuthDB($pdo);
+
+use Database\DatabaseConnection;
+use Database\AuthDB;
+use Database\models\ArticleDB;
+
 $articleDB = new ArticleDB($pdo);
 $currentUser = $userDB->isLoggedIn();
 $headTitle = 'Suppression Article';
-
 
 if (!$currentUser) {
   header('Location: /index.php?page=/');

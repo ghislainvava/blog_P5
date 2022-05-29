@@ -1,16 +1,18 @@
 <?php
+namespace Controllers;
 //require './Models/MsgError.php';
 
+ use Models\MsgError;
 
 class ArticlesController
 {
-    
    private $articleDB;
    private $currentUser ; 
    public function __construct($articleDB, $currentUser){
     $this->articleDB = $articleDB;
     $this->currentUser = $currentUser;
    }
+
 
    function getProfil($articleDB, $currentUser)
    {
@@ -50,6 +52,7 @@ class ArticlesController
     function moveArticle($articleDB, $currentUser)
     {
         ob_start();
+    
         $objet= new MsgError();
         $msgError = $objet->msgError;
         $msgError = $objet->prgPush($msgError);

@@ -1,4 +1,8 @@
 <?php
+namespace Database;
+
+ use PDOStatement;
+ use PDO; 
 
 class AuthDB 
 {      

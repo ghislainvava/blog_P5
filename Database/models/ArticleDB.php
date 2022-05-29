@@ -1,5 +1,8 @@
-
 <?php
+namespace Database\models;
+
+use PDOStatement;
+use PDO;
 
 class ArticleDB
 {

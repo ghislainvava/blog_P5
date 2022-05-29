@@ -1,16 +1,5 @@
 <?php
-$pdo = require_once './Database/Database.php';
-require_once './Database/security.php';
-
-//$userDB = new AuthDB($pdo);
-$currentUser = $userDB->isLoggedIn();
-
-$headTitle ='Presentation';
-// $currentPage = "index";
-ob_start();
-
-?>
-
+ob_start();?>
 <!-- <header>
 
     <h1 class="site-heading text-center text-faded d-none d-lg-block">

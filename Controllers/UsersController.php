@@ -1,5 +1,8 @@
 <?php
+namespace Controllers;
 require './Models/MsgError.php';
+use Models\MsgError;
+
 
 class UsersController
 {

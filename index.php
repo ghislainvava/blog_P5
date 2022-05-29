@@ -1,14 +1,23 @@
 <?php
 session_start();
-require_once './Database/security.php';
+include ('./vendor/autoload.php');
+
+require_once './Database/AuthDB.php';
 require_once 'Database/models/ArticleDB.php';
-//$pdo = require_once './Database/Database.php';
 require './Controllers/UsersController.php';
 require_once './Controllers/ArticlesController.php';
-require_once './Database/Database.php';
+require_once './Database/DatabaseConnection.php';
+
+use Database\DatabaseConnection;
+use Database\AuthDB;
+use Database\models\ArticleDB;
+use Controllers\UsersController;
+use Controllers\ArticlesController;
+
 
 $db = new DatabaseConnection();
 $pdo = $db->getConnection();
+
 
     if(isset($_GET['page']) ){
         
@@ -17,12 +26,13 @@ $pdo = $db->getConnection();
         if ($_GET['page'] !== 'register' and $_GET['page'] !== 'login'){
             $currentUser = $userDB->isLoggedIn();
             if (!$currentUser) {
-                header('Location: /index.php?page=home');
+                header('Location: /index.php?page=login');
                 exit();
             }
         }
         switch ($_GET['page']) {
             case 'home';
+                $headTitle ='Presentation';
                 require_once 'home.php'; 
                 break;
             case 'login':

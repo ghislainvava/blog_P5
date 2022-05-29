@@ -1,8 +1,7 @@
 <?php
+namespace Models;
 
 class MsgError {
-
-
     public $msgError = array(
             
         "ERROR_REQUIRED" => "Veuillez renseigner ce champ",
