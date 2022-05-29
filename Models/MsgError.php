@@ -1,9 +1,8 @@
 <?php
-namespace Models;
+namespace BlogOC\Models;
 
 class MsgError {
-    public $msgError = array(
-            
+    public $msgError = array(     
         "ERROR_REQUIRED" => "Veuillez renseigner ce champ",
         "ERROR_EMAIL_INVALID" => "L'email n'est pas valide",
         "ERROR_EMAIL_NO_RECORD" => "l'email n'est pas enregistré",
@@ -13,8 +12,7 @@ class MsgError {
         "ERROR_TITLE_TOO_SHORT" => 'Le titre est trop court',
         'ERROR_CONTENT_TOO_SHORT' => "L'article est trop court",
         'ERROR_SIZE_IMAGE' => "L'image doit faire moins de 6 MO",
-        'ERROR_EXTENSIONS' => "Veuillez sélectionner un format de fichier valide",
-   
+        'ERROR_EXTENSIONS' => "Veuillez sélectionner un format de fichier valide", 
     'errors' => array(
             'login' => array(
                 'email' => '',
@@ -31,7 +29,6 @@ class MsgError {
             )
         )
     );
-
     function prgPush($msgError){
         
         if (isset($_SESSION['PRG']['email'])){
@@ -61,7 +58,6 @@ class MsgError {
         if (isset($_SESSION['PRG']['input_email'])) {
             $email = $_SESSION['PRG']['input_email'];
         }
-       
         if (isset($_SESSION['PRG']['post_email'])) {
             $password = $_SESSION['PRG']['post_email'];
         }
@@ -76,18 +72,15 @@ class MsgError {
         
     }
     function pushErrors($msgError, $email, $password, $lastname, $firstname ){
-       
         $email = $_POST['email'] ?? '';
         $password = $_POST['password'] ?? '';
         $firstname = $_POST['firstname'] ?? '';
         $lastname = $_POST['lastname'] ?? '';
-       
         if ($firstname === '') {
             $msgError['errors']['name']['firstname'] = $msgError['ERROR_REQUIRED'];  //$erors est variable dans le form
         } elseif (mb_strlen($firstname) < 2) {
             $msgError['errors']['name']['firstname'] = $msgError['ERROR_TOO_SHORT'];
-           $_SESSION['PRG']['firstname'] = $firstname;
-          
+           $_SESSION['PRG']['firstname'] = $firstname; 
         }
         if ($lastname === '') {
             $msgError['errors']['name']['lastname'] = $msgError['ERROR_REQUIRED'];
@@ -104,7 +97,6 @@ class MsgError {
         } elseif (mb_strlen($password) < 6) {
             $msgError['errors']['login']['password'] = $msgError['ERROR_PASSWORD_TOO_SHORT'];
         }
-       
         return $msgError;
     }
     function pushInput(){
@@ -116,7 +108,6 @@ class MsgError {
     function pushErrorsArticles($msgError, $content, $title ){
         $content = $_POST['content'] ?? '';
         $title = $_POST['title'] ?? '';
-
         if ($title === '') {
             $msgError['errors']['attribut']['title'] = $msgError['ERROR_REQUIRED'];   
         } elseif (mb_strlen($title) < 5) {
@@ -129,7 +120,6 @@ class MsgError {
         } 
         return $msgError;
     }
-
     function fillPRG($msgError, $email, $password, $lastname, $firstname ){
             if (!empty($msgError['errors']['login']['email'])){ //on rempli $_SESSION avant PRG
                 $_SESSION['PRG']['email'] = $msgError['errors']['login']['email'];

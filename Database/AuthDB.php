@@ -1,5 +1,5 @@
 <?php
-namespace Database;
+namespace BlogOC\Database;
 
  use PDOStatement;
  use PDO; 
@@ -15,16 +15,13 @@ class AuthDB
 
         function __construct(private PDO $pdo)
         {
-            
             $this->statementRegister = $pdo->prepare('INSERT INTO user VALUES (
                 DEFAULT,
                 :email,
                 :password,
                 :firstname,
-                :lastname
-                
+                :lastname     
               )');
-
               $this->statementReadSession = $pdo->prepare('SELECT * FROM session WHERE id=:id');
               $this->statementReadUser = $pdo->prepare('SELECT * FROM user WHERE id=:id');
               $this->statementReadUserFromEmail = $pdo->prepare('SELECT * FROM user WHERE email=:email');
@@ -34,10 +31,8 @@ class AuthDB
                 )');
              $this->statementDeleteSession = $pdo->prepare('DELETE FROM session WHERE id=:id');
         }
-
         function login(string $userId): void
         {   
-           
             $this->statementCreateSession->bindValue(':userid', $userId);
             $this->statementCreateSession->execute();
             $sessionId = $this->pdo->lastInsertId();
@@ -51,7 +46,6 @@ class AuthDB
               $this->statementRegister->bindValue(':password', $hashedPassword);
               $this->statementRegister->bindValue(':firstname', $user['firstname']);
               $this->statementRegister->bindValue(':lastname', $user['lastname']);
-              
               $this->statementRegister->execute();
               return;
         }

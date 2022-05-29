@@ -1,7 +1,5 @@
 <?php
 $currentUser  = $currentUser ?? false;
-
-   
 ?>
 
 <!-- Navigation-->
@@ -28,7 +26,6 @@ $currentUser  = $currentUser ?? false;
                      <li class="nav-item px-lg-4 " id="header-profile" <?= $_SERVER['REQUEST_URI'] === '/profil.php' ? 'active' : '' ?>>
                          <a class="nav-link text-uppercase" href="index.php?page=profil"><?= $currentUser['firstname'][0].$currentUser['lastname'][0]?></a>
                      </li>
-                 
                  <?php else : ?>
                      <li class="nav-item px-lg-4" <?= $_SERVER['REQUEST_URI'] === '/register.php' ? 'active' : '' ?>>
                          <a class="nav-link text-uppercase" href="index.php?page=register">Inscription</a>
@@ -36,7 +33,6 @@ $currentUser  = $currentUser ?? false;
                      <li class="nav-item px-lg-4" <?= $_SERVER['REQUEST_URI'] === '/login.php' ? 'active' : '' ?>>
                          <a class="nav-link text-uppercase" href="index.php?page=login">Connection</a>
                      </li>
-
                  <?php endif; ?>
                    
              </ul>

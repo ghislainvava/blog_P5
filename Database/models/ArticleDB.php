@@ -1,5 +1,5 @@
 <?php
-namespace Database\models;
+namespace BlogOC\Database\models;
 
 use PDOStatement;
 use PDO;
@@ -13,7 +13,6 @@ class ArticleDB
   private PDOStatement $statementReadAll;
   private PDOStatement $statementReadUserAll;
 
-
   function __construct(private PDO $pdo)
   {
     $this->statementCreateOne = $pdo->prepare('
@@ -22,15 +21,11 @@ class ArticleDB
         image,
         content,
         author
-        
-       
       ) VALUES (   
         :title,
         :image,
         :content,
         :author
-        
-        
       )
     ');
     $this->statementUpdateOne = $pdo->prepare('
@@ -47,28 +42,23 @@ class ArticleDB
     $this->statementDeleteOne = $pdo->prepare('DELETE FROM article WHERE id=:id');
     $this->statementReadUserAll = $pdo->prepare('SELECT * FROM article WHERE author=:authorId');
   }
-
-
   public function fetchAll() :array //on type pour + de securité
   {
     $this->statementReadAll->execute();
     return $this->statementReadAll->fetchAll();
   }
-
   public function fetchOne(string $id) : array
   {
     $this->statementReadOne->bindValue(':id', $id);
     $this->statementReadOne->execute();
     return $this->statementReadOne->fetch();
   }
-
   public function deleteOne(string $id): string
   {
     $this->statementDeleteOne->bindValue(':id', $id);
     $this->statementDeleteOne->execute();
     return $id;
   }
-
   public function createOne($article): array
   {
     $this->statementCreateOne->bindValue(':title', $article['title']);
@@ -78,7 +68,6 @@ class ArticleDB
     $this->statementCreateOne->execute();
     return $this->fetchOne($this->pdo->lastInsertId());
   }
-
   public function updateOne($article): array
   {
     $this->statementUpdateOne->bindValue(':title', $article['title']);
@@ -89,14 +78,12 @@ class ArticleDB
     $this->statementUpdateOne->execute();
     return $article;
   }
-
   public function fetchUserArticle($authorId) :array
   {
     $this->statementReadUserAll->bindValue(":authorId", $authorId);
     $this->statementReadUserAll->execute();
     return $this->statementReadUserAll->fetchAll();
   }
-
 }
 
 

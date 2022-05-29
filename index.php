@@ -1,18 +1,18 @@
 <?php
 session_start();
-include ('./vendor/autoload.php');
+require 'vendor/autoload.php';
 
-require_once './Database/AuthDB.php';
-require_once 'Database/models/ArticleDB.php';
-require './Controllers/UsersController.php';
-require_once './Controllers/ArticlesController.php';
-require_once './Database/DatabaseConnection.php';
+// require_once './Database/AuthDB.php';
+// require_once 'Database/models/ArticleDB.php';
+// require './Controllers/UsersController.php';
+// require_once './Controllers/ArticlesController.php';
+//require_once './Database/DatabaseConnection.php';
 
-use Database\DatabaseConnection;
-use Database\AuthDB;
-use Database\models\ArticleDB;
-use Controllers\UsersController;
-use Controllers\ArticlesController;
+use BlogOC\Database\DatabaseConnection;
+use BlogOC\Database\AuthDB;
+use BlogOC\Database\models\ArticleDB;
+use BlogOC\Controllers\UsersController;
+use BlogOC\Controllers\ArticlesController;
 
 
 $db = new DatabaseConnection();

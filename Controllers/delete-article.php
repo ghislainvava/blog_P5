@@ -1,8 +1,8 @@
 <?php
 
-use Database\DatabaseConnection;
-use Database\AuthDB;
-use Database\models\ArticleDB;
+use BlogOC\Database\DatabaseConnection;
+use BlogOC\Database\AuthDB;
+use BlogOC\Database\models\ArticleDB;
 
 $articleDB = new ArticleDB($pdo);
 $currentUser = $userDB->isLoggedIn();

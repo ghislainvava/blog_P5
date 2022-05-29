@@ -1,14 +1,12 @@
 <?php
-namespace Controllers;
-require './Models/MsgError.php';
-use Models\MsgError;
+namespace BlogOC\Controllers;
 
+use BlogOC\Models\MsgError;
 
 class UsersController
 {
     private $userDB;
   
-
     public function __construct($userDB)
     {
         $this->userDB = $userDB;

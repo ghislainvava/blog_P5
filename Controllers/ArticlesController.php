@@ -1,8 +1,7 @@
 <?php
-namespace Controllers;
-//require './Models/MsgError.php';
+namespace BlogOC\Controllers;
 
- use Models\MsgError;
+ use BlogOC\Models\MsgError;
 
 class ArticlesController
 {
@@ -12,8 +11,6 @@ class ArticlesController
     $this->articleDB = $articleDB;
     $this->currentUser = $currentUser;
    }
-
-
    function getProfil($articleDB, $currentUser)
    {
        ob_start();
@@ -22,7 +19,6 @@ class ArticlesController
        require_once 'profil.php';
        return ob_get_clean();
    }
-
    function getAllArticle($articleDB, $currentUser)
    {
         ob_start();
@@ -52,7 +48,6 @@ class ArticlesController
     function moveArticle($articleDB, $currentUser)
     {
         ob_start();
-    
         $objet= new MsgError();
         $msgError = $objet->msgError;
         $msgError = $objet->prgPush($msgError);

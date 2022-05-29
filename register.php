@@ -1,16 +1,15 @@
-
-  <form action="/index.php?page=register" method="POST">
+ <form action="/index.php?page=register" method="POST">
     <div>
-      <input type="text" name="lastname" placeholder="Veuillez saisir votre nom" value="<?= $lastname ?? '' ?>">
-      <?php if ($msgError['errors']['name']['lastname']) : ?>
+        <input type="text" name="lastname" placeholder="Veuillez saisir votre nom" value="<?= $lastname ?? '' ?>">
+        <?php if ($msgError['errors']['name']['lastname']) : ?>
         <p class="text-danger"><?= $msgError['errors']['name']['lastname'] ?></p>
-      <?php endif; ?>
-      <br>
-      <br>
-      <input type="text" name="firstname" placeholder="Veuillez saisir votre prénom" value="<?= $firstname ?? '' ?>">
-      <?php if ($msgError['errors']['name']['firstname']) : ?>
-        <p class="text-danger"><?= $msgError['errors']['name']['firstname'] ?></p>
-      <?php endif; ?>
+        <?php endif; ?>
+        <br>
+        <br>
+        <input type="text" name="firstname" placeholder="Veuillez saisir votre prénom" value="<?= $firstname ?? '' ?>">
+        <?php if ($msgError['errors']['name']['firstname']) : ?>
+          <p class="text-danger"><?= $msgError['errors']['name']['firstname'] ?></p>
+        <?php endif; ?>
     </div>
     <br>
     <br>
