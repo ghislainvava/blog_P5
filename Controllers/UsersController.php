@@ -12,9 +12,21 @@ class UsersController
         $this->userDB = $userDB;
     }
     private $currentUser ;
-   
 
-    function affichage_erreur()
+    public function logout($userDB){
+       
+        $sessionId = $_COOKIE['session'] ?? '';
+        if ($sessionId) {
+            $userDB->logout($sessionId);
+            session_destroy();
+            header('Location: /index.php?page=login');
+            exit;
+        }
+        
+    }  
+    
+   
+    public function affichage_erreur()
     {
         $objet= new MsgError();
         $msgError = $objet->msgError;
@@ -84,7 +96,7 @@ class UsersController
           exit();   
       }
     }
-    
+
     
     public function register()
     {

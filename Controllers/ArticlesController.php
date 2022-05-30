@@ -44,6 +44,25 @@ class ArticlesController
        require_once 'show-article.php';
        return ob_get_clean();
    }
+   function deleteArticle($articleDB, $currentUser)
+   {
+    if (!$currentUser) {
+        header('Location: /index.php?page=home');
+        exit();
+      } else{
+          $_GET = filter_input_array(INPUT_GET, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+          $id = $_GET['id'] ?? '';
+          if ($id) {
+            $article = $articleDB->fetchOne($id);
+            if ($article['author'] === $currentUser['id']) {
+              $articleDB->deleteOne($id);
+              $_SESSION['message'] = "l'article a bien été supprimé";
+            }
+        }  
+          header('Location: /index.php?page=message');
+          exit();
+      }
+   }
 
     function moveArticle($articleDB, $currentUser)
     {
