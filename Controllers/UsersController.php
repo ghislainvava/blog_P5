@@ -13,19 +13,16 @@ class UsersController
     }
     private $currentUser ;
 
-    public function logout($userDB){
-       
+    public function logout($userDB)
+    {
         $sessionId = $_COOKIE['session'] ?? '';
         if ($sessionId) {
             $userDB->logout($sessionId);
             session_destroy();
             header('Location: /index.php?page=login');
             exit;
-        }
-        
+        }   
     }  
-    
-   
     public function affichage_erreur()
     {
         $objet= new MsgError();
@@ -41,9 +38,8 @@ class UsersController
         }
        return $msgError;    
    }
-   
-   function enregistrement($msgError, $page, $objet){
-       
+   public function enregistrement($msgError, $page, $objet)
+   { 
         if ($_SERVER['REQUEST_METHOD'] === 'POST'){
             $input = filter_input_array(INPUT_POST, [
                 'firstname' => FILTER_SANITIZE_SPECIAL_CHARS,
@@ -54,7 +50,6 @@ class UsersController
             $password = $_POST['password'] ?? '';
             $firstname = $input['firstname'] ?? '';
             $lastname = $input['lastname'] ?? '';
-           
             //recuperer le tableau errors car besoin pour fonctionner
             if ($msgError['errors']['login']['email'] === '' and $msgError['errors']['login']['password'] === ''  ){
                 if($page === 'login'){ 
@@ -72,7 +67,6 @@ class UsersController
                     }
                 } else {
                     if ($msgError['errors']['name']['lastname'] === '' and $msgError['errors']['name']['firstname'] === ''){
-                   
                         $this->userDB->register([
                             'firstname' => $firstname,
                             'lastname' => $lastname,
@@ -83,36 +77,32 @@ class UsersController
                             exit();
                         } 
                 }
-            
-          } elseif ($page ==='login'){ // ils y a des messages d'erreurs 
+          }  // ils y a des messages d'erreurs 
             $objet->fillPRG($msgError, $email, $password, $lastname, $firstname);
-            header( "Location: /index.php?page=login");
-            return $msgError['errors'];
-
-          }
-          $objet->fillPRG($msgError, $email, $password, $lastname , $firstname);
-          header( "Location: /index.php?page=register");
-          return $msgError['errors'];
-          exit();   
+                if ($page ==='login'){
+                header( "Location: /index.php?page=login");
+                return $msgError['errors'];
+            }else{
+                header( "Location: /index.php?page=register");
+                return $msgError['errors'];
+                exit();   
+            }
       }
     }
-
-    
     public function register()
     {
         ob_start(); 
         $msgError = $this->affichage_erreur();
         $this->enregistrement($msgError,'register',new MsgError());
-        require_once 'register.php';
+        require_once 'Views/register.php';
         return ob_get_clean();
     } 
-
      public function login()
     {
         ob_start();
         $msgError = $this->affichage_erreur();
         $this->enregistrement($msgError,'login',new MsgError());
-        require_once 'login.php';
+        require_once 'Views/login.php';
         return ob_get_clean();
     }
     

@@ -1,12 +1,4 @@
-<?php
-ob_start();?>
-<!-- <header>
-
-    <h1 class="site-heading text-center text-faded d-none d-lg-block">
-        <span class="site-heading-upper text-primary mb-3">GHISLAIN VACHET</span>
-        <span class="site-heading-lower">Mon premier Blog</span>
-    </h1>
-</header> -->
+<?php ob_start();?>
 <section class="page-section clearfix">
     <div class="container">
         <div class="intro">
@@ -68,9 +60,6 @@ ob_start();?>
             </div>
         </div>
 </section>
-  <?php 
-    $contentView = ob_get_clean();
-   // require('template.php');
-    ?>
+  <?php ob_get_clean();?>
       
 

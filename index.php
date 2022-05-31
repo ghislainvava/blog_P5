@@ -7,7 +7,7 @@ use BlogOC\Database\AuthDB;
 use BlogOC\Database\models\ArticleDB;
 use BlogOC\Controllers\UsersController;
 use BlogOC\Controllers\ArticlesController;
-
+use BlogOC\Views\Message;
 
 $db = new DatabaseConnection();
 $pdo = $db->getConnection();
@@ -17,7 +17,6 @@ $pdo = $db->getConnection();
         $articleDB = new ArticleDB($pdo);
         if ($_GET['page'] !== 'register' and $_GET['page'] !== 'login'){
             $currentUser = $userDB->isLoggedIn();
-            var_dump($currentUser);
             if (!$currentUser) {
                 header('Location: /index.php?page=login');
                 exit();
@@ -26,7 +25,7 @@ $pdo = $db->getConnection();
         switch ($_GET['page']) {
             case 'home';
                 $headTitle ='Presentation';
-                require_once 'home.php'; 
+                $contentView = include('Views/home.php'); 
                 break;
             case 'login':
                 $headTitle = "Connection";
@@ -39,56 +38,41 @@ $pdo = $db->getConnection();
                 $contentView = $usersController->register();
                 break;
             case 'logout':
-                $headTitle = "Déconnection";
                 $usersController = new UsersController($userDB);
                 $contentView = $usersController->logout($userDB);
                 break;
             case 'profil':
-                $headTitle = "Profile";
-                $currentUser = $userDB->isLoggedIn();
+                $headTitle = "Mon profil";
                 $articlesController = new ArticlesController($articleDB, $currentUser);
                 $contentView = $articlesController->getProfil($articleDB, $currentUser); 
                 break;
             case 'articles':
                 $headTitle = "Articles";
-                $currentUser = $userDB->isLoggedIn();
                 $articlesController = new ArticlesController($articleDB, $currentUser);
                 $contentView = $articlesController->getAllArticle($articleDB, $currentUser); 
                 break;
             case 'show-article':
                 $headTitle = "Article";
-                $currentUser = $userDB->isLoggedIn(); //authentification
                 $articlesController = new ArticlesController($articleDB, $currentUser);
                 $contentView = $articlesController->getArticle($articleDB, $currentUser);
                 break;
             case 'form-article':
-                $currentUser = $userDB->isLoggedIn(); //authentification   
                 $articlesController = new ArticlesController($articleDB, $currentUser);
                 $contentView = $articlesController->moveArticle($articleDB, $currentUser); 
                 break;
             case 'delete-article':
-                $headTitle = "Suppression-article";
                 $articlesController = new ArticlesController($articleDB, $currentUser);
                 $contentView = $articlesController->deleteArticle($articleDB, $currentUser); 
                 break;
             case 'message';
-                require_once 'message.php';
-                include('head.php');
+                $headTitle = "message";
+                include('Views/head.php');
+                $message = new Message();
+                $contentView = $message->message();
                 break;
             default :
-                require_once 'message.php';
-                include('head.php');
-            break;
-                
+                header:('Location: index.php?=message');
+                break;        
         }
-        if ($_GET['page'] !== 'message') {
-            include('template.php');//sert à structure la page
-        }
-
-            }else{
-                header('Location: /index.php?page=message');
-            }
-
-
-
-
+            include('Views/template.php');//sert à structure la page
+    }

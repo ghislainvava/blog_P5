@@ -15,8 +15,7 @@ class ArticlesController
    {
        ob_start();
        $articles = $articleDB->fetchUserArticle($currentUser['id']);
-       $headTitle = "Mon profil";
-       require_once 'profil.php';
+       require_once 'Views/profil.php';
        return ob_get_clean();
    }
    function getAllArticle($articleDB, $currentUser)
@@ -24,14 +23,12 @@ class ArticlesController
         ob_start();
         $_GET = filter_input_array(INPUT_GET, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
         $articles = $articleDB->fetchAll();
-        $headTitle ='Articles';
-        require_once 'articles.php';
+        require_once 'Views/articles.php';
         return ob_get_clean();
    }
    function getArticle($articleDB, $currentUser)
    {
        ob_start();
-       $headTitle = "Show-article";
        $_GET = filter_input_array(INPUT_GET, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
        $id = $_GET['id'] ?? '';
        if ($id) {  //si id de l'article on envoye les données
@@ -41,7 +38,7 @@ class ArticlesController
                exit();
            }
        }
-       require_once 'show-article.php';
+       require_once 'Views/show-article.php';
        return ob_get_clean();
    }
    function deleteArticle($articleDB, $currentUser)
@@ -63,8 +60,7 @@ class ArticlesController
           exit();
       }
    }
-
-    function moveArticle($articleDB, $currentUser)
+    public function moveArticle($articleDB, $currentUser)
     {
         ob_start();
         $objet= new MsgError();
@@ -83,6 +79,7 @@ class ArticlesController
             $content = $article['content'];  
         }
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+           
             $_POST = filter_input_array(INPUT_POST, [
                 'title' => FILTER_SANITIZE_FULL_SPECIAL_CHARS,
                 'content' => [
@@ -115,6 +112,7 @@ class ArticlesController
             $content = $_POST['content'] ?? '';
             $msgError = $objet->pushErrorsArticles( $msgError, $content, $title);
             //if (empty(array_filter($msgError['errors'], fn ($e) => $e !== ''))) {
+                var_dump($msgError);
             if($msgError['errors']['attribut']['title'] === '' and $msgError['errors']['attribut']['content'] === ''){    
                 if ($id) {   
                     var_dump($msgError);
@@ -153,7 +151,7 @@ class ArticlesController
         }else{
             $headitle ="Créer un article";
         }
-        require_once 'form-article.php';
+        require_once 'Views/form-article.php';
         return ob_get_clean();
     }
 }
