@@ -1,6 +1,3 @@
-<?php
-$currentUser  = $currentUser ?? false;
-?>
 
 <!-- Navigation-->
 <nav class="navbar navbar-expand-lg navbar-dark py-lg-4" id="mainNav">

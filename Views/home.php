@@ -1,4 +1,4 @@
-<?php ob_start();?>
+
 <section class="page-section clearfix">
     <div class="container">
         <div class="intro">
@@ -60,6 +60,6 @@
             </div>
         </div>
 </section>
-  <?php ob_get_clean();?>
+ 
       
 

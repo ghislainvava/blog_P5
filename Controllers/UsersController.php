@@ -23,6 +23,12 @@ class UsersController
             exit;
         }   
     }  
+    public function home(){
+        ob_start();
+        require_once 'Views/home.php';
+        return ob_get_clean();
+
+    }
     public function affichage_erreur()
     {
         $objet= new MsgError();

@@ -10,7 +10,7 @@
                     <div class="form-control">
                         <label for="title">Titre</label>
                         <input type="text" name="title" id="title" value="<?= $title ?? '' ?>">
-                        <?php if ($msgError['errors']['attribut']['title']) : ?>['attribut']
+                        <?php if ($msgError['errors']['attribut']['title']) : ?>
                             <p class="text-danger"><?= $msgError['errors']['attribut']['title'] ?></p>
                         <?php endif; ?>
                     </div>

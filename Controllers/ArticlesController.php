@@ -63,9 +63,10 @@ class ArticlesController
     public function moveArticle($articleDB, $currentUser)
     {
         ob_start();
-        $objet= new MsgError();
+        $objet= new MsgError(); 
         $msgError = $objet->msgError;
-        $msgError = $objet->prgPush($msgError);
+        $msgError = $objet->prgPush($msgError); //on rempli les erreurs du PRG et Placeholder
+        unset($_SESSION['PRG']);
         $_GET = filter_input_array(INPUT_GET, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
         $id = $_GET['id'] ?? '';
         if ($id) {  //si id de l'article on envoye les données
@@ -77,7 +78,11 @@ class ArticlesController
             $title = $article['title'];
             $image = $article['image'];
             $content = $article['content'];  
-        }
+        }else{
+            $title = $msgError['placeholder']['attribut']['title']; //on rempli s'il y a un placeholder enregistré
+            $image = $msgError['placeholder']['attribut']['image'];
+            $content = $msgError['placeholder']['attribut']['content'];
+        }  
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
            
             $_POST = filter_input_array(INPUT_POST, [
@@ -111,47 +116,39 @@ class ArticlesController
             $title = $_POST['title'] ?? '';
             $content = $_POST['content'] ?? '';
             $msgError = $objet->pushErrorsArticles( $msgError, $content, $title);
-            //if (empty(array_filter($msgError['errors'], fn ($e) => $e !== ''))) {
-                var_dump($msgError);
+
             if($msgError['errors']['attribut']['title'] === '' and $msgError['errors']['attribut']['content'] === ''){    
                 if ($id) {   
-                    var_dump($msgError);
-                    exit; 
-                $article['title'] = $title;
-                $article['image'] = $image;
-                $article['content'] = $content;
-                $article['author'] = $currentUser['id'];
-                $articleDB->updateOne($article);
-                $_SESSION['message'] = "l'article a bien été modifié";
-                } else { 
-                $articleDB->createOne([         
-                        'title' => $title,
-                        'image' => $image,
-                        'content' => $content,
-                        'author' => $currentUser['id']
-                    ]);
-                    $_SESSION['message'] = "l'article a bien été ajouté";
-                }
+                    $article['title'] = $title;
+                    $article['image'] = $image;
+                    $article['content'] = $content;
+                    $article['author'] = $currentUser['id'];
+                    $articleDB->updateOne($article);
+                    $_SESSION['message'] = "l'article a bien été modifié";
+                    } else { 
+                        $articleDB->createOne([         
+                                'title' => $title,
+                                'image' => $image,
+                                'content' => $content,
+                                'author' => $currentUser['id']
+                            ]);
+                            $_SESSION['message'] = "l'article a bien été ajouté";
+                        }
                 unset($_SESSION['post_image']);
                 header('Location: /index.php?page=message');
                 exit();    
-            } else {
-            //si erreur je crée des Session pour garder en mémoire les erreurs avant le PRG
-            $objet->fillPRGArticle($msgError, $content, $image, $title);
-                if (isset($_GET['id'])){
-                    header('Location: /index.php?=form-article&id='.$_GET['id']);
+                } else {
+                $objet->fillPRGArticle($msgError, $content, $image, $title);
+
+                    if (isset($_GET['id'])){
+                        header('Location: /index.php?=form-article&id='.$_GET['id']);
+                        return $msgError['errors'];
+                        } 
+                    header('Location: /index.php?page=form-article');
                     return $msgError['errors'];
-                    } 
-                header('Location: /index.php?page=form-article');
-                return $msgError['errors'];
+                }
             }
-        }
-        if (isset($id)){
-            $headTitle ="Modifier un article";
-        }else{
-            $headitle ="Créer un article";
-        }
-        require_once 'Views/form-article.php';
+        $contentView = require_once 'Views/form-article.php';
         return ob_get_clean();
     }
 }
