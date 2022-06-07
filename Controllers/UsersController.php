@@ -11,7 +11,7 @@ class UsersController
     {
         $this->userDB = $userDB;
     }
-    private $currentUser ;
+    private $currentUser;
 
     public function logout($userDB)
     {

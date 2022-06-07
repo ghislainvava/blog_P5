@@ -104,15 +104,15 @@ class MsgError {
         } 
         return $msgError;
     }
-    function fillPRG($msgError, $email, $password, $lastname, $firstname ){
-            $_SESSION['PRG']['email'] = $msgError['errors']['login']['email']; //on rempli $_SESSION avant PRG
-            $_SESSION['PRG']['password'] = $msgError['errors']['login']['password'];
-            $_SESSION['PRG']['lastname'] = $msgError['errors']['name']['lastname'];
-            $_SESSION['PRG']['firstname'] = $msgError['errors']['name']['firstname'];
-            $_SESSION['PRG']['input_email'] = $email; 
-            $_SESSION['PRG']['post_password'] = $password;   
+    function fillPRG($msgError){
+            $_SESSION['PRG']['error']['email'] = $msgError['errors']['login']['email']; //on rempli $_SESSION avant PRG
+            $_SESSION['PRG']['error']['password'] = $msgError['errors']['login']['password'];
+            $_SESSION['PRG']['error']['lastname'] = $msgError['errors']['name']['lastname'];
+            $_SESSION['PRG']['error']['firstname'] = $msgError['errors']['name']['firstname'];
+            $_SESSION['PRG']['email'] = $_POST['email']; 
+            $_SESSION['PRG']['password'] = $_POST['password'];   
         }
-    function fillPRGArticle($msgError, $title, $image, $content){
+    function fillPRGArticle($msgError){
         $_SESSION['PRG']['error']['title'] = $msgError['errors']['attribut']['title'];
         $_SESSION['PRG']['error']['image'] = $msgError['errors']['attribut']['image'];
         $_SESSION['PRG']['error']['content'] = $msgError['errors']['attribut']['content'];

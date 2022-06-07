@@ -20,11 +20,13 @@ class AuthDB
                 :email,
                 :password,
                 :firstname,
-                :lastname     
+                :lastname,
+                DEFAULT
+
               )');
-              $this->statementReadSession = $pdo->prepare('SELECT * FROM session WHERE id=:id');
-              $this->statementReadUser = $pdo->prepare('SELECT * FROM user WHERE id=:id');
-              $this->statementReadUserFromEmail = $pdo->prepare('SELECT * FROM user WHERE email=:email');
+              $this->statementReadSession = $pdo->prepare('SELECT id, userid FROM session WHERE id=:id');
+              $this->statementReadUser = $pdo->prepare('SELECT id,email,password,firstname,lastname,admin FROM user WHERE id=:id');
+              $this->statementReadUserFromEmail = $pdo->prepare('SELECT id,email,password,firstname,lastname,admin FROM user WHERE email=:email');
               $this->statementCreateSession = $pdo->prepare('INSERT INTO session VALUES (
                 DEFAULT,
                 :userid

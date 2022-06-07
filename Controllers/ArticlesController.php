@@ -2,46 +2,70 @@
 namespace BlogOC\Controllers;
 
  use BlogOC\Models\MsgError;
+ use BlogOC\Database\models\CommentDB;
 
 class ArticlesController
 {
    private $articleDB;
    private $currentUser ; 
-   public function __construct($articleDB, $currentUser){
+   private $commentDB;
+   public function __construct($articleDB){
     $this->articleDB = $articleDB;
-    $this->currentUser = $currentUser;
+   
    }
-   function getProfil($articleDB, $currentUser)
+   function getProfil( $currentUser)
    {
        ob_start();
-       $articles = $articleDB->fetchUserArticle($currentUser['id']);
+       $articles = $this->articleDB->fetchUserArticle($currentUser['id']);
        require_once 'Views/profil.php';
        return ob_get_clean();
    }
-   function getAllArticle($articleDB, $currentUser)
+   function getAllArticle( $currentUser)
    {
         ob_start();
         $_GET = filter_input_array(INPUT_GET, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-        $articles = $articleDB->fetchAll();
+        $articles = $this->articleDB->fetchAll();
         require_once 'Views/articles.php';
         return ob_get_clean();
    }
-   function getArticle($articleDB, $currentUser)
+
+
+   function getArticle($currentUser, $commentDB )
    {
        ob_start();
+       $msg = '';
        $_GET = filter_input_array(INPUT_GET, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
        $id = $_GET['id'] ?? '';
        if ($id) {  //si id de l'article on envoye les données
-           $article = $articleDB->fetchOne($id);
-           if($article['author'] !== $currentUser['id']){
-               header('Location: /index.php?page=home');
-               exit();
-           }
-       }
-       require_once 'Views/show-article.php';
+           $article = $this->articleDB->fetchOne($id);  
+           $comments = $commentDB->fetchArticles($id);
+       } 
+       
+
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $_POST = filter_input_array(INPUT_POST, [
+                'comment' => [
+                    'filter' => FILTER_SANITIZE_FULL_SPECIAL_CHARS,
+                    'flags' => FILTER_FLAG_NO_ENCODE_QUOTES
+                ]
+            ]);
+            $comment['id_article'] = $id;
+            $comment['commentaire'] = $_POST['comment'];
+            $comment['author'] = $currentUser['id'];
+            $commentDB->createOne([
+                    'id_article' => $comment['id_article'],
+                    'commentaire' => $comment['commentaire'],
+                    'author' => $comment['author']         
+            ]);
+            $_SESSION['message'] = "Votre commentaire a bien été ajouté";
+            header('Location: /index.php?page=message');
+            exit;
+        }
+      $contentView =  require_once 'Views/show-article.php';
        return ob_get_clean();
-   }
-   function deleteArticle($articleDB, $currentUser)
+  
+    }
+   function deleteArticle( $currentUser)
    {
     if (!$currentUser) {
         header('Location: /index.php?page=home');
@@ -50,9 +74,9 @@ class ArticlesController
           $_GET = filter_input_array(INPUT_GET, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
           $id = $_GET['id'] ?? '';
           if ($id) {
-            $article = $articleDB->fetchOne($id);
+            $article = $this->articleDB->fetchOne($id);
             if ($article['author'] === $currentUser['id']) {
-              $articleDB->deleteOne($id);
+                $this->articleDB->deleteOne($id);
               $_SESSION['message'] = "l'article a bien été supprimé";
             }
         }  
@@ -138,14 +162,12 @@ class ArticlesController
                 header('Location: /index.php?page=message');
                 exit();    
                 } else {
-                $objet->fillPRGArticle($msgError, $content, $image, $title);
-
-                    if (isset($_GET['id'])){
-                        header('Location: /index.php?=form-article&id='.$_GET['id']);
-                        return $msgError['errors'];
+                $objet->fillPRGArticle($msgError);
+                    if (isset($id)){
+                        header('Location: /index.php?page=form-article&id='.$id);
+                        exit;
                         } 
                     header('Location: /index.php?page=form-article');
-                    return $msgError['errors'];
                 }
             }
         $contentView = require_once 'Views/form-article.php';
