@@ -17,21 +17,33 @@
     </div>
 
     <div >
-      <h2>Commentaire sur cet Article<article></article></h2>
-        <?php foreach($comments as $comment) :  ?> 
-        <div class="comment">
-                <p><?=$comment['commentaire']?></p> 
-                <p>Ecrit le : <?=$comment['date_commentaire']?></p>   
-                <p>par : <?=$comment['author']?></p> 
+      <h2>Commentaire sur cet Article</h2>
+        <?php foreach($comments as $comment) :  ?>
         
-        <?php endforeach; ?>
+        <div class="container comment border border-dark rounded mb-5">
+        <?php if($comment['checked'] > 0 || $currentUser['admin']) : ?> 
+                  <p><?=$comment['commentaire']?></p> 
+                  <p>Ecrit le : <?=$comment['date_commentaire']?></p>   
+                  <p>par : <?=$comment['author']?></p> 
+                  <p><?= $comment['checked']?></p>
+                  <p><?= $comment['id_comment']?></p>
+
+                  <?php //endif;
+                  if($currentUser['id'] === $comment['author'] || $currentUser['admin']) : ?>
+          <div class="action">
+            <a class="btn btn-secondary" href="index.php?page=delete-comment&id=<?=$comment['id_comment']?>">Supprimer</a> 
+          
+          </div>
+          <?php endif; ?>
+          <?php endif; ?>
+          <?php endforeach; ?>
         </div>
     </div>
     <form action = "index.php?page=show-article&id=<?=$id?>"   method="POST" >
                     
                     <div class="form-control">
-                        <label for="comment">comment</label>
-                        <textarea name="comment" id="comment"></textarea>   
+                        <label for="comment">Ajouter un commentaire</label>
+                        <textarea class='w-100' name="comment" id="comment"></textarea>   
                             <p class="text-danger"><?= $msg ?></p> 
                     </div>
                     <div class="form-actions">

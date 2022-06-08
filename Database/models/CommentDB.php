@@ -7,11 +7,12 @@ use PDO;
 class CommentDB
 {
   private PDOStatement $statementCreateOne;
-  private PDOStatement $statementUpdateOne;
-  private PDOStatement $statementDeleteOne;
+  private PDOStatement $statementChecked;
+  private PDOStatement $statementDelete;
   private PDOStatement $statementReadOne;
   private PDOStatement $statementReadAll;
   private PDOStatement $statementReadUserAll;
+  private PDOStatement $statementReadAllComment;
 
   function __construct(private PDO $pdo)
   {
@@ -20,27 +21,33 @@ class CommentDB
       :id_article,
       DEFAULT,
       :commentaire,
-      :author
+      :author,
+      DEFAULT
     )');
-    $this->statementUpdateOne = $pdo->prepare('
-      UPDATE article
+    $this->statementChecked = $pdo->prepare(
+      'UPDATE comment
       SET
-        id_article=:id_article,
-        commentaire=:commentaire,
-        author=:author
-      WHERE id_comment=:id_comment
-    ');
+      checked=1
+      WHERE id_comment=id_comment'
+      );
     $this->statementReadOne = $pdo->prepare('SELECT comment.id_comment,comment.date_commentaire, comment.author, article.id fROM comment LEFT JOIN  article on comment.id_article = article.id WHERE comment.id_article=:id');
-    $this->statementReadAll = $pdo->prepare('SELECT comment.date_commentaire, comment.author, comment.commentaire FROM comment LEFT JOIN article ON comment.id_article = article.id WHERE comment.id_article =:id ');
-    $this->statementDeleteOne = $pdo->prepare('DELETE FROM Comment WHERE id=:id');
-    $this->statementReadUserAll = $pdo->prepare('SELECT * FROM Comment WHERE author=:authorId'); //a voir pb
+    $this->statementReadOneComment = $pdo->prepare('SELECT comment.id_comment,comment.date_commentaire, comment.author, article.id fROM comment LEFT JOIN  article on comment.id_article = article.id WHERE comment.id_comment=:id');
+    $this->statementReadAllComment = $pdo->prepare('SELECT comment.date_commentaire, comment.id_comment, comment.author, comment.commentaire, comment.checked FROM comment LEFT JOIN article ON comment.id_article = article.id');
+    $this->statementReadAll = $pdo->prepare('SELECT comment.date_commentaire, comment.id_comment, comment.author, comment.commentaire, comment.checked FROM comment LEFT JOIN article ON comment.id_article = article.id WHERE comment.id_article =:id ');
+    $this->statementDelete = $pdo->prepare('DELETE FROM Comment WHERE id_comment=:id');
+   
 
   }
-  public function fetchArticles(string $id) :array //on type pour + de securité
+  public function fetchComments(string $id) :array //on type pour + de securité
   {
     $this->statementReadAll->bindValue(':id', $id);
     $this->statementReadAll->execute();
     return $this->statementReadAll->fetchAll();
+  }
+  public function fetchAllComments($commentDB) :array //on type pour + de securité
+  {
+    $this->statementReadAllComment->execute();
+    return $this->statementReadAllComment->fetchAll();
   }
   public function fetchOne(string $id) : array
   {
@@ -48,10 +55,16 @@ class CommentDB
     $this->statementReadOne->execute();
     return $this->statementReadOne->fetch();
   }
-  public function deleteOne(string $id): string
+  // public function fetchOneArticle(string $id) : array
+  // {
+  //   $this->statementReadOneComment->bindValue(':id_comment', $id);
+  //   $this->statementReadOneComment->execute();
+  //   return $this->statementReadOneComment->fetch();
+  // }
+  public function delete(string $id): string
   {
-    $this->statementDeleteOne->bindValue(':id', $id);
-    $this->statementDeleteOne->execute();
+    $this->statementDelete->bindValue(':id', $id);
+    $this->statementDelete->execute();
     return $id;
   }
   public function createOne($comment): array
@@ -62,20 +75,12 @@ class CommentDB
     $this->statementCreateOne->execute();
     return $comment;
   }
-  public function updateOne($article): array
+  public function checked(string $id): string
   {
-    $this->statementUpdateOne->bindValue(':title', $article['title']);
-    $this->statementUpdateOne->bindValue(':content', $article['content']);
-    $this->statementUpdateOne->bindValue(':author', $article['author']);
-    $this->statementUpdateOne->bindValue(':image', $article['image']);
-    $this->statementUpdateOne->bindValue(':id', $article['id']);
-    $this->statementUpdateOne->execute();
-    return $article;
+    var_dump($id);
+    $this->statementChecked->bindValue(':id_comment', $id);
+    $this->statementChecked->execute();
+    return $id;
   }
-  public function fetchUserArticle($authorId) :array
-  {
-    $this->statementReadUserAll->bindValue(":authorId", $authorId);
-    $this->statementReadUserAll->execute();
-    return $this->statementReadUserAll->fetchAll();
-  }
+ 
 }

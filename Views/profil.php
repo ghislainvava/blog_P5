@@ -32,6 +32,28 @@
           <?php endforeach; ?>
         </ul>
       </div>
+      <?php if($currentUser['admin'] > 0) : ?>
+      <h2>Commentaires à valider</h2>
+      
+      <div>
+          <ul>
+            <?php foreach ($comments as $comment) : ?>
+              <li>
+                
+                <?php if($comment['checked'] < 1 and $currentUser['admin'] > 0) :?>
+                <p><?=$comment['commentaire']?></p>
+                <p><?=$comment['checked']?></p>
+                
+                <a href="/index.php?page=checked&id=<?= $comment['id_comment'] ?>" class="btn btn-primary">Valider</a>
+                <a class="btn btn-secondary" href="index.php?page=delete-comment&id=<?=$comment['id_comment']?>">Supprimer</a> 
+              </li>
+              <?php 
+              endif;
+              endforeach;
+            endif;
+            ?>
+          </ul>
+      </div>
     </div>
 </div>
 

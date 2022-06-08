@@ -3,6 +3,7 @@ namespace BlogOC\Controllers;
 
  use BlogOC\Models\MsgError;
  use BlogOC\Database\models\CommentDB;
+ use BlogOC\Controllers\CommentController;
 
 class ArticlesController
 {
@@ -13,10 +14,11 @@ class ArticlesController
     $this->articleDB = $articleDB;
    
    }
-   function getProfil( $currentUser)
+   function getProfil( $currentUser, $commentDB)
    {
        ob_start();
        $articles = $this->articleDB->fetchUserArticle($currentUser['id']);
+       $comments = $commentDB->fetchAllComments($commentDB);
        require_once 'Views/profil.php';
        return ob_get_clean();
    }
@@ -38,10 +40,8 @@ class ArticlesController
        $id = $_GET['id'] ?? '';
        if ($id) {  //si id de l'article on envoye les données
            $article = $this->articleDB->fetchOne($id);  
-           $comments = $commentDB->fetchArticles($id);
+           $comments = $commentDB->fetchComments($id);
        } 
-       
-
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $_POST = filter_input_array(INPUT_POST, [
                 'comment' => [
@@ -49,7 +49,7 @@ class ArticlesController
                     'flags' => FILTER_FLAG_NO_ENCODE_QUOTES
                 ]
             ]);
-            $comment['id_article'] = $id;
+            $comment['id_article'] = $id; 
             $comment['commentaire'] = $_POST['comment'];
             $comment['author'] = $currentUser['id'];
             $commentDB->createOne([
@@ -63,8 +63,8 @@ class ArticlesController
         }
       $contentView =  require_once 'Views/show-article.php';
        return ob_get_clean();
-  
     }
+   
    function deleteArticle( $currentUser)
    {
     if (!$currentUser) {

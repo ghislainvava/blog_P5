@@ -7,6 +7,7 @@ use BlogOC\Database\AuthDB;
 use BlogOC\Database\models\ArticleDB;
 use BlogOC\Controllers\UsersController;
 use BlogOC\Controllers\ArticlesController;
+use BlogOC\Controllers\CommentController;
 use BlogOC\Views\Message;
 use BlogOC\Controllers\TestController;
 use BlogOC\Database\models\CommentDB;
@@ -31,9 +32,6 @@ switch ($_GET['page']) {
         break;
     case 'login':
         $headTitle = "Connection";
-        //$usersController = new UsersController($userDB);
-
-        //$contentView = $usersController->login();
         $usersController = new TestController($userDB);
         $contentView = $usersController->log();
         break; 
@@ -49,7 +47,7 @@ switch ($_GET['page']) {
     case 'profil':
         $headTitle = "Mon profil";
         $articlesController = new ArticlesController($articleDB);
-        $contentView = $articlesController->getProfil( $currentUser); 
+        $contentView = $articlesController->getProfil( $currentUser, $commentDB); 
         break;
     case 'articles':
         $headTitle = "Articles";
@@ -70,6 +68,14 @@ switch ($_GET['page']) {
         $articlesController = new ArticlesController($articleDB);
         $contentView = $articlesController->deleteArticle( $currentUser); 
         break;
+    case 'delete-comment':
+        $commentController = new CommentController($commentDB);
+        $contentView = $commentController->deleteComment( $currentUser); 
+        break;
+    case 'checked':
+        $commentController = new CommentController($commentDB);
+        $contentView = $commentController->checkedComment( $currentUser); 
+        break;
     case 'message';
         $headTitle = "message";
         include('Views/head.php');
@@ -80,5 +86,8 @@ switch ($_GET['page']) {
         header:('Location: index.php?=message');
         break;        
 }
+if ($_GET['page'] !== 'message'){
     include('Views/template.php');//sert à structure la page
+}
+    
     
