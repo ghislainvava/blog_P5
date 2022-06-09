@@ -1,5 +1,5 @@
 {
-  "devDependencies": {
-    "prettier": "2.6.2"
+  "dependencies": {
+    "mailjet": "^0.0.1"
   }
 }

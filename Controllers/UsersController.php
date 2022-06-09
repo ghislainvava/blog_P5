@@ -2,6 +2,7 @@
 namespace BlogOC\Controllers;
 
 use BlogOC\Models\MsgError;
+use Mailjet\Resources;
 
 class UsersController
 {
@@ -25,6 +26,44 @@ class UsersController
     }  
     public function home(){
         ob_start();
+        $mj = new \Mailjet\Client('d9e8b3ed3950793fc15812123a486784','56142a2c9ff8ac4a98abf948ef204d8f',true,['version' => 'v3.1']);
+        if(!empty($_POST['name']) && !empty($_POST['email']) && !empty($_POST["message"])) {
+            $name = htmlspecialchars($_POST['name']);
+            $email = htmlspecialchars($_POST['email']);
+            $message = htmlspecialchars(($_POST['message']));
+    
+            if(filter_var($email, FILTER_VALIDATE_EMAIL)){
+                
+                $body = [
+                    'Messages' => [
+                    [
+                        'From' => [
+                        'Email' => "carcassonneweb@icloud.com",
+                        'Name' => "ghislain"
+                        ],
+                        'To' => [
+                        [
+                            'Email' => "carcassonneweb@icloud.com",
+                            'Name' => "ghislain"
+                        ]
+                        ],
+                        'Subject' => "Greetings from Mailjet.",
+                        'TextPart' => "$email, $message",
+                    ]
+                    ]
+                ];
+                $response = $mj->post(Resources::$Email, ['body' => $body]);
+                //$response->success() && var_dump($response->getData());
+            $_SESSION['message'] = 'Votre email a bien été envoyé, nous vous répondrons rapidement';
+                header('Location: /index.php?page=message');
+                exit; 
+            }else{
+                $_SESSION['message'] = "Votre email n'a pas pu être envoyé, retenté ultérieurement";
+                header('Location: /index.php?page=message');
+            exit;
+            }
+    
+        }
         require_once 'Views/home.php';
         return ob_get_clean();
 

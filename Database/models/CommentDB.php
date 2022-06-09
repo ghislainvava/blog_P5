@@ -25,10 +25,10 @@ class CommentDB
       DEFAULT
     )');
     $this->statementChecked = $pdo->prepare(
-      'UPDATE comment
+      'UPDATE Comment
       SET
       checked=1
-      WHERE id_comment=id_comment'
+      WHERE id_comment=:id_comment'
       );
     $this->statementReadOne = $pdo->prepare('SELECT comment.id_comment,comment.date_commentaire, comment.author, article.id fROM comment LEFT JOIN  article on comment.id_article = article.id WHERE comment.id_article=:id');
     $this->statementReadOneComment = $pdo->prepare('SELECT comment.id_comment,comment.date_commentaire, comment.author, article.id fROM comment LEFT JOIN  article on comment.id_article = article.id WHERE comment.id_comment=:id');
@@ -77,7 +77,6 @@ class CommentDB
   }
   public function checked(string $id): string
   {
-    var_dump($id);
     $this->statementChecked->bindValue(':id_comment', $id);
     $this->statementChecked->execute();
     return $id;

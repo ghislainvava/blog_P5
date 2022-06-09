@@ -9,13 +9,13 @@
                         <span class="section-heading-upper">ghislain vachet</span>
                         <span class="section-heading-lower">Développeur PHP/JS</span>
                     </h2>
-                    <p class="m-3">Développeur pationné, aprés le JavaScript je me suis mis au PHP, j'ai une préférence pour le back-end même si le front avec Bootstrap, Vue.js, Twig ne me pose pas de probléme. Vous avez votre base de donnée avec MySQL ou MongoDB, là aussi aucun soucis !</p>
+                    <p class="m-3">Développeur pationné, aprés le JavaScript je me suis mis au PHP, j'ai une préférence pour le back-end mais le front avec Bootstrap, Vue.js, React ne me pose pas de probléme. Vous avez votre base de donnée avec MySQL ou MongoDB, là aussi aucun soucis !</p>
                         <div >
-                        <i class="fab fa-github m-2"></i>
-                        <i class="fab fa-twitter m-2"></i>
-                        <i class="fab fa-linkedin m-2 "></i>
+                        <a href='https://github.com/ghislainvava'><i class="fab fa-github m-2"></i></a>
+                        <a href='https://twitter.com/home'><i class="fab fa-twitter m-2"></i></a>
+                        <a href='https://www.linkedin.com/in/ghislain-vachet-b306a51b8/'><i class="fab fa-linkedin m-2 "></i><a>
                     </div>
-                    <div class="intro-button mx-auto"><a class="btn btn-primary btn-xl" href="#!">Téléchargez mon CV!</a></div> 
+                    <div class="intro-button mx-auto"><a class="btn btn-primary btn-xl" href="assets/upload/CV_Ghislain_Vachet.pdf">Visionne mon CV!</a></div> 
                 </div>   
         </div>   
     </div>
@@ -31,11 +31,11 @@
                         </div>
                         <div class="contact-section">
                             <div class="container">
-                                <form action="contact.php" method="POST">
+                                <form action="index.php?page=home" method="POST">
                                     <div class="col-md-6 form-line">
                                         <div class="form-group">
-                                            <label for="exampleInputUsername">Votre Nom</label>
-                                            <input type="text" name="name" class="form-control mb-2" id="" placeholder=" Entrez votre nom" required>
+                                            <label for="exampleInputUsername">Votre Nom & Prénom</label>
+                                            <input type="text" name="name" class="form-control mb-2" id="" placeholder=" Entrez votre nom et prénom" required>
                                         </div>
                                         <div class="form-group">
                                             <label for="exampleInputEmail">Adresse Email</label>

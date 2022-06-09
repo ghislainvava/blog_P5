@@ -53,6 +53,7 @@ class MsgError {
         $msgError['errors']['attribut']['image'] = $_SESSION['PRG']['image'] ?? '';  
         $msgError['errors']['attribut']['content'] = $_SESSION['PRG']['error']['content'] ?? '';
         $msgError['placeholder']['attribut']['title'] = $_SESSION['PRG']['title'] ?? '';
+        $msgError['placeholder']['attribut']['image'] = $_SESSION['PRG']['image'] ?? '';
         $msgError['placeholder']['attribut']['content'] = $_SESSION['PRG']['content'] ?? '';
         $msgError['placeholder']['login']['email'] = $_SESSION['PRG']['email'] ?? '';
         $msgError['placeholder']['login']['password'] = $_SESSION['PRG']['password'] ?? '';

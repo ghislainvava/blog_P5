@@ -30,8 +30,6 @@ class ArticlesController
         require_once 'Views/articles.php';
         return ob_get_clean();
    }
-
-
    function getArticle($currentUser, $commentDB )
    {
        ob_start();
@@ -91,6 +89,7 @@ class ArticlesController
         $msgError = $objet->msgError;
         $msgError = $objet->prgPush($msgError); //on rempli les erreurs du PRG et Placeholder
         unset($_SESSION['PRG']);
+        
         $_GET = filter_input_array(INPUT_GET, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
         $id = $_GET['id'] ?? '';
         if ($id) {  //si id de l'article on envoye les données
@@ -108,7 +107,7 @@ class ArticlesController
             $content = $msgError['placeholder']['attribut']['content'];
         }  
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-           
+       
             $_POST = filter_input_array(INPUT_POST, [
                 'title' => FILTER_SANITIZE_FULL_SPECIAL_CHARS,
                 'content' => [
@@ -118,7 +117,7 @@ class ArticlesController
             ]);
             $image = '';
             $extension ='';
-            if($_FILES['image']['name'] !== ''){ 
+            if($_FILES['image']['name'] !== ''){  
                 $tmpName = $_FILES['image']['tmp_name'];
                 $name = $_FILES['image']['name'];
                 $size = $_FILES['image']['size'];
@@ -126,6 +125,7 @@ class ArticlesController
                 $fileInfo = pathinfo($name);
                 $extension = $fileInfo['extension'];
                 $allowedExtensions = ['jpg', 'jpeg', 'gif', 'png'];
+                
                 if ($size < 6000000) {
                     if (in_array($extension, $allowedExtensions)){
                         move_uploaded_file($tmpName, './images/'.$size.$name );
@@ -163,6 +163,7 @@ class ArticlesController
                 exit();    
                 } else {
                 $objet->fillPRGArticle($msgError);
+             
                     if (isset($id)){
                         header('Location: /index.php?page=form-article&id='.$id);
                         exit;
@@ -170,6 +171,7 @@ class ArticlesController
                     header('Location: /index.php?page=form-article');
                 }
             }
+            var_dump($image);
         $contentView = require_once 'Views/form-article.php';
         return ob_get_clean();
     }

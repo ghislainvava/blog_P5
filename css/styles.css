@@ -79,6 +79,9 @@
 .moi{
   width: 100px;
 }
+ul{
+  list-style-type: none;
+}
 #header-profile {
   font-weight: 700;
  
