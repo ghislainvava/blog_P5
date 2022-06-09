@@ -124,7 +124,7 @@ class ArticlesController
                 $error = $_FILES['image']['error'];
                 $fileInfo = pathinfo($name);
                 $extension = $fileInfo['extension'];
-                $allowedExtensions = ['jpg', 'jpeg', 'gif', 'png'];
+                $allowedExtensions = ['jpg', 'jpeg', 'gif', 'png', 'webp'];
                 
                 if ($size < 6000000) {
                     if (in_array($extension, $allowedExtensions)){
