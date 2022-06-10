@@ -9,6 +9,11 @@
                         <p class="text-danger"><?= $msgError['errors']['attribut']['title'] ?></p>
                 </div>
                 <div class="form-control">
+                    <label for="chapo">Chapô</label>
+                    <input type="text" name="chapo" id="chapo" value="<?= $chapo ?? '' ?>">
+                        <p class="text-danger"><?= $msgError['errors']['attribut']['chapo'] ?></p>
+                </div>
+                <div class="form-control">
                     <label for="image">Image</label>
                     <?php if(!empty($image)) : ?>
                         <img src="images/<?=$image?>"/> 
@@ -24,7 +29,7 @@
                         <p class="text-danger"><?= $msgError['errors']['attribut']['content'] ?></p>
                 </div>
                 <div class="form-actions">
-                    <a href="/index.php?page=form-article" class="btn btn-secondary" type="button">Annuler</a>
+                    <a href="index.php?page=form-article" class="btn btn-secondary" type="button">Annuler</a>
                     <button class="btn btn-primary" type="submit"><?= $id ? 'Modifier' : 'Sauvegarder' ?></button>
                 </div>
             </form>

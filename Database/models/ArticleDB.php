@@ -20,21 +20,24 @@ class ArticleDB
         title,
         image,
         content,
-        author
+        author,
+        chapo
       ) VALUES (   
         :title,
         :image,
         :content,
-        :author
+        :author,
+        :chapo
       )
     ');
     $this->statementUpdateOne = $pdo->prepare('
       UPDATE article
       SET
         title=:title,
-        author=:author,
         content=:content,
-        image=:image
+        author=:author,
+        date=:date,
+        chapo=:chapo
       WHERE id=:id
     ');
     $this->statementReadOne = $pdo->prepare('SELECT article.*, user.firstname, user.lastname FROM article LEFT JOIN user ON article.author = user.id WHERE article.id=:id');
@@ -65,15 +68,18 @@ class ArticleDB
     $this->statementCreateOne->bindValue(':content', $article['content']);
     $this->statementCreateOne->bindValue(':author', $article['author']);
     $this->statementCreateOne->bindValue(':image', $article['image']);
+    $this->statementCreateOne->bindValue(':chapo', $article['chapo']);
     $this->statementCreateOne->execute();
     return $this->fetchOne($this->pdo->lastInsertId());
   }
   public function updateOne($article): array
   {
+    $date = date('d-m-y h:i:s');
     $this->statementUpdateOne->bindValue(':title', $article['title']);
     $this->statementUpdateOne->bindValue(':content', $article['content']);
     $this->statementUpdateOne->bindValue(':author', $article['author']);
-    $this->statementUpdateOne->bindValue(':image', $article['image']);
+    $this->statementUpdateOne->bindValue(':date', $date);
+    $this->statementUpdateOne->bindValue(':chapo', $article['chapo']);
     $this->statementUpdateOne->bindValue(':id', $article['id']);
     $this->statementUpdateOne->execute();
     return $article;

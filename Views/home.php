@@ -1,4 +1,4 @@
-
+<body class='bodys'>
 <section class="page-section clearfix">
     <div class="container">
         <div class="intro">
@@ -60,6 +60,6 @@
             </div>
         </div>
 </section>
- 
+</body>
       
 

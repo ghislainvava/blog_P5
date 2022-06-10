@@ -20,9 +20,7 @@
                      <li class="nav-item px-lg-4" <?= $_SERVER['REQUEST_URI'] === '/logout.php' ? 'active' : '' ?>>
                          <a class="nav-link text-uppercase" href="index.php?page=logout"> Se Déconnecter</a>
                      </li>
-                     <li class="nav-item px-lg-4 " id="header-profile" <?= $_SERVER['REQUEST_URI'] === '/profil.php' ? 'active' : '' ?>>
-                         <a class="nav-link text-uppercase" href="index.php?page=profil"><?= $currentUser['firstname'][0].$currentUser['lastname'][0]?></a>
-                     </li>           
+                          
                      <?php elseif (!$currentUser) : ?>
                         
                      <li class="nav-item px-lg-4" <?= $_SERVER['REQUEST_URI'] === '/register.php' ? 'active' : '' ?>>

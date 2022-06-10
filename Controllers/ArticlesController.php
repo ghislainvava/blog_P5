@@ -94,15 +94,19 @@ class ArticlesController
         $id = $_GET['id'] ?? '';
         if ($id) {  //si id de l'article on envoye les données
             $article = $articleDB->fetchOne($id);
-            if($article['author'] !== $currentUser['id']){
-                header('Location: /index.php?page=home');
-                exit();
+            if($article['author'] !== $currentUser['id'] ){
+                if($currentUser['admin'] < 1){
+                    header('Location: /index.php?page=home');
+                    exit();
+                }
             }
             $title = $article['title'];
+            $chapo = $article['chapo'];
             $image = $article['image'];
             $content = $article['content'];  
         }else{
             $title = $msgError['placeholder']['attribut']['title']; //on rempli s'il y a un placeholder enregistré
+            $chapo = $msgError['placeholder']['attribut']['chapo'];
             $image = $msgError['placeholder']['attribut']['image'];
             $content = $msgError['placeholder']['attribut']['content'];
         }  
@@ -110,6 +114,7 @@ class ArticlesController
        
             $_POST = filter_input_array(INPUT_POST, [
                 'title' => FILTER_SANITIZE_FULL_SPECIAL_CHARS,
+                'chapo' => FILTER_SANITIZE_FULL_SPECIAL_CHARS,
                 'content' => [
                     'filter' => FILTER_SANITIZE_FULL_SPECIAL_CHARS,
                     'flags' => FILTER_FLAG_NO_ENCODE_QUOTES
@@ -138,12 +143,15 @@ class ArticlesController
                 } 
             }
             $title = $_POST['title'] ?? '';
+            $chapo = $_POST['chapo'] ?? '';
             $content = $_POST['content'] ?? '';
-            $msgError = $objet->pushErrorsArticles( $msgError, $content, $title);
 
-            if($msgError['errors']['attribut']['title'] === '' and $msgError['errors']['attribut']['content'] === ''){    
+            $msgError = $objet->pushErrorsArticles( $msgError, $content, $title, $chapo);
+
+            if($msgError['errors']['attribut']['title'] === '' and $msgError['errors']['attribut']['chapo'] === '' and $msgError['errors']['attribut']['content'] === ''){    
                 if ($id) {   
                     $article['title'] = $title;
+                    $article['chapo'] = $chapo;
                     $article['image'] = $image;
                     $article['content'] = $content;
                     $article['author'] = $currentUser['id'];
@@ -152,6 +160,7 @@ class ArticlesController
                     } else { 
                         $articleDB->createOne([         
                                 'title' => $title,
+                                'chapo' => $chapo,
                                 'image' => $image,
                                 'content' => $content,
                                 'author' => $currentUser['id']
@@ -171,7 +180,6 @@ class ArticlesController
                     header('Location: /index.php?page=form-article');
                 }
             }
-            var_dump($image);
         $contentView = require_once 'Views/form-article.php';
         return ob_get_clean();
     }
