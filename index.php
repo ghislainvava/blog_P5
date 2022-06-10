@@ -32,13 +32,13 @@ switch ($_GET['page']) {
         break;
     case 'login':
         $headTitle = "Connection";
-        $usersController = new TestController($userDB);
+        $usersController = new UsersController($userDB);
         $contentView = $usersController->log();
         break; 
     case 'register':
         $headTitle = "Enregistrement";
         $usersController = new UsersController($userDB);
-        $contentView = $usersController->register();
+        $contentView = $usersController->log();
         break;
     case 'logout':
         $usersController = new UsersController($userDB);

@@ -1,12 +1,12 @@
- <form action="/index.php?page=register" method="POST">
+ <form class="container mt-5" action="/index.php?page=register" method="POST">
     <div>
-        <input type="text" name="lastname" placeholder="Veuillez saisir votre nom" value="<?= $lastname ?? '' ?>">
+        <input class="w-50" type="text" name="lastname" placeholder="Veuillez saisir votre nom" value="<?= $lastname ?? '' ?>">
         <?php if ($msgError['errors']['name']['lastname']) : ?>
         <p class="text-danger"><?= $msgError['errors']['name']['lastname'] ?></p>
         <?php endif; ?>
         <br>
         <br>
-        <input type="text" name="firstname" placeholder="Veuillez saisir votre prénom" value="<?= $firstname ?? '' ?>">
+        <input class="w-50" type="text" name="firstname" placeholder="Veuillez saisir votre prénom" value="<?= $firstname ?? '' ?>">
         <?php if ($msgError['errors']['name']['firstname']) : ?>
           <p class="text-danger"><?= $msgError['errors']['name']['firstname'] ?></p>
         <?php endif; ?>
@@ -19,7 +19,7 @@
     <?php endif; ?>
     <br>
     <br>
-    <input type="text" placeholder="Mot de passe" name="password" >
+    <input type="text" placeholder="Mot de passe" name="password" value="<?= $password ?? '' ?>" >
     <?php if ($msgError['errors']['login']['password']) : ?>
       <p class="text-danger"><?= $msgError['errors']['login']['password'] ?></p>
     <?php endif; ?>

@@ -18,7 +18,7 @@
       <?php endif; ?>
     </div>
     <div class="container ">
-    <h2 class="mb-5">Commentaires sur cet Article</h2>
+    <h2 class="mb-5 mt-5">Commentaires sur cet Article</h2>
       <?php foreach($comments as $comment) :  ?>
         <div class="straits"></div>
         <?php if($comment['checked'] > 0 || $currentUser['admin']) : ?> 

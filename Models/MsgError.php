@@ -79,16 +79,19 @@ class MsgError {
             $msgError['errors']['name']['lastname'] = $msgError['ERROR_REQUIRED'];
         } elseif (mb_strlen($lastname) < 2) {
             $msgError['errors']['name']['lastname'] = $msgError['ERROR_TOO_SHORT'];
+            $_SESSION['PRG']['lastname'] = $lastname;
         }
         if ($email === '') {
             $msgError['errors']['login']['email'] = $msgError['ERROR_REQUIRED'];
         } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
             $msgError['errors']['login']['email'] = $msgError['ERROR_EMAIL_INVALID'];
+            $_SESSION['PRG']['email'] = $email;
         }
         if ($password === '') {
             $msgError['errors']['login']['password'] = $msgError['ERROR_REQUIRED'];
         } elseif (mb_strlen($password) < 6) {
             $msgError['errors']['login']['password'] = $msgError['ERROR_PASSWORD_TOO_SHORT'];
+            $_SESSION['PRG']['password'] = $password;
         }
         return $msgError;
     }
@@ -119,7 +122,9 @@ class MsgError {
             $_SESSION['PRG']['error']['lastname'] = $msgError['errors']['name']['lastname'];
             $_SESSION['PRG']['error']['firstname'] = $msgError['errors']['name']['firstname'];
             $_SESSION['PRG']['email'] = $_POST['email']; 
-            $_SESSION['PRG']['password'] = $_POST['password'];   
+            $_SESSION['PRG']['password'] = $_POST['password'];
+            $_SESSION['PRG']['lastname'] = $_POST['lastname']; 
+            $_SESSION['PRG']['firstname'] = $_POST['firstname'];    
         }
     function fillPRGArticle($msgError){
         $_SESSION['PRG']['error']['title'] = $msgError['errors']['attribut']['title'];
@@ -129,6 +134,7 @@ class MsgError {
         $_SESSION['PRG']['title'] = $_POST['title'];
         $_SESSION['PRG']['image'] = $_POST['image'];
         $_SESSION['PRG']['content'] = $_POST['content'];
+        $_SESSION['PRG']['chapo'] = $_POST['chapo']; 
    
     }
 
