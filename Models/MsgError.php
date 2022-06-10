@@ -46,6 +46,7 @@ class MsgError {
             )
     );
     function prgPush($msgError){
+       
         $msgError['errors']['login']['email'] = $_SESSION['PRG']['error']['email'] ?? '';
         $msgError['errors']['login']['password'] = $_SESSION['PRG']['error']['password'] ?? '';
         $msgError['errors']['name']['lastname'] = $_SESSION['PRG']['error']['lastname'] ?? '';
@@ -59,9 +60,9 @@ class MsgError {
         $msgError['placeholder']['attribut']['image'] = $_SESSION['PRG']['image'] ?? '';
         $msgError['placeholder']['attribut']['content'] = $_SESSION['PRG']['content'] ?? '';
         $msgError['placeholder']['login']['email'] = $_SESSION['PRG']['email'] ?? '';
-        $msgError['placeholder']['login']['password'] = $_SESSION['PRG']['password'] ?? '';
         $msgError['placeholder']['name']['lastname'] = $_SESSION['PRG']['lastname'] ?? '';
         $msgError['placeholder']['name']['firstname'] = $_SESSION['PRG']['firstname'] ?? '';
+        unset($_SESSION['PRG']); //on vide le PRG aprés récupération
         return $msgError;
     }
     function pushErrors($msgError, $email, $password, $lastname, $firstname ){

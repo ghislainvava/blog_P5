@@ -28,7 +28,7 @@ switch ($_GET['page']) {
     case 'home';
         $headTitle ='Presentation';
         $usersController = new UsersController($userDB);
-        $contentView = $usersController->home();     
+            $contentView = $usersController->home();     
         break;
     case 'login':
         $headTitle = "Connection";

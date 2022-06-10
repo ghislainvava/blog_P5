@@ -6,7 +6,7 @@
     <?php endif; ?>
     <br>
     <br>
-    <input type="text" placeholder="Mot de passe" name="password" value="<?= $password ?? '' ?>">
+    <input type="text" placeholder="Mot de passe" name="password">
     <?php if ($msgError['errors']['login']['password']) : ?>
       <p class="text-danger"><?= $msgError['errors']['login']['password'] ?></p>
     <?php endif; ?>

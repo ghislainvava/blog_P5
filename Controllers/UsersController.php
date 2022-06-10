@@ -70,11 +70,11 @@ class UsersController
         $objet= new MsgError();
         $msgError = $objet->msgError;
         $msgError = $objet->prgPush($msgError); //on recupere les messages d'erreurs sotcoker par PRG
-        unset($_SESSION['PRG']); //on vide le PRG aprés récupération
         $email = $msgError['placeholder']['login']['email']; //on rempli s'il y a un placeholder enregistré
         $password = $msgError['placeholder']['login']['password'];
         $lastname = $msgError['placeholder']['name']['lastname'];
         $firstname = $msgError['placeholder']['name']['firstname'];
+        $page = $_GET['page'];
          if ($_SERVER['REQUEST_METHOD'] === 'POST'){
              $input = filter_input_array(INPUT_POST, [
                  'firstname' => FILTER_SANITIZE_SPECIAL_CHARS,
@@ -87,7 +87,9 @@ class UsersController
              $lastname = $input['lastname'] ?? '';
              $msgError = $objet->pushErrors( $msgError, $email, $password, $lastname, $firstname);
              //recuperer le tableau errors car besoin pour fonctionner
-             if ($msgError['errors']['login']['email'] === '' and $msgError['errors']['login']['password'] === ''){
+             //$test = $msgError['errors'];
+             if ($msgError['errors']['login']['email'] === '' and $msgError['errors']['login']['password'] === '' and $msgError['errors']['name']['lastname'] === '' and $msgError['errors']['name']['firstname'] === ''){
+                //if (empty(array_filter($test, fn ($e) => $e !== ''))){ 
                  if($_GET['page'] === 'login'){ 
                      $user = $this->userDB->getUserFromEmail($email);
                      if (!$user) {
@@ -98,11 +100,11 @@ class UsersController
                          } else {
                              $this->userDB->login($user['id']);
                              header('Location: index.php?page=articles');                      
-                             return $msgError;
+                             exit();
                          }
                      }
                  } else {
-                   if(  $msgError['errors']['name']['lastname'] === '' and $msgError['errors']['name']['firstname'] === ''){
+                  // if( $msgError['errors']['name']['lastname'] === '' and $msgError['errors']['name']['firstname'] === ''){
                     $this->userDB->register([
                         'firstname' => $firstname,
                         'lastname' => $lastname,
@@ -111,10 +113,10 @@ class UsersController
                         ]);
                         header('Location: /index.php?page=login');
                         exit();
-                        }
+                        //}
                          
                 } 
-            }elseif ($_GET['page'] ==='login'){
+            }elseif ($page ==='login'){
              // il y a des messages d'erreurs 
              $objet->fillPRG($msgError);
              header( "Location: /index.php?page=login");
@@ -124,9 +126,8 @@ class UsersController
              header( "Location: /index.php?page=register");
              exit();   
             }
-
         }
-        if ($_GET['page'] ==='login'){
+        if ($page ==='login'){
             require_once 'Views/login.php';
             return ob_get_clean();
         }else{
