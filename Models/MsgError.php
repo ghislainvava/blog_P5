@@ -46,6 +46,24 @@ class MsgError {
             )
     );
     function prgPush($msgError){
+        // $_SESSION['PRG'] = array();
+
+        // array_push($_SESSION['PRG'], $msgError['errors']['login']['email'] );
+        // array_push($_SESSION['PRG'], $msgError['errors']['login']['password']);
+        // array_push($_SESSION['PRG'], $msgError['errors']['name']['lastname'] );
+        // array_push($_SESSION['PRG'], $msgError['errors']['name']['firstname'] );
+        // array_push($_SESSION['PRG'], $msgError['errors']['attribut']['title'] );
+        // array_push($_SESSION['PRG'], $$msgError['errors']['attribut']['chapo'] );
+        // array_push($_SESSION['PRG'], $msgError['errors']['attribut']['image'] );
+        // array_push($_SESSION['PRG'], $msgError['errors']['attribut']['content'] );
+        // array_push($_SESSION['PRG'], $msgError['placeholder']['attribut']['title'] );
+        // array_push($_SESSION['PRG'], $msgError['placeholder']['attribut']['chapo']);
+        // array_push($_SESSION['PRG'], $msgError['placeholder']['attribut']['image'] );
+        // array_push($_SESSION['PRG'], $msgError['placeholder']['attribut']['content'] );
+        // array_push($_SESSION['PRG'], $msgError['placeholder']['login']['email'] );
+        // array_push($_SESSION['PRG'], $msgError['placeholder']['name']['lastname'] );
+        // array_push($_SESSION['PRG'], $msgError['placeholder']['name']['firstname'] );
+
        
         $msgError['errors']['login']['email'] = $_SESSION['PRG']['error']['email'] ?? '';
         $msgError['errors']['login']['password'] = $_SESSION['PRG']['error']['password'] ?? '';

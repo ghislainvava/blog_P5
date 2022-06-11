@@ -13,7 +13,6 @@ class UsersController
         $this->userDB = $userDB;
     }
     private $currentUser;
-
     public function logout($userDB)
     {
         $sessionId = $_COOKIE['session'] ?? '';
@@ -76,6 +75,7 @@ class UsersController
         $firstname = $msgError['placeholder']['name']['firstname'];
         $page = $_GET['page'];
          if ($_SERVER['REQUEST_METHOD'] === 'POST'){
+           
              $input = filter_input_array(INPUT_POST, [
                  'firstname' => FILTER_SANITIZE_SPECIAL_CHARS,
                  'lastname' => FILTER_SANITIZE_SPECIAL_CHARS,
@@ -87,10 +87,9 @@ class UsersController
              $lastname = $input['lastname'] ?? '';
              $msgError = $objet->pushErrors( $msgError, $email, $password, $lastname, $firstname);
              //recuperer le tableau errors car besoin pour fonctionner
-             //$test = $msgError['errors'];
-             if ($msgError['errors']['login']['email'] === '' and $msgError['errors']['login']['password'] === '' and $msgError['errors']['name']['lastname'] === '' and $msgError['errors']['name']['firstname'] === ''){
-                //if (empty(array_filter($test, fn ($e) => $e !== ''))){ 
-                 if($_GET['page'] === 'login'){ 
+            
+                if (empty(array_filter($msgError['errors']['login'], fn ($e) => $e !== ''))){ 
+                 if($page === 'login'){ 
                      $user = $this->userDB->getUserFromEmail($email);
                      if (!$user) {
                          $msgError['errors']['login']['email'] = $msgError['ERROR_EMAIL_NO_RECORD'];
@@ -104,7 +103,7 @@ class UsersController
                          }
                      }
                  } else {
-                  // if( $msgError['errors']['name']['lastname'] === '' and $msgError['errors']['name']['firstname'] === ''){
+                    if (empty(array_filter($msgError['errors']['login'], fn ($e) => $e !== ''))){ 
                     $this->userDB->register([
                         'firstname' => $firstname,
                         'lastname' => $lastname,
@@ -113,7 +112,7 @@ class UsersController
                         ]);
                         header('Location: /index.php?page=login');
                         exit();
-                        //}
+                        }
                          
                 } 
             }elseif ($page ==='login'){
