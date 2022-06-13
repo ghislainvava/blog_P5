@@ -33,7 +33,7 @@
           </div>
       <?php endif; endif; endforeach;?>  
     </div>
-    <form class="container" action = "index.php?page=show-article&id=<?=$id?>"   method="POST" >    
+    <form class="container" action = "index.php?page=show-article&id=<?=$_id?>"   method="POST" >    
       <div class="group-form row w75">
         <label for="comment">Ajouter un commentaire</label>
         <textarea class="mt-2 mb-2" name="comment" id="comment"></textarea>   

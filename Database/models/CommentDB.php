@@ -12,7 +12,7 @@ class CommentDB
   private PDOStatement $statementReadOne;
   private PDOStatement $statementReadAll;
   private PDOStatement $statementReadUserAll;
-  private PDOStatement $statementReadAllComment;
+  private PDOStatement $statementAllComment;
 
   function __construct(private PDO $pdo)
   {
@@ -32,40 +32,40 @@ class CommentDB
       );
     $this->statementReadOne = $pdo->prepare('SELECT comment.id_comment,comment.date_commentaire, comment.author, article.id fROM comment LEFT JOIN  article on comment.id_article = article.id WHERE comment.id_article=:id');
     $this->statementReadOneComment = $pdo->prepare('SELECT comment.id_comment,comment.date_commentaire, comment.author, article.id fROM comment LEFT JOIN  article on comment.id_article = article.id WHERE comment.id_comment=:id');
-    $this->statementReadAllComment = $pdo->prepare('SELECT comment.date_commentaire, comment.id_comment, comment.author, comment.commentaire, comment.checked FROM comment LEFT JOIN article ON comment.id_article = article.id');
+    $this->statementAllComment = $pdo->prepare('SELECT comment.date_commentaire, comment.id_comment, comment.author, comment.commentaire, comment.checked FROM comment LEFT JOIN article ON comment.id_article = article.id');
     $this->statementReadAll = $pdo->prepare('SELECT comment.date_commentaire, comment.id_comment, comment.author, comment.commentaire, comment.checked FROM comment LEFT JOIN article ON comment.id_article = article.id WHERE comment.id_article =:id ');
     $this->statementDelete = $pdo->prepare('DELETE FROM Comment WHERE id_comment=:id');
    
 
   }
-  public function fetchComments(string $id) :array //on type pour + de securité
+  public function fetchComments(string $_id) :array //on type pour + de securité
   {
-    $this->statementReadAll->bindValue(':id', $id);
+    $this->statementReadAll->bindValue(':id', $_id);
     $this->statementReadAll->execute();
     return $this->statementReadAll->fetchAll();
   }
   public function fetchAllComments($commentDB) :array //on type pour + de securité
   {
-    $this->statementReadAllComment->execute();
-    return $this->statementReadAllComment->fetchAll();
+    $this->statementAllComment->execute();
+    return $this->statementAllComment->fetchAll();
   }
-  public function fetchOne(string $id) : array
+  public function fetchOne(string $_id) : array
   {
-    $this->statementReadOne->bindValue(':id_article', $id);
+    $this->statementReadOne->bindValue(':id_article', $_id);
     $this->statementReadOne->execute();
     return $this->statementReadOne->fetch();
   }
-  // public function fetchOneArticle(string $id) : array
+  // public function fetchOneArticle(string $_id) : array
   // {
-  //   $this->statementReadOneComment->bindValue(':id_comment', $id);
+  //   $this->statementReadOneComment->bindValue(':id_comment', $_id);
   //   $this->statementReadOneComment->execute();
   //   return $this->statementReadOneComment->fetch();
   // }
-  public function delete(string $id): string
+  public function delete(string $_id): string
   {
-    $this->statementDelete->bindValue(':id', $id);
+    $this->statementDelete->bindValue(':id', $_id);
     $this->statementDelete->execute();
-    return $id;
+    return $_id;
   }
   public function createOne($comment): array
   {
@@ -75,11 +75,11 @@ class CommentDB
     $this->statementCreateOne->execute();
     return $comment;
   }
-  public function checked(string $id): string
+  public function checked(string $_id): string
   {
-    $this->statementChecked->bindValue(':id_comment', $id);
+    $this->statementChecked->bindValue(':id_comment', $_id);
     $this->statementChecked->execute();
-    return $id;
+    return $_id;
   }
  
 }

@@ -9,7 +9,7 @@ class AuthDB
         private PDOStatement $statementRegister;
         private PDOStatement $statementReadSession;
         private PDOStatement $statementReadUser;
-        private PDOStatement $statementReadUserFromEmail;
+        private PDOStatement $statementFromEmail;
         private PDOStatement $statementCreateSession;
         private PDOStatement $statementDeleteSession;
 
@@ -26,7 +26,7 @@ class AuthDB
               )');
               $this->statementReadSession = $pdo->prepare('SELECT id, userid FROM session WHERE id=:id');
               $this->statementReadUser = $pdo->prepare('SELECT id,email,password,firstname,lastname,admin FROM user WHERE id=:id');
-              $this->statementReadUserFromEmail = $pdo->prepare('SELECT id,email,password,firstname,lastname,admin FROM user WHERE email=:email');
+              $this->statementFromEmail = $pdo->prepare('SELECT id,email,password,firstname,lastname,admin FROM user WHERE email=:email');
               $this->statementCreateSession = $pdo->prepare('INSERT INTO session VALUES (
                 DEFAULT,
                 :userid
@@ -53,7 +53,8 @@ class AuthDB
         }
         function isLoggedIn(): array | false
         {
-            $sessionId = $_COOKIE['session'] ?? '';
+            $cookie = filter_input_array(INPUT_COOKIE);
+            $sessionId = $cookie['session'] ?? '';
                 if($sessionId) {
                     $this->statementReadSession->bindValue(':id', $sessionId);
                     $this->statementReadSession->execute();
@@ -74,9 +75,9 @@ class AuthDB
             return;            
         }
         function getUserFromEmail(string $email): array | false {
-            $this->statementReadUserFromEmail->bindValue(':email', $email);
-            $this->statementReadUserFromEmail->execute();
-            return $this->statementReadUserFromEmail->fetch();
+            $this->statementFromEmail->bindValue(':email', $email);
+            $this->statementFromEmail->execute();
+            return $this->statementFromEmail->fetch();
 
         }
 

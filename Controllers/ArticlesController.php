@@ -33,14 +33,14 @@ class ArticlesController
    function getArticle($currentUser, $commentDB )
    {
        ob_start();
-       $msg = '';
+       //$msg = '';
        $server = filter_input_array(INPUT_SERVER);
        $post = filter_input_array(INPUT_POST);
        $get = filter_input_array(INPUT_GET, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-       $id = $get['id'] ?? '';
-       if ($id) {  //si id de l'article on envoye les données
-           $article = $this->articleDB->fetchOne($id);  
-           $comments = $commentDB->fetchComments($id);
+       $_id = $get['id'] ?? '';
+       if ($_id) {  //si id de l'article on envoye les données
+           $article = $this->articleDB->fetchOne($_id);  
+           $comments = $commentDB->fetchComments($_id);
        } 
         if ($server['REQUEST_METHOD'] === 'POST') {
             $post = filter_input_array(INPUT_POST, [
@@ -49,7 +49,7 @@ class ArticlesController
                     'flags' => FILTER_FLAG_NO_ENCODE_QUOTES
                 ]
             ]);
-            $comment['id_article'] = $id; 
+            $comment['id_article'] = $_id; 
             $comment['commentaire'] = $post['comment'];
             $comment['author'] = $currentUser['id'];
             $commentDB->createOne([
@@ -70,20 +70,20 @@ class ArticlesController
     if (!$currentUser) {
         header('Location: /index.php?page=home');
         exit();
-      } else{
+      } 
         $get = filter_input_array(INPUT_GET);
           $get = filter_input_array(INPUT_GET, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-          $id = $get['id'] ?? '';
-          if ($id) {
-            $article = $this->articleDB->fetchOne($id);
+          $_id = $get['id'] ?? '';
+          if ($_id) {
+            $article = $this->articleDB->fetchOne($_id);
             if ($article['author'] === $currentUser['id']) {
-                $this->articleDB->deleteOne($id);
+                $this->articleDB->deleteOne($_id);
               $_SESSION['message'] = "l'article a bien été supprimé";
             }
         }  
           header('Location: /index.php?page=message');
           exit();
-      }
+      
    }
     public function moveArticle($articleDB, $currentUser)
     {
@@ -92,12 +92,11 @@ class ArticlesController
         $msgError = $objet->msgError;
         $msgError = $objet->prgPush($msgError); //on rempli les erreurs du PRG et Placeholder
         unset($_SESSION['PRG']);
-        $get = filter_input_array(INPUT_GET);
         $get = filter_input_array(INPUT_GET, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
         $server = filter_input_array(INPUT_SERVER);
-        $id = $_GET['id'] ?? '';
-        if ($id) {  //si id de l'article on envoye les données
-            $article = $articleDB->fetchOne($id);
+        $_id = $get['id'] ?? '';
+        if ($_id) {  //si id de l'article on envoye les données
+            $article = $articleDB->fetchOne($_id);
             if($article['author'] !== $currentUser['id'] ){
                 if($currentUser['admin'] < 1){
                     header('Location: /index.php?page=home');
@@ -115,7 +114,6 @@ class ArticlesController
             $content = $msgError['placeholder']['attribut']['content'];
         }  
         if ($server['REQUEST_METHOD'] === 'POST') {
-       
             $_POST = filter_input_array(INPUT_POST, [
                 'title' => FILTER_SANITIZE_FULL_SPECIAL_CHARS,
                 'chapo' => FILTER_SANITIZE_FULL_SPECIAL_CHARS,
@@ -134,8 +132,7 @@ class ArticlesController
                 $error = $_FILES['image']['error'];
                 $fileInfo = pathinfo($name);
                 $extension = $fileInfo['extension'];
-                $allowedExtensions = ['jpg', 'jpeg', 'gif', 'png', 'webp'];
-                
+                $allowedExtensions = ['jpg', 'jpeg', 'gif', 'png', 'webp'];  
                 if ($size < 6000000) {
                     if (in_array($extension, $allowedExtensions)){
                         move_uploaded_file($tmpName, './images/'.$size.$name );
@@ -150,11 +147,9 @@ class ArticlesController
             $title = $post['title'] ?? '';
             $chapo = $post['chapo'] ?? '';
             $content = $post['content'] ?? '';
-
             $msgError = $objet->pushErrorsArticles( $msgError, $content, $title, $chapo);
-
             if($msgError['errors']['attribut']['title'] === '' and $msgError['errors']['attribut']['chapo'] === '' and $msgError['errors']['attribut']['content'] === ''){    
-                if ($id) {   
+                if ($_id) {   
                     $article['title'] = $title;
                     $article['chapo'] = $chapo;
                     $article['image'] = $image;
@@ -178,8 +173,8 @@ class ArticlesController
                 } else {
                 $objet->fillPRGArticle($msgError);
              
-                    if (isset($id)){
-                        header('Location: /index.php?page=form-article&id='.$id);
+                    if (isset($_id)){
+                        header('Location: /index.php?page=form-article&id='.$_id);
                         exit;
                         } 
                     header('Location: /index.php?page=form-article');

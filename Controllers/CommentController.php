@@ -7,7 +7,7 @@ namespace BlogOC\Controllers;
 class CommentController
 {
   
-   private $currentUser ; 
+   //private $currentUser ; 
    private $commentDB;
    public function __construct($commentDB){
     $this->commentDB = $commentDB;
@@ -22,9 +22,9 @@ class CommentController
          } else{
             $get = filter_input_array(INPUT_GET);
              $get = filter_input_array(INPUT_GET, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-             $id = $get['id'] ?? '';
-             if ($id) {
-                $comment = $this->commentDB->delete($id);
+             $_id = $get['id'] ?? '';
+             if ($_id) {
+                $comment = $this->commentDB->delete($_id);
                 $_SESSION['message'] = "le commentaire a bien été supprimé";   
            }  
              header('Location: /index.php?page=message');
@@ -39,8 +39,8 @@ class CommentController
             exit();
         } else {
             $get = filter_input_array(INPUT_GET, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-            $id = $get['id'] ?? '';
-            $comment = $this->commentDB->checked($id);
+            $_id = $get['id'] ?? '';
+            $comment = $this->commentDB->checked($_id);
             $_SESSION['message'] = "le commentaire a bien été supprimé";   
             header('Location: /index.php?page=message');
             exit();

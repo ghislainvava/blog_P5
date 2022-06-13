@@ -1,8 +1,8 @@
 <div class="container ">
     <div class="content">
         <div class="block p-20 form-container mt-5">
-            <h1><?= $id ? 'Modifier' : 'Écrire' ?> un article</h1>
-            <form action = "index.php?page=form-article<?= $id ? "&id=$id" : '' ?>"  method="POST" enctype='multipart/form-data'>
+            <h1><?= $_id ? 'Modifier' : 'Écrire' ?> un article</h1>
+            <form action = "index.php?page=form-article<?= $_id ? "&id=$_id" : '' ?>"  method="POST" enctype='multipart/form-data'>
                 <div class="container group-form row w-75 mt-3 ">
                     <label for="title">Titre :</label>
                     <input type="text" name="title" id="title" value="<?= $title ?? '' ?>">
@@ -30,7 +30,7 @@
                 </div>
                 <div class="container form-actions">
                     <a href="index.php?page=form-article" class="btn btn-secondary" type="button">Annuler</a>
-                    <button class="btn btn-primary" type="submit"><?= $id ? 'Modifier' : 'Sauvegarder' ?></button>
+                    <button class="btn btn-primary" type="submit"><?= $_id ? 'Modifier' : 'Sauvegarder' ?></button>
                 </div>
             </form>
         </div>

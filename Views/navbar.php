@@ -7,27 +7,27 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mx-auto">
                  
-                     <li class="nav-item px-lg-4" <?= $_SERVER['REQUEST_URI'] === '/.php' ? 'active' : '' ?>>
+                     <li class="nav-item px-lg-4">
                          <a class="nav-link text-uppercase" href="index.php?page=home">Home</a>
                      </li>
-                     <li class="nav-item px-lg-4" <?= $_SERVER['REQUEST_URI'] === '/articles.php' ? 'active' : '' ?>>
+                     <li class="nav-item px-lg-4" >
                          <a class="nav-link text-uppercase" href="index.php?page=articles">Articles</a>
                      </li>
                      <?php if ($currentUser) : ?>
-                     <li class="nav-item px-lg-4" <?= $_SERVER['REQUEST_URI'] === '/form-article.php' ? 'active' : '' ?>>
+                     <li class="nav-item px-lg-4" >
                          <a class="nav-link text-uppercase" href="index.php?page=form-article">Ajouter un article</a>
                      </li>
-                     <li class="nav-item px-lg-4" <?= $_SERVER['REQUEST_URI'] === '/logout.php' ? 'active' : '' ?>>
+                     <li class="nav-item px-lg-4" >
                          <a class="nav-link text-uppercase" href="index.php?page=logout"> Se Déconnecter</a>
                      </li>
                           
                      <?php elseif (!$currentUser) : ?>
                         
-                     <li class="nav-item px-lg-4" <?= $_SERVER['REQUEST_URI'] === '/register.php' ? 'active' : '' ?>>
+                     <li class="nav-item px-lg-4" >
                          <a class="nav-link text-uppercase" href="index.php?page=register">Inscription</a>
                      </li>
                     
-                     <li class="nav-item px-lg-4" <?= $_SERVER['REQUEST_URI'] === '/login.php' ? 'active' : '' ?>>
+                     <li class="nav-item px-lg-4" >
                          <a class="nav-link text-uppercase" href="index.php?page=login">Connection</a>
                      </li>
                    

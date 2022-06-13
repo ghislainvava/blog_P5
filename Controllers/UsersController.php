@@ -85,7 +85,6 @@ class UsersController
                  'lastname' => FILTER_SANITIZE_SPECIAL_CHARS,
                  'email' => FILTER_SANITIZE_EMAIL,
              ]);
-
              $email = $post['email'] ?? '';
              $password = $post['password'] ?? '';
              $firstname = $post['firstname'] ?? '';
@@ -93,8 +92,7 @@ class UsersController
              $msgError = $objet->pushErrors( $msgError, $email, $password, $lastname, $firstname);
              $error1 = $msgError['errors']['login'];
              $error2 = $msgError['errors']['name'];
-             //recuperer le tableau errors car besoin pour fonctionner
-            
+             //recuperer le tableau errors car besoin pour fonctionner  
                 if (empty(array_filter($error1, fn ($e) => $e !== ''))){ 
                  if($page === 'login'){ 
                      $user = $this->userDB->getUserFromEmail($email);
@@ -119,8 +117,7 @@ class UsersController
                         ]);
                         header('Location: /index.php?page=login');
                         exit();
-                        }
-                         
+                        }       
                 } 
             }elseif ($page ==='login'){
              // il y a des messages d'erreurs 
