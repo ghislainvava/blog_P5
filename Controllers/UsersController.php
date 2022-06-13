@@ -18,7 +18,7 @@ class UsersController
         $sessionId = $cookie['session'] ?? '';
         if ($sessionId) {
             $userDB->logout($sessionId);
-            $sessiondestroy = filter_input_array(session_destroy());
+           session_destroy();
             header('Location: /index.php?page=login');
             exit;
         }   
@@ -80,7 +80,7 @@ class UsersController
         $page = $get['page'];
          if ($method['REQUEST_METHOD'] === 'POST'){
            
-             $input = filter_input_array(INPUT_POST, [
+           filter_input_array(INPUT_POST, [
                  'firstname' => FILTER_SANITIZE_SPECIAL_CHARS,
                  'lastname' => FILTER_SANITIZE_SPECIAL_CHARS,
                  'email' => FILTER_SANITIZE_EMAIL,
@@ -93,7 +93,7 @@ class UsersController
              $error1 = $msgError['errors']['login'];
              $error2 = $msgError['errors']['name'];
              //recuperer le tableau errors car besoin pour fonctionner  
-                if (empty(array_filter($error1, fn ($e) => $e !== ''))){ 
+                if (empty(array_filter($error1, fn ($err) => $err !== ''))){ 
                  if($page === 'login'){ 
                      $user = $this->userDB->getUserFromEmail($email);
                      if (!$user) {

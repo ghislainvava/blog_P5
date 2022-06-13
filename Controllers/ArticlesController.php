@@ -33,9 +33,9 @@ class ArticlesController
    function getArticle($currentUser, $commentDB )
    {
        ob_start();
-       //$msg = '';
+       $msg = '';
        $server = filter_input_array(INPUT_SERVER);
-       $post = filter_input_array(INPUT_POST);
+       //$post = filter_input_array(INPUT_POST);
        $get = filter_input_array(INPUT_GET, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
        $_id = $get['id'] ?? '';
        if ($_id) {  //si id de l'article on envoye les données
@@ -71,7 +71,7 @@ class ArticlesController
         header('Location: /index.php?page=home');
         exit();
       } 
-        $get = filter_input_array(INPUT_GET);
+        
           $get = filter_input_array(INPUT_GET, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
           $_id = $get['id'] ?? '';
           if ($_id) {
@@ -94,7 +94,7 @@ class ArticlesController
         unset($_SESSION['PRG']);
         $get = filter_input_array(INPUT_GET, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
         $server = filter_input_array(INPUT_SERVER);
-        $_id = $get['id'] ?? '';
+        $_id = $_GET['id'] ?? '';
         if ($_id) {  //si id de l'article on envoye les données
             $article = $articleDB->fetchOne($_id);
             if($article['author'] !== $currentUser['id'] ){
@@ -107,14 +107,15 @@ class ArticlesController
             $chapo = $article['chapo'];
             $image = $article['image'];
             $content = $article['content'];  
-        }else{
+        }
+        if(isset($_id)){
             $title = $msgError['placeholder']['attribut']['title']; //on rempli s'il y a un placeholder enregistré
             $chapo = $msgError['placeholder']['attribut']['chapo'];
             $image = $msgError['placeholder']['attribut']['image'];
             $content = $msgError['placeholder']['attribut']['content'];
         }  
         if ($server['REQUEST_METHOD'] === 'POST') {
-            $_POST = filter_input_array(INPUT_POST, [
+            $post = filter_input_array(INPUT_POST, [
                 'title' => FILTER_SANITIZE_FULL_SPECIAL_CHARS,
                 'chapo' => FILTER_SANITIZE_FULL_SPECIAL_CHARS,
                 'content' => [
@@ -124,7 +125,6 @@ class ArticlesController
             ]);
             $image = '';
             $extension ='';
-            $post = filter_input_array(INPUT_POST);
             if($_FILES['image']['name'] !== ''){  
                 $tmpName = $_FILES['image']['tmp_name'];
                 $name = $_FILES['image']['name'];
@@ -172,7 +172,6 @@ class ArticlesController
                 exit();    
                 } else {
                 $objet->fillPRGArticle($msgError);
-             
                     if (isset($_id)){
                         header('Location: /index.php?page=form-article&id='.$_id);
                         exit;

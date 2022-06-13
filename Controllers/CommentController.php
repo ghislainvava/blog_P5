@@ -19,7 +19,7 @@ class CommentController
            $_SESSION['message'] = "Vous n'êtes pas administrateur le commentaire ne peux pas être supprimé";
            header('Location: /index.php?page=message');
            exit();
-         } else{
+         } 
             $get = filter_input_array(INPUT_GET);
              $get = filter_input_array(INPUT_GET, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
              $_id = $get['id'] ?? '';
@@ -28,8 +28,7 @@ class CommentController
                 $_SESSION['message'] = "le commentaire a bien été supprimé";   
            }  
              header('Location: /index.php?page=message');
-             exit();
-         }
+             exit();  
    }
    public function checkedComment($currentUser)
     {
@@ -37,14 +36,13 @@ class CommentController
             $_SESSION['message'] = "Vous n'êtes pas administrateur, vous ne pouvez pas validé le commentaire!";
             header('Location: /index.php?page=message');
             exit();
-        } else {
+        } 
             $get = filter_input_array(INPUT_GET, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
             $_id = $get['id'] ?? '';
             $comment = $this->commentDB->checked($_id);
             $_SESSION['message'] = "le commentaire a bien été supprimé";   
             header('Location: /index.php?page=message');
             exit();
-        }
    }
    
 
