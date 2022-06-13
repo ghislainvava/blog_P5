@@ -1,5 +1,5 @@
 <?php
-session_start();
+$sessionStart = filter_input_array(session_start());
 require 'vendor/autoload.php';
 
 use BlogOC\Database\DatabaseConnection;
@@ -14,17 +14,18 @@ use BlogOC\Database\models\CommentDB;
 
 $db = new DatabaseConnection();
 $pdo = $db->getConnection();
+$get = filter_input_array(INPUT_GET);
 
-if(!isset($_GET['page']))  $_GET['page'] = 'home'; //on attribut home pour démarrer
+if(!isset($get['page']))  $get['page'] = 'home'; //on attribut home pour démarrer
 $userDB = new AuthDB($pdo);
 $articleDB = new ArticleDB($pdo);
 $commentDB = new CommentDB($pdo);
-if ($_GET['page'] !== 'register' and $_GET['page'] !== 'login'){
+if ($get['page'] !== 'register' and $get['page'] !== 'login'){
     $currentUser = $userDB->isLoggedIn();
 } else{
     $currentUser  = $currentUser ?? false;
 }
-switch ($_GET['page']) {
+switch ($get['page']) {
     case 'home';
         $headTitle ='Presentation';
         $usersController = new UsersController($userDB);
@@ -86,7 +87,7 @@ switch ($_GET['page']) {
         header:('Location: index.php?=message');
         break;        
 }
-if ($_GET['page'] !== 'message'){
+if ($get['page'] !== 'message'){
     include('Views/template.php');//sert à structure la page
 }
     

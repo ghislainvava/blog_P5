@@ -14,23 +14,19 @@ class UsersController
     }
     public function logout($userDB)
     {
-        $sessionId = $_COOKIE['session'] ?? '';
+        $cookie = filter_input_array(INPUT_COOKIE);
+        $sessionId = $cookie['session'] ?? '';
         if ($sessionId) {
             $userDB->logout($sessionId);
-            $_SESSION = array();
+            $sessiondestroy = filter_input_array(session_destroy());
             header('Location: /index.php?page=login');
             exit;
         }   
     }  
-    public function getPOST($key = null){
-        if(null !== $key){
-            return $this->POST[$key] ?? null;
-        }
-        return $this->POST;
-    }
     public function home(){
         ob_start();
         $post = filter_input_array(INPUT_POST);
+        //$sessionStart = filter_input_array(session_start());
         $mj = new \Mailjet\Client('d9e8b3ed3950793fc15812123a486784','56142a2c9ff8ac4a98abf948ef204d8f',true,['version' => 'v3.1']);
         if(!empty($post['name']) && !empty($post['email']) && !empty($post["message"])) {
             $email = htmlspecialchars($post['email']);
@@ -80,8 +76,9 @@ class UsersController
         $firstname = $msgError['placeholder']['name']['firstname'];
         $get = filter_input_array(INPUT_GET);
         $post = filter_input_array(INPUT_POST);
+        $method = filter_input_array(INPUT_SERVER);
         $page = $get['page'];
-         if ($_SERVER['REQUEST_METHOD'] === 'POST'){
+         if ($method['REQUEST_METHOD'] === 'POST'){
            
              $input = filter_input_array(INPUT_POST, [
                  'firstname' => FILTER_SANITIZE_SPECIAL_CHARS,

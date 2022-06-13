@@ -8,8 +8,8 @@ namespace BlogOC\Controllers;
 class ArticlesController
 {
    private $articleDB;
-   private $currentUser ; 
-   private $commentDB;
+   //private $currentUser ; 
+   //private $commentDB;
    public function __construct($articleDB){
     $this->articleDB = $articleDB;
    
@@ -34,21 +34,23 @@ class ArticlesController
    {
        ob_start();
        $msg = '';
-       $_GET = filter_input_array(INPUT_GET, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-       $id = $_GET['id'] ?? '';
+       $server = filter_input_array(INPUT_SERVER);
+       $post = filter_input_array(INPUT_POST);
+       $get = filter_input_array(INPUT_GET, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+       $id = $get['id'] ?? '';
        if ($id) {  //si id de l'article on envoye les données
            $article = $this->articleDB->fetchOne($id);  
            $comments = $commentDB->fetchComments($id);
        } 
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $_POST = filter_input_array(INPUT_POST, [
+        if ($server['REQUEST_METHOD'] === 'POST') {
+            $post = filter_input_array(INPUT_POST, [
                 'comment' => [
                     'filter' => FILTER_SANITIZE_FULL_SPECIAL_CHARS,
                     'flags' => FILTER_FLAG_NO_ENCODE_QUOTES
                 ]
             ]);
             $comment['id_article'] = $id; 
-            $comment['commentaire'] = $_POST['comment'];
+            $comment['commentaire'] = $post['comment'];
             $comment['author'] = $currentUser['id'];
             $commentDB->createOne([
                     'id_article' => $comment['id_article'],
@@ -69,8 +71,9 @@ class ArticlesController
         header('Location: /index.php?page=home');
         exit();
       } else{
-          $_GET = filter_input_array(INPUT_GET, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-          $id = $_GET['id'] ?? '';
+        $get = filter_input_array(INPUT_GET);
+          $get = filter_input_array(INPUT_GET, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+          $id = $get['id'] ?? '';
           if ($id) {
             $article = $this->articleDB->fetchOne($id);
             if ($article['author'] === $currentUser['id']) {
@@ -89,8 +92,9 @@ class ArticlesController
         $msgError = $objet->msgError;
         $msgError = $objet->prgPush($msgError); //on rempli les erreurs du PRG et Placeholder
         unset($_SESSION['PRG']);
-        
-        $_GET = filter_input_array(INPUT_GET, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+        $get = filter_input_array(INPUT_GET);
+        $get = filter_input_array(INPUT_GET, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+        $server = filter_input_array(INPUT_SERVER);
         $id = $_GET['id'] ?? '';
         if ($id) {  //si id de l'article on envoye les données
             $article = $articleDB->fetchOne($id);
@@ -110,7 +114,7 @@ class ArticlesController
             $image = $msgError['placeholder']['attribut']['image'];
             $content = $msgError['placeholder']['attribut']['content'];
         }  
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        if ($server['REQUEST_METHOD'] === 'POST') {
        
             $_POST = filter_input_array(INPUT_POST, [
                 'title' => FILTER_SANITIZE_FULL_SPECIAL_CHARS,
@@ -122,6 +126,7 @@ class ArticlesController
             ]);
             $image = '';
             $extension ='';
+            $post = filter_input_array(INPUT_POST);
             if($_FILES['image']['name'] !== ''){  
                 $tmpName = $_FILES['image']['tmp_name'];
                 $name = $_FILES['image']['name'];
@@ -135,16 +140,16 @@ class ArticlesController
                     if (in_array($extension, $allowedExtensions)){
                         move_uploaded_file($tmpName, './images/'.$size.$name );
                         $image = $size.$name ;        
-                    }elseif ($_name !== '' ){          
+                    }elseif ($name !== '' ){          
                         $errors['image'] = $msgError['ERROR_EXTENSIONS']; 
                     }
                 } else{
                     $errors['image'] = $msgError['ERROR_SIZE_IMAGE'];
                 } 
             }
-            $title = $_POST['title'] ?? '';
-            $chapo = $_POST['chapo'] ?? '';
-            $content = $_POST['content'] ?? '';
+            $title = $post['title'] ?? '';
+            $chapo = $post['chapo'] ?? '';
+            $content = $post['content'] ?? '';
 
             $msgError = $objet->pushErrorsArticles( $msgError, $content, $title, $chapo);
 

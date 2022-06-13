@@ -32,9 +32,8 @@ class __TwigTemplate_546f5b201670dfc3f0a9c8eaca90992a extends Template
 
     protected function doDisplay(array $context, array $blocks = [])
     {
-        $macros = $this->macros;
-        // line 1
-        echo "coucou";
+        $context = [];
+
     }
 
     public function getTemplateName()
