@@ -12,24 +12,29 @@ class UsersController
     {
         $this->userDB = $userDB;
     }
-    private $currentUser;
     public function logout($userDB)
     {
         $sessionId = $_COOKIE['session'] ?? '';
         if ($sessionId) {
             $userDB->logout($sessionId);
-            session_destroy();
+            $_SESSION = array();
             header('Location: /index.php?page=login');
             exit;
         }   
     }  
+    public function getPOST($key = null){
+        if(null !== $key){
+            return $this->POST[$key] ?? null;
+        }
+        return $this->POST;
+    }
     public function home(){
         ob_start();
+        $post = filter_input_array(INPUT_POST);
         $mj = new \Mailjet\Client('d9e8b3ed3950793fc15812123a486784','56142a2c9ff8ac4a98abf948ef204d8f',true,['version' => 'v3.1']);
-        if(!empty($_POST['name']) && !empty($_POST['email']) && !empty($_POST["message"])) {
-            $name = htmlspecialchars($_POST['name']);
-            $email = htmlspecialchars($_POST['email']);
-            $message = htmlspecialchars(($_POST['message']));
+        if(!empty($post['name']) && !empty($post['email']) && !empty($post["message"])) {
+            $email = htmlspecialchars($post['email']);
+            $message = htmlspecialchars(($post['message']));
             if(filter_var($email, FILTER_VALIDATE_EMAIL)){    
                 $body = [
                     'Messages' => [
@@ -73,7 +78,9 @@ class UsersController
         $password = $msgError['placeholder']['login']['password'];
         $lastname = $msgError['placeholder']['name']['lastname'];
         $firstname = $msgError['placeholder']['name']['firstname'];
-        $page = $_GET['page'];
+        $get = filter_input_array(INPUT_GET);
+        $post = filter_input_array(INPUT_POST);
+        $page = $get['page'];
          if ($_SERVER['REQUEST_METHOD'] === 'POST'){
            
              $input = filter_input_array(INPUT_POST, [
@@ -81,14 +88,17 @@ class UsersController
                  'lastname' => FILTER_SANITIZE_SPECIAL_CHARS,
                  'email' => FILTER_SANITIZE_EMAIL,
              ]);
-             $email = $input['email'] ?? '';
-             $password = $_POST['password'] ?? '';
-             $firstname = $input['firstname'] ?? '';
-             $lastname = $input['lastname'] ?? '';
+
+             $email = $post['email'] ?? '';
+             $password = $post['password'] ?? '';
+             $firstname = $post['firstname'] ?? '';
+             $lastname = $post['lastname'] ?? '';
              $msgError = $objet->pushErrors( $msgError, $email, $password, $lastname, $firstname);
+             $error1 = $msgError['errors']['login'];
+             $error2 = $msgError['errors']['name'];
              //recuperer le tableau errors car besoin pour fonctionner
             
-                if (empty(array_filter($msgError['errors']['login'], fn ($e) => $e !== ''))){ 
+                if (empty(array_filter($error1, fn ($e) => $e !== ''))){ 
                  if($page === 'login'){ 
                      $user = $this->userDB->getUserFromEmail($email);
                      if (!$user) {
@@ -103,7 +113,7 @@ class UsersController
                          }
                      }
                  } else {
-                    if (empty(array_filter($msgError['errors']['login'], fn ($e) => $e !== ''))){ 
+                    if (empty(array_filter($error2, fn ($e) => $e !== ''))){ 
                     $this->userDB->register([
                         'firstname' => $firstname,
                         'lastname' => $lastname,

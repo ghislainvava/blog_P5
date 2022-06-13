@@ -80,14 +80,16 @@ class MsgError {
         $msgError['placeholder']['login']['email'] = $_SESSION['PRG']['email'] ?? '';
         $msgError['placeholder']['name']['lastname'] = $_SESSION['PRG']['lastname'] ?? '';
         $msgError['placeholder']['name']['firstname'] = $_SESSION['PRG']['firstname'] ?? '';
-        unset($_SESSION['PRG']); //on vide le PRG aprés récupération
+        //unset($_SESSION['PRG']); //on vide le PRG aprés récupération
+        $_SESSION['PRG'] = '';
         return $msgError;
     }
     function pushErrors($msgError, $email, $password, $lastname, $firstname ){
-        $email = $_POST['email'] ?? '';
-        $password = $_POST['password'] ?? '';
-        $firstname = $_POST['firstname'] ?? '';
-        $lastname = $_POST['lastname'] ?? '';
+        $post = filter_input_array(INPUT_POST);
+        $email = $post['email'] ?? '';
+        $password = $post['password'] ?? '';
+        $firstname = $post['firstname'] ?? '';
+        $lastname = $post['lastname'] ?? '';
         if ($firstname === '') {
             $msgError['errors']['name']['firstname'] = $msgError['ERROR_REQUIRED'];  //$erors est variable dans le form
         } elseif (mb_strlen($firstname) < 2) {
@@ -116,8 +118,9 @@ class MsgError {
     }
 
     function pushErrorsArticles($msgError, $content, $title, $chapo ){
-        $content = $_POST['content'] ?? '';
-        $title = $_POST['title'] ?? '';
+        $post = filter_input_array(INPUT_POST);
+        $content = $post['content'] ?? '';
+        $title = $post['title'] ?? '';
         if ($title === '') {
             $msgError['errors']['attribut']['title'] = $msgError['ERROR_REQUIRED'];   
         } elseif (mb_strlen($title) < 5) {
@@ -136,24 +139,25 @@ class MsgError {
         return $msgError;
     }
     function fillPRG($msgError){
+        $post = filter_input_array(INPUT_POST);
             $_SESSION['PRG']['error']['email'] = $msgError['errors']['login']['email']; //on rempli $_SESSION avant PRG
             $_SESSION['PRG']['error']['password'] = $msgError['errors']['login']['password'];
             $_SESSION['PRG']['error']['lastname'] = $msgError['errors']['name']['lastname'];
             $_SESSION['PRG']['error']['firstname'] = $msgError['errors']['name']['firstname'];
-            $_SESSION['PRG']['email'] = $_POST['email']; 
-            $_SESSION['PRG']['password'] = $_POST['password'];
-            $_SESSION['PRG']['lastname'] = $_POST['lastname']; 
-            $_SESSION['PRG']['firstname'] = $_POST['firstname'];    
+            $_SESSION['PRG']['email'] = $post['password'];
+            $_SESSION['PRG']['lastname'] = $post['lastname']; 
+            $_SESSION['PRG']['firstname'] = $post['firstname'];    
         }
     function fillPRGArticle($msgError){
+        $post = filter_input_array(INPUT_POST);
         $_SESSION['PRG']['error']['title'] = $msgError['errors']['attribut']['title'];
         $_SESSION['PRG']['error']['image'] = $msgError['errors']['attribut']['image'];
         $_SESSION['PRG']['error']['chapo'] = $msgError['errors']['attribut']['chapo'];
         $_SESSION['PRG']['error']['content'] = $msgError['errors']['attribut']['content'];
-        $_SESSION['PRG']['title'] = $_POST['title'];
-        $_SESSION['PRG']['image'] = $_POST['image'];
-        $_SESSION['PRG']['content'] = $_POST['content'];
-        $_SESSION['PRG']['chapo'] = $_POST['chapo']; 
+        $_SESSION['PRG']['title'] = $post['title'];
+        $_SESSION['PRG']['image'] = $post['image'];
+        $_SESSION['PRG']['content'] = $post['content'];
+        $_SESSION['PRG']['chapo'] = $post['chapo']; 
    
     }
 

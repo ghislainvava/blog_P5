@@ -16,7 +16,7 @@
                 <div class="container group-form row w-75 ml-2">
                     <label for="image">Image :</label>
                     <?php if(!empty($image)) : ?>
-                        <img src="images/<?=$image?>"/> 
+                        <img src="images/<?=$image?>" alt="image choisi"/> 
                     <!-- condition image -->
                     <?php else : ?>                
                         <input type="file" name="image" id="image" value="<?=$image ?? '' ?>">
