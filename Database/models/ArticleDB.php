@@ -50,17 +50,17 @@ class ArticleDB
     $this->statementReadAll->execute();
     return $this->statementReadAll->fetchAll();
   }
-  public function fetchOne(string $id) : array
+  public function fetchOne(string $_id) : array
   {
-    $this->statementReadOne->bindValue(':id', $id);
+    $this->statementReadOne->bindValue(':id', $_id);
     $this->statementReadOne->execute();
     return $this->statementReadOne->fetch();
   }
-  public function deleteOne(string $id): string
+  public function deleteOne(string $_id): string
   {
-    $this->statementDeleteOne->bindValue(':id', $id);
+    $this->statementDeleteOne->bindValue(':id', $_id);
     $this->statementDeleteOne->execute();
-    return $id;
+    return $_id;
   }
   public function createOne($article): array
   {

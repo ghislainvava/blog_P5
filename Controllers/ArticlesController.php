@@ -8,11 +8,8 @@ namespace BlogOC\Controllers;
 class ArticlesController
 {
    private $articleDB;
-   //private $currentUser ; 
-   //private $commentDB;
    public function __construct($articleDB){
-    $this->articleDB = $articleDB;
-   
+    $this->articleDB = $articleDB;  
    }
    function getProfil( $currentUser, $commentDB)
    {
@@ -25,7 +22,7 @@ class ArticlesController
    function getAllArticle( $currentUser)
    {
         ob_start();
-        $_GET = filter_input_array(INPUT_GET, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+        $get = filter_input_array(INPUT_GET, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
         $articles = $this->articleDB->fetchAll();
         require_once 'Views/articles.php';
         return ob_get_clean();
@@ -35,7 +32,6 @@ class ArticlesController
        ob_start();
        $msg = '';
        $server = filter_input_array(INPUT_SERVER);
-       //$post = filter_input_array(INPUT_POST);
        $get = filter_input_array(INPUT_GET, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
        $_id = $get['id'] ?? '';
        if ($_id) {  //si id de l'article on envoye les données
@@ -64,14 +60,12 @@ class ArticlesController
       $contentView =  require_once 'Views/show-article.php';
        return ob_get_clean();
     }
-   
    function deleteArticle( $currentUser)
    {
     if (!$currentUser) {
         header('Location: /index.php?page=home');
         exit();
       } 
-        
           $get = filter_input_array(INPUT_GET, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
           $_id = $get['id'] ?? '';
           if ($_id) {
@@ -82,8 +76,7 @@ class ArticlesController
             }
         }  
           header('Location: /index.php?page=message');
-          exit();
-      
+          exit(); 
    }
     public function moveArticle($articleDB, $currentUser)
     {
@@ -91,29 +84,30 @@ class ArticlesController
         $objet= new MsgError(); 
         $msgError = $objet->msgError;
         $msgError = $objet->prgPush($msgError); //on rempli les erreurs du PRG et Placeholder
-        unset($_SESSION['PRG']);
         $get = filter_input_array(INPUT_GET, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
         $server = filter_input_array(INPUT_SERVER);
-        $_id = $_GET['id'] ?? '';
-        if ($_id) {  //si id de l'article on envoye les données
-            $article = $articleDB->fetchOne($_id);
-            if($article['author'] !== $currentUser['id'] ){
-                if($currentUser['admin'] < 1){
-                    header('Location: /index.php?page=home');
-                    exit();
+        $_id = $get['id'] ?? '';
+        $error1 = $msgError['errors']['attribut'];
+        if (empty(array_filter($error1, fn ($err) => $err !== ''))){ 
+            if ($_id) {  //si id de l'article on envoye les données
+                $article = $articleDB->fetchOne($_id);
+                if($article['author'] !== $currentUser['id'] ){
+                    if($currentUser['admin'] < 1){
+                        header('Location: /index.php?page=home');
+                        exit();
+                    }
                 }
-            }
-            $title = $article['title'];
-            $chapo = $article['chapo'];
-            $image = $article['image'];
-            $content = $article['content'];  
-        }
-        if(isset($_id)){
+                $title = $article['title'];
+                $chapo = $article['chapo'];
+                $image = $article['image'];
+                $content = $article['content'];  
+            }    
+        }else {
             $title = $msgError['placeholder']['attribut']['title']; //on rempli s'il y a un placeholder enregistré
             $chapo = $msgError['placeholder']['attribut']['chapo'];
             $image = $msgError['placeholder']['attribut']['image'];
             $content = $msgError['placeholder']['attribut']['content'];
-        }  
+        }
         if ($server['REQUEST_METHOD'] === 'POST') {
             $post = filter_input_array(INPUT_POST, [
                 'title' => FILTER_SANITIZE_FULL_SPECIAL_CHARS,
@@ -129,18 +123,17 @@ class ArticlesController
                 $tmpName = $_FILES['image']['tmp_name'];
                 $name = $_FILES['image']['name'];
                 $size = $_FILES['image']['size'];
-                $error = $_FILES['image']['error'];
                 $fileInfo = pathinfo($name);
                 $extension = $fileInfo['extension'];
                 $allowedExtensions = ['jpg', 'jpeg', 'gif', 'png', 'webp'];  
-                if ($size < 6000000) {
+                if ($size > 6000000) {
                     if (in_array($extension, $allowedExtensions)){
                         move_uploaded_file($tmpName, './images/'.$size.$name );
                         $image = $size.$name ;        
                     }elseif ($name !== '' ){          
                         $errors['image'] = $msgError['ERROR_EXTENSIONS']; 
                     }
-                } else{
+                } elseif($size > 6000000){
                     $errors['image'] = $msgError['ERROR_SIZE_IMAGE'];
                 } 
             }
@@ -148,7 +141,8 @@ class ArticlesController
             $chapo = $post['chapo'] ?? '';
             $content = $post['content'] ?? '';
             $msgError = $objet->pushErrorsArticles( $msgError, $content, $title, $chapo);
-            if($msgError['errors']['attribut']['title'] === '' and $msgError['errors']['attribut']['chapo'] === '' and $msgError['errors']['attribut']['content'] === ''){    
+            $error1 = $msgError['errors']['attribut'];
+            if (empty(array_filter($error1, fn ($err) => $err !== ''))){ 
                 if ($_id) {   
                     $article['title'] = $title;
                     $article['chapo'] = $chapo;
@@ -170,14 +164,13 @@ class ArticlesController
                 unset($_SESSION['post_image']);
                 header('Location: /index.php?page=message');
                 exit();    
-                } else {
-                $objet->fillPRGArticle($msgError);
+                } 
+                //$objet->fillPRGArticle($msgError);
                     if (isset($_id)){
                         header('Location: /index.php?page=form-article&id='.$_id);
                         exit;
                         } 
                     header('Location: /index.php?page=form-article');
-                }
             }
         $contentView = require_once 'Views/form-article.php';
         return ob_get_clean();

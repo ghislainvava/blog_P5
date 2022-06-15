@@ -27,7 +27,7 @@ class UsersController
         ob_start();
         $post = filter_input_array(INPUT_POST);
         //$sessionStart = filter_input_array(session_start());
-        $mj = new \Mailjet\Client('d9e8b3ed3950793fc15812123a486784','56142a2c9ff8ac4a98abf948ef204d8f',true,['version' => 'v3.1']);
+        $mjet = new \Mailjet\Client('d9e8b3ed3950793fc15812123a486784','56142a2c9ff8ac4a98abf948ef204d8f',true,['version' => 'v3.1']);
         if(!empty($post['name']) && !empty($post['email']) && !empty($post["message"])) {
             $email = htmlspecialchars($post['email']);
             $message = htmlspecialchars(($post['message']));
@@ -50,15 +50,15 @@ class UsersController
                     ]
                     ]
                 ];
-                $response = $mj->post(Resources::$Email, ['body' => $body]);
+                $response = $mjet->post(Resources::$Email, ['body' => $body]);
             $_SESSION['message'] = 'Votre email a bien été envoyé, nous vous répondrons rapidement';
                 header('Location: /index.php?page=message');
                 exit; 
-            }else{
+            }
                 $_SESSION['message'] = "Votre email n'a pas pu être envoyé, retenté ultérieurement";
                 header('Location: /index.php?page=message');
-            exit;
-            }
+                exit;
+            
         }
         require_once 'Views/home.php';
         return ob_get_clean();
@@ -79,7 +79,6 @@ class UsersController
         $method = filter_input_array(INPUT_SERVER);
         $page = $get['page'];
          if ($method['REQUEST_METHOD'] === 'POST'){
-           
            filter_input_array(INPUT_POST, [
                  'firstname' => FILTER_SANITIZE_SPECIAL_CHARS,
                  'lastname' => FILTER_SANITIZE_SPECIAL_CHARS,
@@ -108,7 +107,7 @@ class UsersController
                          }
                      }
                  } else {
-                    if (empty(array_filter($error2, fn ($e) => $e !== ''))){ 
+                    if (empty(array_filter($error2, fn ($err) => $err !== ''))){ 
                     $this->userDB->register([
                         'firstname' => $firstname,
                         'lastname' => $lastname,
@@ -120,15 +119,12 @@ class UsersController
                         }       
                 } 
             }elseif ($page ==='login'){
-             // il y a des messages d'erreurs 
-             $objet->fillPRG($msgError);
              header( "Location: /index.php?page=login");
              exit();
-            }else{
-             $objet->fillPRG($msgError);
+            }
              header( "Location: /index.php?page=register");
              exit();   
-            }
+            
         }
         if ($page ==='login'){
             require_once 'Views/login.php';

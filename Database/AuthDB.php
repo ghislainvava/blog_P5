@@ -10,8 +10,8 @@ class AuthDB
         private PDOStatement $statementReadSession;
         private PDOStatement $statementReadUser;
         private PDOStatement $statementFromEmail;
-        private PDOStatement $statementCreateSession;
-        private PDOStatement $statementDeleteSession;
+        private PDOStatement $statementCreate;
+        private PDOStatement $statementDelete;
 
         function __construct(private PDO $pdo)
         {
@@ -27,16 +27,16 @@ class AuthDB
               $this->statementReadSession = $pdo->prepare('SELECT id, userid FROM session WHERE id=:id');
               $this->statementReadUser = $pdo->prepare('SELECT id,email,password,firstname,lastname,admin FROM user WHERE id=:id');
               $this->statementFromEmail = $pdo->prepare('SELECT id,email,password,firstname,lastname,admin FROM user WHERE email=:email');
-              $this->statementCreateSession = $pdo->prepare('INSERT INTO session VALUES (
+              $this->statementCreate = $pdo->prepare('INSERT INTO session VALUES (
                 DEFAULT,
                 :userid
                 )');
-             $this->statementDeleteSession = $pdo->prepare('DELETE FROM session WHERE id=:id');
+             $this->statementDelete = $pdo->prepare('DELETE FROM session WHERE id=:id');
         }
         function login(string $userId): void
         {   
-            $this->statementCreateSession->bindValue(':userid', $userId);
-            $this->statementCreateSession->execute();
+            $this->statementCreate->bindValue(':userid', $userId);
+            $this->statementCreate->execute();
             $sessionId = $this->pdo->lastInsertId();
             setcookie('session', $sessionId, time() + 60 *60 *24 * 14 ,'','',false, true);
             return;
@@ -69,8 +69,8 @@ class AuthDB
         }
         function logout(string $sessionId): void
         {
-            $this->statementDeleteSession->bindValue(':id', $sessionId);
-            $this->statementDeleteSession->execute();
+            $this->statementDelete->bindValue(':id', $sessionId);
+            $this->statementDelete->execute();
             setcookie('session','', time() -1);
             return;            
         }
