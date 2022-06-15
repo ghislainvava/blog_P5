@@ -88,26 +88,26 @@ class ArticlesController
         $server = filter_input_array(INPUT_SERVER);
         $_id = $get['id'] ?? '';
         $error1 = $msgError['errors']['attribut'];
-        if (empty(array_filter($error1, fn ($err) => $err !== ''))){ 
-            if ($_id) {  //si id de l'article on envoye les données
-                $article = $articleDB->fetchOne($_id);
-                if($article['author'] !== $currentUser['id'] ){
-                    if($currentUser['admin'] < 1){
-                        header('Location: /index.php?page=home');
-                        exit();
-                    }
-                }
-                $title = $article['title'];
-                $chapo = $article['chapo'];
-                $image = $article['image'];
-                $content = $article['content'];  
-            }    
-        }else {
+        if (!empty(array_filter($error1, fn ($err) => $err !== ''))){ 
             $title = $msgError['placeholder']['attribut']['title']; //on rempli s'il y a un placeholder enregistré
             $chapo = $msgError['placeholder']['attribut']['chapo'];
             $image = $msgError['placeholder']['attribut']['image'];
             $content = $msgError['placeholder']['attribut']['content'];
         }
+        if ($_id) {                 //si id de l'article on envoye les données
+            $article = $articleDB->fetchOne($_id);
+            if($article['author'] !== $currentUser['id'] ){
+                if($currentUser['admin'] < 1){
+                    header('Location: /index.php?page=home');
+                    exit();
+                }
+            }
+            $title = $article['title'];
+            $chapo = $article['chapo'];
+            $image = $article['image'];
+            $content = $article['content'];  
+        }    
+        
         if ($server['REQUEST_METHOD'] === 'POST') {
             $post = filter_input_array(INPUT_POST, [
                 'title' => FILTER_SANITIZE_FULL_SPECIAL_CHARS,
@@ -165,7 +165,6 @@ class ArticlesController
                 header('Location: /index.php?page=message');
                 exit();    
                 } 
-                //$objet->fillPRGArticle($msgError);
                     if (isset($_id)){
                         header('Location: /index.php?page=form-article&id='.$_id);
                         exit;

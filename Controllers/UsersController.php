@@ -92,22 +92,23 @@ class UsersController
              $error1 = $msgError['errors']['login'];
              $error2 = $msgError['errors']['name'];
              //recuperer le tableau errors car besoin pour fonctionner  
-                if (empty(array_filter($error1, fn ($err) => $err !== ''))){ 
-                 if($page === 'login'){ 
-                     $user = $this->userDB->getUserFromEmail($email);
-                     if (!$user) {
-                         $msgError['errors']['login']['email'] = $msgError['ERROR_EMAIL_NO_RECORD'];
-                     } else {
-                         if (!password_verify($password, $user['password'])) {
-                             $msgError['errors']['login']['password'] = $msgError['ERROR_PASSWORD_MISMATCH'];
-                         } else {
-                             $this->userDB->login($user['id']);
+
+             if (empty(array_filter($error1, fn ($err) => $err !== ''))){ 
+                if($page === 'login'){ 
+                    $user = $this->userDB->getUserFromEmail($email); //je creer un user pour verifier s'il est inscrit
+                    if ($user['email'] = $email){
+                        if(password_verify($password, $user['password'])){
+                            $this->userDB->login($user['id']);
                              header('Location: index.php?page=articles');                      
                              exit();
-                         }
-                     }
-                 } else {
-                    if (empty(array_filter($error2, fn ($err) => $err !== ''))){ 
+                        }
+                        $msgError['errors']['login']['password'] = $msgError['ERROR_PASSWORD_MISMATCH'];
+                    }
+                    $msgError['errors']['login']['email'] = $msgError['ERROR_EMAIL_NO_RECORD'];
+
+
+                }
+                if (empty(array_filter($error2, fn ($err) => $err !== ''))){ 
                     $this->userDB->register([
                         'firstname' => $firstname,
                         'lastname' => $lastname,
@@ -116,16 +117,16 @@ class UsersController
                         ]);
                         header('Location: /index.php?page=login');
                         exit();
-                        }       
-                } 
-            }elseif ($page ==='login'){
-             header( "Location: /index.php?page=login");
-             exit();
-            }
+                        }   
+                header( "Location: /index.php?page=register");
+                exit();       
+
+             }
+             
              header( "Location: /index.php?page=register");
              exit();   
             
-        }
+        } //dans post
         if ($page ==='login'){
             require_once 'Views/login.php';
             return ob_get_clean();
