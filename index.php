@@ -9,33 +9,35 @@ use BlogOC\Controllers\UsersController;
 use BlogOC\Controllers\ArticlesController;
 use BlogOC\Controllers\CommentController;
 use BlogOC\Views\Message;
-use BlogOC\Controllers\TestController;
+use BlogOC\Models\Article;
 use BlogOC\Database\models\CommentDB;
 
 $db = new DatabaseConnection();
 $pdo = $db->getConnection();
 $get = filter_input_array(INPUT_GET);
 
-if(!isset($get['page']))  $get['page'] = 'home'; //on attribut home pour démarrer
+if (!isset($get['page'])) {
+    $get['page'] = 'home';
+} //on attribut home pour démarrer
 $userDB = new AuthDB($pdo);
 $articleDB = new ArticleDB($pdo);
 $commentDB = new CommentDB($pdo);
-if ($get['page'] !== 'register' and $get['page'] !== 'login'){
+if ($get['page'] !== 'register' and $get['page'] !== 'login') {
     $currentUser = $userDB->isLoggedIn();
-} else{
+} else {
     $currentUser  = $currentUser ?? false;
 }
 switch ($get['page']) {
-    case 'home';
+    case 'home':
         $headTitle ='Presentation';
         $usersController = new UsersController($userDB);
-            $contentView = $usersController->home();     
+            $contentView = $usersController->home();
         break;
     case 'login':
         $headTitle = "Connection";
         $usersController = new UsersController($userDB);
         $contentView = $usersController->log();
-        break; 
+        break;
     case 'register':
         $headTitle = "Enregistrement";
         $usersController = new UsersController($userDB);
@@ -48,12 +50,12 @@ switch ($get['page']) {
     case 'profil':
         $headTitle = "Mon profil";
         $articlesController = new ArticlesController($articleDB);
-        $contentView = $articlesController->getProfil( $currentUser, $commentDB); 
+        $contentView = $articlesController->getProfil($currentUser, $commentDB);
         break;
     case 'articles':
         $headTitle = "Articles";
         $articlesController = new ArticlesController($articleDB);
-        $contentView = $articlesController->getAllArticle( $currentUser); 
+        $contentView = $articlesController->getAllArticle($currentUser);
         break;
     case 'show-article':
         $headTitle = "Article";
@@ -63,32 +65,30 @@ switch ($get['page']) {
     case 'form-article':
         $headTitle ="Form-Article";
         $articlesController = new ArticlesController($articleDB);
-        $contentView = $articlesController->moveArticle($articleDB, $currentUser); 
+        $contentView = $articlesController->moveArticle($articleDB, $currentUser);
         break;
     case 'delete-article':
         $articlesController = new ArticlesController($articleDB);
-        $contentView = $articlesController->deleteArticle( $currentUser); 
+        $contentView = $articlesController->deleteArticle($currentUser);
         break;
     case 'delete-comment':
         $commentController = new CommentController($commentDB);
-        $contentView = $commentController->deleteComment( $currentUser); 
+        $contentView = $commentController->deleteComment($currentUser);
         break;
     case 'checked':
         $commentController = new CommentController($commentDB);
-        $contentView = $commentController->checkedComment( $currentUser); 
+        $contentView = $commentController->checkedComment($currentUser);
         break;
-    case 'message';
+    case 'message':
         $headTitle = "message";
         include('Views/head.php');
         $message = new Message();
         $contentView = $message->message();
         break;
-    default :
+    default:
         header:('Location: index.php?=message');
-        break;        
+        break;
 }
-if ($get['page'] !== 'message'){
+if ($get['page'] !== 'message') {
     include('Views/template.php');//sert à structure la page
 }
-    
-    
