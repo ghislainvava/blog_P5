@@ -33,7 +33,6 @@ class __TwigTemplate_546f5b201670dfc3f0a9c8eaca90992a extends Template
     protected function doDisplay(array $context, array $blocks = [])
     {
         $context = [];
-
     }
 
     public function getTemplateName()
@@ -43,7 +42,7 @@ class __TwigTemplate_546f5b201670dfc3f0a9c8eaca90992a extends Template
 
     public function getDebugInfo()
     {
-        return array (  37 => 1,);
+        return array(  37 => 1,);
     }
 
     public function getSourceContext()

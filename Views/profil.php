@@ -38,17 +38,16 @@
       <div>
           <ul>
             <?php foreach ($comments as $comment) : ?>
-              <li>
-                <?php if ($comment['checked'] < 1 and $currentUser['admin'] > 0) :?>
-                <p><?=$comment['commentaire']?></p>
-                <a href="/index.php?page=checked&id=<?= $comment['id_comment'] ?>" class="btn btn-primary ">Valider</a>
-                <a class="btn btn-secondary " href="index.php?page=delete-comment&id=<?=$comment['id_comment']?>">Supprimer</a> 
-              </li>
-              <?php
-              endif;
-              endforeach;
-            endif;
-            ?>
+                <li>
+                    <?php if ($comment['checked'] < 1 and $currentUser['admin'] > 0) :?>
+                    <p><?=htmlentities($comment['commentaire'])?></p>
+                    <a href="/index.php?page=checked&id=<?= htmlentities($comment['id_comment']) ?>" class="btn btn-primary ">Valider</a>
+                    <a class="btn btn-secondary " href="index.php?page=delete-comment&id=<?=htmlentities($comment['id_comment'])?>">Supprimer</a> 
+                </li>
+                <?php
+                endif;
+                endforeach;
+                endif;?>
           </ul>
       </div>
     </div>
