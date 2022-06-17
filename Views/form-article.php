@@ -5,13 +5,13 @@
             <form action = "index.php?page=form-article<?= $_id ? "&id=$_id" : '' ?>"  method="POST" enctype='multipart/form-data'>
                 <div class="container group-form row w-75 mt-3 ">
                     <label for="title">Titre :</label>
-                    <input type="text" name="title" id="title" value="<?= htmlentities($title ?? '')?>">
+                    <input type="text" name="title" id="title" value="<?=htmlentities($title ?? '')?>">
                     <p class="text-danger"><?= htmlentities($msgError['errors']['attribut']['title']) ?></p>
                 </div>
                 <div class="container group-form row w-75 ml-2">
                     <label for="chapo">Chapô : </label>
-                    <input type="text" name="chapo" id="chapo" value="<?= htmlentities($chapo ?? '')?>">
-                    <p class="text-danger"><?= htmlentities($msgError['errors']['attribut']['chapo']) ?></p>
+                    <input type="text" name="chapo" id="chapo" value="<?=htmlentities($chapo ?? '')?>">
+                    <p class="text-danger"><?=htmlentities($msgError['errors']['attribut']['chapo'])?></p>
                 </div>
                 <div class="container group-form row w-75 ml-2">
                     <label for="image">Image :</label>
@@ -19,7 +19,7 @@
                         <img src="images/<?=$image?>" alt="image choisi"/> 
                     <!-- condition image -->
                     <?php else : ?>                
-                        <input type="file" name="image" id="image" value="<?=$image ?? ''?>">
+                        <input type="file" name="image" id="image" value="<?=htmlentities($image ?? '')?>">
                         <?php endif; ?>   
                         <p class="text-danger"><?=htmlentities($msgError['errors']['attribut']['image'])?></p>
                 </div>

@@ -10,11 +10,11 @@
                 </li>
                 <li class="d-flex">
                     <strong>Nom :</strong> &nbsp &nbsp 
-                    <p><?= htmlentities($currentUser['lastname'])?></p>
+                    <p><?=htmlentities($currentUser['lastname'])?></p>
                 </li>
                 <li class="d-flex">
                     <strong>Email :</strong> &nbsp &nbsp 
-                    <p><?= htmlentities($currentUser['email'])?></p>
+                    <p><?=htmlentities($currentUser['email'])?></p>
                 </li>
             </ul>
          </div>
@@ -24,10 +24,10 @@
                 <?php //var_dump($articles);
                 foreach ($articles as $article) : ?>
                 <li>
-                    <span><?= htmlentities($article['title'])?></span>
+                    <span><?=htmlentities($article['title'])?></span>
                     <div>
-                        <a href="/index.php?page=form-article&id=<?= htmlentities($article['id']) ?>" class="btn btn-primary">Modifier</a>
-                        <a class="btn btn-secondary" href="/index.php?page=delete-article&id=<?= htmlentities($article['id']) ?>">Supprimer</a>
+                        <a href="/index.php?page=form-article&id=<?=htmlentities($article['id']) ?>" class="btn btn-primary">Modifier</a>
+                        <a class="btn btn-secondary" href="/index.php?page=delete-article&id=<?=htmlentities($article['id'])?>">Supprimer</a>
                     </div>
                 </li>
                 <?php endforeach; ?>
@@ -41,7 +41,7 @@
                 <li>
                     <?php if ($comment->checked < 1) :?>
                     <p><?=htmlentities($comment->commentaire)?></p>
-                    <a href="/index.php?page=checked&id=<?= htmlentities($comment->id_comment) ?>" class="btn btn-primary ">Valider</a>
+                    <a href="/index.php?page=checked&id=<?=htmlentities($comment->id_comment)?>" class="btn btn-primary ">Valider</a>
                     <a class="btn btn-secondary " href="index.php?page=delete-comment&id=<?=htmlentities($comment->id_comment)?>">Supprimer</a> 
                 </li>
                 <?php

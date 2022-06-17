@@ -59,7 +59,7 @@ class ArticlesController
             ]);
             $_SESSION['message'] = "Votre commentaire a bien été ajouté";
             header('Location: /index.php?page=message');
-            exit;
+            die;
         }
         $contentView =  require_once 'Views/show-article.php';
         return ob_get_clean();
@@ -68,7 +68,7 @@ class ArticlesController
     {
         if (!$currentUser) {
             header('Location: /index.php?page=home');
-            exit();
+            die();
         }
         $get = filter_input_array(INPUT_GET, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
         $_id = $get['id'] ?? '';
@@ -80,7 +80,7 @@ class ArticlesController
             }
         }
         header('Location: /index.php?page=message');
-        exit();
+        die();
     }
     public function img($msgError, $image)
     {
@@ -123,7 +123,7 @@ class ArticlesController
             if ($article->author !== $currentUser['id']) {
                 if ($currentUser['admin'] < 1) {
                     header('Location: /index.php?page=home');
-                    exit();
+                    die();
                 }
             }
             $title = $article->title;
@@ -156,7 +156,7 @@ class ArticlesController
                     $this->articleDB->updateOne($article);
                     $_SESSION['message'] = "l'article a bien été modifié";
                     header('Location: /index.php?page=message');
-                    exit();
+                    die();
                 }
                 $this->articleDB->createOne([
                     'title' => $title,
@@ -167,14 +167,14 @@ class ArticlesController
                 ]);
                 $_SESSION['message'] = "l'article a bien été ajouté";
                 header('Location: /index.php?page=message');
-                exit();
+                die();
             }
             if (isset($_id)) {
                 header('Location: /index.php?page=form-article&id='.$_id);
-                exit;
+                die;
             }
             header('Location: /index.php?page=form-article');
-            exit();
+            die();
         }//fin du post
         $contentView = require_once 'Views/form-article.php';
         return ob_get_clean();

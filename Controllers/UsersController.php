@@ -21,7 +21,7 @@ class UsersController
             $userDB->logout($sessionId);
             session_destroy();
             header('Location: /index.php?page=login');
-            exit;
+            die;
         }
     }
     public function home()
@@ -55,11 +55,11 @@ class UsersController
                 $response = $mjet->post(Resources::$Email, ['body' => $body]);
                 $_SESSION['message'] = 'Votre email a bien été envoyé, nous vous répondrons rapidement';
                 header('Location: /index.php?page=message');
-                exit;
+                die;
             }
             $_SESSION['message'] = "Votre email n'a pas pu être envoyé, retenté ultérieurement";
             header('Location: /index.php?page=message');
-            exit;
+            die;
         }
         require_once 'Views/home.php';
         return ob_get_clean();
@@ -101,7 +101,7 @@ class UsersController
                         if (password_verify($password, $user['password'])) {
                             $this->userDB->login($user['id']);
                             header('Location: index.php?page=articles');
-                            exit();
+                            die();
                         }
                         $msgError['errors']['login']['password'] = $msgError['ERROR_PASSWORD_MISMATCH'];
                     }
@@ -115,20 +115,19 @@ class UsersController
                         'password' => $password
                     ]);
                     header('Location: /index.php?page=login');
-                    exit();
+                    die();
                 }
                 header("Location: /index.php?page=register");
-                exit();
+                die();
             }
             header("Location: /index.php?page=register");
-            exit();
+            die();
         } //dans post
         if ($page === 'login') {
             require_once 'Views/login.php';
             return ob_get_clean();
-        } else {
-            require_once 'Views/register.php';
-            return ob_get_clean();
         }
+        require_once 'Views/register.php';
+        return ob_get_clean();
     }
 }
