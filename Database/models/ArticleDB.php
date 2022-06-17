@@ -1,9 +1,9 @@
 <?php
-namespace BlogOC\Database\models;
+namespace BlogOC\Database\Models;
 
 use PDOStatement;
 use PDO;
-use BlogOC\Database\models\Article;
+use BlogOC\Database\Models\Article;
 
 class ArticleDB
 {
@@ -75,15 +75,15 @@ class ArticleDB
         $this->statementCreateOne->execute();
         return $this->fetchOne($this->pdo->lastInsertId());
     }
-    public function updateOne($article): array
+    public function updateOne($article): Article
     {
         $date = date('d-m-y h:i:s');
-        $this->statementUpdateOne->bindValue(':title', $article['title']);
-        $this->statementUpdateOne->bindValue(':content', $article['content']);
-        $this->statementUpdateOne->bindValue(':author', $article['author']);
+        $this->statementUpdateOne->bindValue(':title', $article->title);
+        $this->statementUpdateOne->bindValue(':content', $article->content);
+        $this->statementUpdateOne->bindValue(':author', $article->author);
         $this->statementUpdateOne->bindValue(':date', $date);
-        $this->statementUpdateOne->bindValue(':chapo', $article['chapo']);
-        $this->statementUpdateOne->bindValue(':id', $article['id']);
+        $this->statementUpdateOne->bindValue(':chapo', $article->chapo);
+        $this->statementUpdateOne->bindValue(':id', $article->id);
         $this->statementUpdateOne->execute();
         return $article;
     }

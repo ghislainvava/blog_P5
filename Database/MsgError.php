@@ -1,8 +1,9 @@
 <?php
-namespace BlogOC\Models;
+namespace BlogOC\Database;
 
-class MsgError {
-    public $msgError = array(     
+class MsgError
+{
+    public $msgError = array(
         "ERROR_REQUIRED" => "Veuillez renseigner ce champ",
         "ERROR_EMAIL_INVALID" => "L'email n'est pas valide",
         "ERROR_EMAIL_NO_RECORD" => "l'email n'est pas enregistré",
@@ -13,7 +14,7 @@ class MsgError {
         "ERROR_CHAPO_TOO_SHORT" => 'Le chapô est trop court',
         'ERROR_CONTENT_TOO_SHORT' => "L'article est trop court",
         'ERROR_SIZE_IMAGE' => "L'image doit faire moins de 6 MO",
-        'ERROR_EXTENSIONS' => "Veuillez sélectionner un format de fichier valide", 
+        'ERROR_EXTENSIONS' => "Veuillez sélectionner un format de fichier valide",
         'errors' => array(
                 'login' => array(
                     'email' => '',
@@ -45,7 +46,8 @@ class MsgError {
                 )
             )
     );
-    function prgPush($msgError){
+    public function prgPush($msgError)
+    {
         // $_SESSION['PRG'] = array();
 
         // array_push($_SESSION['PRG'], $msgError['errors']['login']['email'] );
@@ -71,7 +73,7 @@ class MsgError {
         $msgError['errors']['name']['firstname'] = $_SESSION['PRG']['error']['firstname'] ?? '';
         $msgError['errors']['attribut']['title'] = $_SESSION['PRG']['error']['title'] ?? '';
         $msgError['errors']['attribut']['chapo'] = $_SESSION['PRG']['error']['chapo'] ?? '';
-        $msgError['errors']['attribut']['image'] = $_SESSION['PRG']['image'] ?? '';  
+        $msgError['errors']['attribut']['image'] = $_SESSION['PRG']['image'] ?? '';
         $msgError['errors']['attribut']['content'] = $_SESSION['PRG']['error']['content'] ?? '';
         $msgError['placeholder']['attribut']['title'] = $_SESSION['PRG']['title'] ?? '';
         $msgError['placeholder']['attribut']['chapo'] = $_SESSION['PRG']['chapo'] ?? '';
@@ -84,7 +86,8 @@ class MsgError {
    
         return $msgError;
     }
-    function pushErrors($msgError, $email, $password, $lastname, $firstname ){
+    public function pushErrors($msgError, $email, $password, $lastname, $firstname)
+    {
         $post = filter_input_array(INPUT_POST);
         $email = $post['email'] ?? '';
         $password = $post['password'] ?? '';
@@ -95,8 +98,8 @@ class MsgError {
             $_SESSION['PRG']['firsname'] = $firstname;
         } elseif (mb_strlen($firstname) < 2) {
             $msgError['errors']['name']['firstname'] = $msgError['ERROR_TOO_SHORT'];
-           $_SESSION['PRG']['firstname'] = $firstname; 
-           $_SESSION['errors']['name']['fistname'] = $msgError['ERROR_TOO_SHORT'];
+            $_SESSION['PRG']['firstname'] = $firstname;
+            $_SESSION['errors']['name']['fistname'] = $msgError['ERROR_TOO_SHORT'];
         }
         if ($lastname === '') {
             $msgError['errors']['name']['lastname'] = $msgError['ERROR_REQUIRED'];
@@ -123,29 +126,30 @@ class MsgError {
         return $msgError;
     }
 
-    function pushErrorsArticles($msgError, $content, $title, $chapo ){
+    public function pushErrorsArticles($msgError, $content, $title, $chapo)
+    {
         $post = filter_input_array(INPUT_POST);
         $content = $post['content'] ?? '';
         $title = $post['title'] ?? '';
         if ($title === '') {
             $msgError['errors']['attribut']['title'] = $msgError['ERROR_REQUIRED'];
-            $_SESSION['PRG']['error']['title'] = $msgError['errors']['attribut']['title']; 
-            $_SESSION['PRG']['title'] = $title;  
+            $_SESSION['PRG']['error']['title'] = $msgError['errors']['attribut']['title'];
+            $_SESSION['PRG']['title'] = $title;
         } elseif (mb_strlen($title) < 5) {
             $msgError['errors']['attribut']['title'] = $msgError['ERROR_TITLE_TOO_SHORT'];
-            $_SESSION['PRG']['error']['title'] = $msgError['errors']['attribut']['title']; 
-            $_SESSION['PRG']['title'] = $title;  
-            } 
+            $_SESSION['PRG']['error']['title'] = $msgError['errors']['attribut']['title'];
+            $_SESSION['PRG']['title'] = $title;
+        }
         if ($chapo === '') {
-            $msgError['errors']['attribut']['chapo'] = $msgError['ERROR_REQUIRED']; 
+            $msgError['errors']['attribut']['chapo'] = $msgError['ERROR_REQUIRED'];
             $_SESSION['PRG']['error']['chapo'] = $msgError['errors']['attribut']['chapo'];
-            $_SESSION['PRG']['chapo'] = $chapo;  
+            $_SESSION['PRG']['chapo'] = $chapo;
         } elseif (mb_strlen($chapo) < 5) {
             $msgError['errors']['attribut']['chapo'] = $msgError['ERROR_CHAPO_TOO_SHORT'];
             $_SESSION['PRG']['error']['chapo'] = $msgError['errors']['attribut']['chapo'];
             $_SESSION['PRG']['chapo'] = $chapo;
-            } 
-        if ($content ==='') {    
+        }
+        if ($content ==='') {
             $msgError['errors']['attribut']['content'] = $msgError['ERROR_REQUIRED'];
             $_SESSION['PRG']['error']['content'] = $msgError['errors']['attribut']['content'];
             $_SESSION['PRG']['chapo'] = $content;
@@ -153,8 +157,7 @@ class MsgError {
             $msgError['errors']['attribut']['content'] = $msgError['ERROR_CONTENT_TOO_SHORT'];
             $_SESSION['PRG']['error']['content'] = $msgError['errors']['attribut']['content'];
             $_SESSION['PRG']['chapo'] = $content;
-        } 
+        }
         return $msgError;
     }
-
 }

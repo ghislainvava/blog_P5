@@ -2,7 +2,7 @@
 
 namespace BlogOC\Controllers;
 
-use BlogOC\Models\MsgError;
+use BlogOC\Database\MsgError;
 use Mailjet\Resources;
 
 class UsersController

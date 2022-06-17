@@ -1,19 +1,19 @@
 <div class="container">
     <div class="container">
-      <div class="mt-5" style="background-image:url(<?=htmlentities($article->image) ?>)"></div>
-      <h1 class="mb-5"><?= htmlentities($article->title) ?></h1>
+      <div class="mt-5" style="background-image:url(<?=htmlentities($article->image)?>)"></div>
+      <h1 class="mb-5"><?=htmlentities($article->title)?></h1>
       <?php if (htmlentities($article->image !== '')) :?>
-        <img  style="width: 350px;" src="images/<?= htmlentities($article->image) ?>" />
+        <img  style="width: 350px;" src="images/<?=htmlentities($article->image)?>" />
       <?php endif; ?>
-      <h2 class="mt-5 mb-3"><?= htmlentities($article->chapo)?></h2>
+      <h2 class="mt-5 mb-3"><?=htmlentities($article->chapo)?></h2>
       <p ><?= htmlentities($article->content) ?></p>
-      <p class="fst-italic mb-5">Post émis part : <?= htmlentities($article->firstname) . ' ' . htmlentities($article->lastname)?>
+      <p class="fst-italic mb-5">Post émis part : <?=htmlentities($article->firstname). ' ' .htmlentities($article->lastname)?>
         <br>Mis à jour le : <?= htmlentities($article->date)?>≈
       </p>
       <?php if ($currentUser['id'] === htmlentities($article->author || $currentUser['admin'])) : ?>
         <div class="action">
-          <a class="btn btn-secondary" href="index.php?page=delete-article&id=<?= htmlentities($article->_id) ?>">Supprimer</a> 
-          <a class="btn btn-primary" href="index.php?page=form-article&id=<?= htmlentities($article->_id) ?>">Editer l'article</a>
+            <a class="btn btn-secondary" href="index.php?page=delete-article&id=<?=htmlentities($article->_id)?>">Supprimer</a> 
+            <a class="btn btn-primary" href="index.php?page=form-article&id=<?=htmlentities($article->_id)?>">Editer l'article</a>
         </div>
       <?php endif; ?>
     </div>
@@ -23,13 +23,13 @@
         <div class="straits"></div>
         <?php if ($comment->checked > 0 || $currentUser['admin']) : ?> 
           <div class=" mb-5">
-              <p><?=$comment->commentaire?></p>
-              <p class="fst-italic">Ecrit le : <?=htmlentities($comment->date_commentaire)?>&nbsp &nbsp par : <?=htmlentities($comment->author)?></p>   
-              <p class="text-center">*****</p>
-              <?php if ($currentUser['id'] === $comment->author || $currentUser['admin'] === 1) : ?>
-              <div class="action">
-                <a class="btn btn-secondary" href="index.php?page=delete-comment&id=<?=htmlentities($comment->id_comment)?>">Supprimer</a>   
-              </div>
+                <p><?=$comment->commentaire?></p>
+                <p class="fst-italic">Ecrit le : <?=htmlentities($comment->date_commentaire)?>&nbsp &nbsp par : <?=htmlentities($comment->author)?></p>   
+                <p class="text-center">*****</p>
+                <?php if ($currentUser['id'] === $comment->author || $currentUser['admin'] === 1) : ?>
+                <div class="action">
+                    <a class="btn btn-secondary" href="index.php?page=delete-comment&id=<?=htmlentities($comment->id_comment)?>">Supprimer</a>   
+                </div>
           </div>
       <?php endif; endif; endforeach;?>  
     </div>
@@ -37,7 +37,7 @@
       <div class="group-form row w75">
         <label for="comment">Ajouter un commentaire</label>
         <textarea class="mt-2 mb-2" name="comment" id="comment"></textarea>   
-        <p class="text-danger"><?= htmlentities($msg)?></p> 
+        <p class="text-danger"><?=htmlentities($msg)?></p> 
       </div>
       <div class="form-actions">
           <button class="btn btn-primary" type="submit">sauvegarder</button>

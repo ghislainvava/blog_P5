@@ -1,8 +1,8 @@
 <?php
 namespace BlogOC\Controllers;
 
- use BlogOC\Models\MsgError;
- use BlogOC\Database\models\CommentDB;
+ use BlogOC\Database\MsgError;
+ use BlogOC\Database\Models\CommentDB;
  use BlogOC\Controllers\CommentController;
 
 class ArticlesController
@@ -81,7 +81,7 @@ class ArticlesController
         header('Location: /index.php?page=message');
         exit();
     }
-    public function moveArticle($articleDB, $currentUser)
+    public function moveArticle($currentUser)
     {
         ob_start();
         $objet= new MsgError();
@@ -98,7 +98,7 @@ class ArticlesController
             $content = $msgError['placeholder']['attribut']['content'];
         }
         if ($_id) {                 //si id de l'article on envoye les données
-            $article = $articleDB->fetchOne($_id);
+            $article = $this->articleDB->fetchOne($_id);
             if ($article->author !== $currentUser['id']) {
                 if ($currentUser['admin'] < 1) {
                     header('Location: /index.php?page=home');
@@ -110,7 +110,6 @@ class ArticlesController
             $image = $article->image;
             $content = $article->content;
         }
-        
         if ($server['REQUEST_METHOD'] === 'POST') {
             $post = filter_input_array(INPUT_POST, [
                 'title' => FILTER_SANITIZE_FULL_SPECIAL_CHARS,
@@ -146,24 +145,26 @@ class ArticlesController
             $msgError = $objet->pushErrorsArticles($msgError, $content, $title, $chapo);
             $error1 = $msgError['errors']['attribut'];
             if (empty(array_filter($error1, fn ($err) => $err !== ''))) {
-                if (!$_id) {
-                    $articleDB->createOne([
-                        'title' => $title,
-                        'chapo' => $chapo,
-                        'image' => $image,
-                        'content' => $content,
-                        'author' => $currentUser['id']
-                    ]);
-                    $_SESSION['message'] = "l'article a bien été ajouté";
+                if ($_id) {
+                    $article->title = $title;
+                    $article->chapo = $chapo;
+                    $article->image = $image;
+                    $article->content = $content;
+                    $article->author = $currentUser['id'];
+                    $this->articleDB->updateOne($article);
+                    $_SESSION['message'] = "l'article a bien été modifié";
+                    unset($_SESSION['post_image']);
+                    header('Location: /index.php?page=message');
+                    exit();
                 }
-                $article['title'] = $title;
-                $article['chapo'] = $chapo;
-                $article['image'] = $image;
-                $article['content'] = $content;
-                $article['author'] = $currentUser['id'];
-                $articleDB->updateOne($article);
-                $_SESSION['message'] = "l'article a bien été modifié";
-                unset($_SESSION['post_image']);
+                $this->articleDB->createOne([
+                    'title' => $title,
+                    'chapo' => $chapo,
+                    'image' => $image,
+                    'content' => $content,
+                    'author' => $currentUser['id']
+                ]);
+                $_SESSION['message'] = "l'article a bien été ajouté";
                 header('Location: /index.php?page=message');
                 exit();
             }

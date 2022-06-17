@@ -65,7 +65,7 @@ switch ($get['page']) {
     case 'form-article':
         $headTitle ="Form-Article";
         $articlesController = new ArticlesController($articleDB);
-        $contentView = $articlesController->moveArticle($articleDB, $currentUser);
+        $contentView = $articlesController->moveArticle($currentUser);
         break;
     case 'delete-article':
         $articlesController = new ArticlesController($articleDB);

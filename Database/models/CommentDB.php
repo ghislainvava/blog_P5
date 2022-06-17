@@ -1,5 +1,5 @@
 <?php
-namespace BlogOC\Database\models;
+namespace BlogOC\Database\Models;
 
 use PDOStatement;
 use PDO;
