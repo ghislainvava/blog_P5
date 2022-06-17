@@ -90,13 +90,13 @@ class ArticlesController
         $get = filter_input_array(INPUT_GET, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
         $server = filter_input_array(INPUT_SERVER);
         $_id = $get['id'] ?? '';
-        $error1 = $msgError['errors']['attribut'];
-        if (!empty(array_filter($error1, fn ($err) => $err !== ''))) {
+        // $error1 = $msgError['errors']['attribut'];
+        //if (!empty(array_filter($error1, fn ($err) => $err !== ''))) {
             $title = $msgError['placeholder']['attribut']['title']; //on rempli s'il y a un placeholder enregistré
             $chapo = $msgError['placeholder']['attribut']['chapo'];
-            $image = $msgError['placeholder']['attribut']['image'];
-            $content = $msgError['placeholder']['attribut']['content'];
-        }
+        $image = $msgError['placeholder']['attribut']['image'];
+        $content = $msgError['placeholder']['attribut']['content'];
+        //}
         if ($_id) {                 //si id de l'article on envoye les données
             $article = $this->articleDB->fetchOne($_id);
             if ($article->author !== $currentUser['id']) {
@@ -119,7 +119,7 @@ class ArticlesController
                     'flags' => FILTER_FLAG_NO_ENCODE_QUOTES
                 ]
             ]);
-            $image = '';
+            // $image = '';
             $extension ='';
             if ($_FILES['image']['name'] !== '') {
                 $tmpName = $_FILES['image']['tmp_name'];
@@ -129,14 +129,14 @@ class ArticlesController
                 $extension = $fileInfo['extension'];
                 $allowedExtensions = ['jpg', 'jpeg', 'gif', 'png', 'webp'];
                 if ($size > 6000000) {
-                    if (in_array($extension, $allowedExtensions)) {
-                        move_uploaded_file($tmpName, './images/'.$size.$name);
-                        $image = $size.$name ;
-                    } elseif ($name !== '') {
-                        $errors['image'] = $msgError['ERROR_EXTENSIONS'];
-                    }
-                } elseif ($size > 6000000) {
                     $errors['image'] = $msgError['ERROR_SIZE_IMAGE'];
+                }
+                if (in_array($extension, $allowedExtensions)) {
+                    move_uploaded_file($tmpName, './images/'.$size.$name);
+                    $image = $size.$name ;
+                }
+                if ($name !== '') {
+                    $errors['image'] = $msgError['ERROR_EXTENSIONS'];
                 }
             }
             $title = $post['title'] ?? '';
@@ -173,6 +173,7 @@ class ArticlesController
                 exit;
             }
             header('Location: /index.php?page=form-article');
+            exit();
         }//fin du post
         $contentView = require_once 'Views/form-article.php';
         return ob_get_clean();
