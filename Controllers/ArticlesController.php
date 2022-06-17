@@ -82,6 +82,29 @@ class ArticlesController
         header('Location: /index.php?page=message');
         exit();
     }
+    public function img($msgError, $image)
+    {
+        $extension ='';
+        if ($_FILES['image']['name'] !== '') {
+            $tmpName = $_FILES['image']['tmp_name'];
+            $name = $_FILES['image']['name'];
+            $size = $_FILES['image']['size'];
+            $fileInfo = pathinfo($name);
+            $extension = $fileInfo['extension'];
+            $allowedExtensions = ['jpg', 'jpeg', 'gif', 'png', 'webp'];
+            if ($size > 6000000) {
+                $errors['image'] = $msgError['ERROR_SIZE_IMAGE'];
+            }
+            if (in_array($extension, $allowedExtensions)) {
+                move_uploaded_file($tmpName, './images/'.$size.$name);
+                $image = $size.$name ;
+            }
+            if ($name !== '') {
+                $errors['image'] = $msgError['ERROR_EXTENSIONS'];
+            }
+        }
+        return $image;
+    }
     public function moveArticle($currentUser)
     {
         ob_start();
@@ -117,25 +140,7 @@ class ArticlesController
                     'flags' => FILTER_FLAG_NO_ENCODE_QUOTES
                 ]
             ]);
-            $extension ='';
-            if ($_FILES['image']['name'] !== '') {
-                $tmpName = $_FILES['image']['tmp_name'];
-                $name = $_FILES['image']['name'];
-                $size = $_FILES['image']['size'];
-                $fileInfo = pathinfo($name);
-                $extension = $fileInfo['extension'];
-                $allowedExtensions = ['jpg', 'jpeg', 'gif', 'png', 'webp'];
-                if ($size > 6000000) {
-                    $errors['image'] = $msgError['ERROR_SIZE_IMAGE'];
-                }
-                if (in_array($extension, $allowedExtensions)) {
-                    move_uploaded_file($tmpName, './images/'.$size.$name);
-                    $image = $size.$name ;
-                }
-                if ($name !== '') {
-                    $errors['image'] = $msgError['ERROR_EXTENSIONS'];
-                }
-            }
+            $image = $this->img($msgError, $image);
             $title = $post['title'] ?? '';
             $chapo = $post['chapo'] ?? '';
             $content = $post['content'] ?? '';
@@ -150,7 +155,6 @@ class ArticlesController
                     $article->author = $currentUser['id'];
                     $this->articleDB->updateOne($article);
                     $_SESSION['message'] = "l'article a bien été modifié";
-                    unset($_SESSION['post_image']);
                     header('Location: /index.php?page=message');
                     exit();
                 }
@@ -162,7 +166,6 @@ class ArticlesController
                     'author' => $currentUser['id']
                 ]);
                 $_SESSION['message'] = "l'article a bien été ajouté";
-                
                 header('Location: /index.php?page=message');
                 exit();
             }

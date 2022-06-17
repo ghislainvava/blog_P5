@@ -13,7 +13,7 @@ class CommentDB
     private PDOStatement $statementDelete;
     private PDOStatement $statementReadOne;
     private PDOStatement $statementReadAll;
-    private PDOStatement $statementReadAllComment;
+    private PDOStatement $stmReadAllComment;
 
     public function __construct(private PDO $pdo)
     {
@@ -32,8 +32,8 @@ class CommentDB
             WHERE id_comment=:id_comment'
         );
         $this->statementReadOne = $pdo->prepare('SELECT comment.id_comment,comment.date_commentaire, comment.author, article.id fROM comment LEFT JOIN  article on comment.id_article = article.id WHERE comment.id_article=:id');
-        $this->statementReadOneComment = $pdo->prepare('SELECT comment.id_comment,comment.date_commentaire, comment.author, article.id fROM comment LEFT JOIN  article on comment.id_article = article.id WHERE comment.id_comment=:id');
-        $this->statementReadAllComment = $pdo->prepare('SELECT comment.date_commentaire, comment.id_comment, comment.author, comment.commentaire, comment.checked FROM comment LEFT JOIN article ON comment.id_article = article.id');
+        $this->stmReadOneComment = $pdo->prepare('SELECT comment.id_comment,comment.date_commentaire, comment.author, article.id fROM comment LEFT JOIN  article on comment.id_article = article.id WHERE comment.id_comment=:id');
+        $this->stmReadAllComment = $pdo->prepare('SELECT comment.date_commentaire, comment.id_comment, comment.author, comment.commentaire, comment.checked FROM comment LEFT JOIN article ON comment.id_article = article.id');
         $this->statementReadAll = $pdo->prepare('SELECT comment.date_commentaire, comment.id_comment, comment.author, comment.commentaire, comment.checked FROM comment LEFT JOIN article ON comment.id_article = article.id WHERE comment.id_article =:id ');
         $this->statementDelete = $pdo->prepare('DELETE FROM Comment WHERE id_comment=:id');
     }
@@ -46,9 +46,9 @@ class CommentDB
     }
     public function fetchAllComments() :array //on type pour + de securité
     {
-        $this->statementReadAllComment->execute();
-        $this->statementReadAllComment->setFetchMode(PDO::FETCH_CLASS, Comment::class);
-        return $this->statementReadAllComment->fetchAll();
+        $this->stmReadAllComment->execute();
+        $this->stmReadAllComment->setFetchMode(PDO::FETCH_CLASS, Comment::class);
+        return $this->stmReadAllComment->fetchAll();
     }
    
     public function fetchOne(string $_id) : Comment
