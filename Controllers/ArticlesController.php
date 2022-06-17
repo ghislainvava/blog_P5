@@ -2,8 +2,9 @@
 namespace BlogOC\Controllers;
 
  use BlogOC\Database\MsgError;
+
  use BlogOC\Database\Models\CommentDB;
- use BlogOC\Controllers\CommentController;
+  use BlogOC\Controllers\CommentController;
 
 class ArticlesController
 {
@@ -18,7 +19,7 @@ class ArticlesController
         $get = filter_input_array(INPUT_GET, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
         $_id = $get['id'] ?? '';
         $articles = $this->articleDB->fetchUserArticle($currentUser['id']);
-        $comments = $commentDB->fetchComments($_id);
+        $comments = $commentDB->fetchAllComments();
         require_once 'Views/profil.php';
         return ob_get_clean();
     }
@@ -73,7 +74,7 @@ class ArticlesController
         $_id = $get['id'] ?? '';
         if ($_id) {
             $article = $this->articleDB->fetchOne($_id);
-            if ($article['author'] === $currentUser['id']) {
+            if ($article->author === $currentUser['id']) {
                 $this->articleDB->deleteOne($_id);
                 $_SESSION['message'] = "l'article a bien été supprimé";
             }
@@ -90,13 +91,10 @@ class ArticlesController
         $get = filter_input_array(INPUT_GET, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
         $server = filter_input_array(INPUT_SERVER);
         $_id = $get['id'] ?? '';
-        // $error1 = $msgError['errors']['attribut'];
-        //if (!empty(array_filter($error1, fn ($err) => $err !== ''))) {
-            $title = $msgError['placeholder']['attribut']['title']; //on rempli s'il y a un placeholder enregistré
-            $chapo = $msgError['placeholder']['attribut']['chapo'];
+        $title = $msgError['placeholder']['attribut']['title']; //on rempli s'il y a un placeholder enregistré
+        $chapo = $msgError['placeholder']['attribut']['chapo'];
         $image = $msgError['placeholder']['attribut']['image'];
         $content = $msgError['placeholder']['attribut']['content'];
-        //}
         if ($_id) {                 //si id de l'article on envoye les données
             $article = $this->articleDB->fetchOne($_id);
             if ($article->author !== $currentUser['id']) {
@@ -119,7 +117,6 @@ class ArticlesController
                     'flags' => FILTER_FLAG_NO_ENCODE_QUOTES
                 ]
             ]);
-            // $image = '';
             $extension ='';
             if ($_FILES['image']['name'] !== '') {
                 $tmpName = $_FILES['image']['tmp_name'];
@@ -165,6 +162,7 @@ class ArticlesController
                     'author' => $currentUser['id']
                 ]);
                 $_SESSION['message'] = "l'article a bien été ajouté";
+                
                 header('Location: /index.php?page=message');
                 exit();
             }

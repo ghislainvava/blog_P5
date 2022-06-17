@@ -31,6 +31,7 @@ class ArticleDB
         :chapo
       )
     ');
+        
         $this->statementUpdateOne = $pdo->prepare('
       UPDATE article
       SET
