@@ -1,5 +1,5 @@
 <?php
-namespace BlogOC\Models;
+namespace BlogOC\Database;
 
 class MsgError
 {
