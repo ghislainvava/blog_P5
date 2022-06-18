@@ -5,7 +5,8 @@
     "require": {
         "twig/twig": "^3.3",
         "mailjet/mailjet-apiv3-php": "^1.5",
-        "altorouter/altorouter": "^2.0"
+        "altorouter/altorouter": "^2.0",
+        "vlucas/phpdotenv": "^5.4"
     },
     "autoload": {
         "psr-4": {
