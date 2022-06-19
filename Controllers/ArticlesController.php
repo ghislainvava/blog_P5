@@ -126,10 +126,10 @@ class ArticlesController
                     die();
                 }
             }
-            $title = $article->title;
-            $chapo = $article->chapo;
+            $title = utf8_decode($article->title);
+            $chapo = utf8_decode($article->chapo);
             $image = $article->image;
-            $content = $article->content;
+            $content = utf8_decode($article->content);
         }
         if ($server['REQUEST_METHOD'] === 'POST') {
             $post = filter_input_array(INPUT_POST, [
@@ -162,7 +162,7 @@ class ArticlesController
                     'title' => $title,
                     'chapo' => $chapo,
                     'image' => $image,
-                    'content' => $content,
+                    'content' => utf8_decode($content),
                     'author' => $currentUser['id']
                 ]);
                 $_SESSION['message'] = "l'article a bien été ajouté";
