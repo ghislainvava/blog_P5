@@ -8,9 +8,9 @@
         <h2 class="mt-5 mb-3"><?=htmlentities($article->chapo)?></h2>
         <p ><?= htmlentities($article->content) ?></p>
         <p class="fst-italic mb-5">Post émis part : <?=htmlentities($article->firstname). ' ' .htmlentities($article->lastname)?>
-            <br>Mis à jour le : <?= htmlentities($article->date)?>≈
+            <br>Mis à jour le : <?= htmlentities($article->date)?>
         </p>
-        <?php if ($currentUser['id'] === htmlentities($article->author || $currentUser['admin'])) : ?>
+        <?php if ($currentUser['id'] === $article->author) : ?>
             <div class="action">
                 <a class="btn btn-secondary" href="index.php?page=delete-article&id=<?=htmlentities($article->_id)?>">Supprimer</a> 
                 <a class="btn btn-primary" href="index.php?page=form-article&id=<?=htmlentities($article->_id)?>">Editer l'article</a>

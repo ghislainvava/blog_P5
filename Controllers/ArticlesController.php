@@ -68,19 +68,19 @@ class ArticlesController
     {
         if (!$currentUser) {
             header('Location: /index.php?page=home');
-            die();
+            exit();
         }
         $get = filter_input_array(INPUT_GET, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
         $_id = $get['id'] ?? '';
         if ($_id) {
             $article = $this->articleDB->fetchOne($_id);
-            if ($article->author === $currentUser['id']) {
+            if ($article->author == $currentUser['id']) {
                 $this->articleDB->deleteOne($_id);
                 $_SESSION['message'] = "l'article a bien été supprimé";
             }
         }
         header('Location: /index.php?page=message');
-        die();
+        exit();
     }
     public function img($msgError, $image)
     {

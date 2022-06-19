@@ -9,7 +9,7 @@ use BlogOC\Controllers\UsersController;
 use BlogOC\Controllers\ArticlesController;
 use BlogOC\Controllers\CommentController;
 use BlogOC\Views\Message;
-use BlogOC\Models\Article;
+//use BlogOC\Models\Article;
 use BlogOC\Database\models\CommentDB;
 
 $db = new DatabaseConnection();

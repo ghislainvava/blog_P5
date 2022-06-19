@@ -27,7 +27,7 @@
                     <span><?=htmlentities($article['title'])?></span>
                     <div>
                         <a href="/index.php?page=form-article&id=<?=htmlentities($article['id']) ?>" class="btn btn-primary">Modifier</a>
-                        <a class="btn btn-secondary" href="/index.php?page=delete-article&id=<?=htmlentities($article['id'])?>">Supprimer</a>
+                        <a class="btn btn-secondary" href="/index.php?page=delete-article&id=<?=$article['id']?>">Supprimer</a>
                     </div>
                 </li>
                 <?php endforeach; ?>
