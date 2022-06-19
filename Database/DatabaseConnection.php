@@ -29,29 +29,3 @@ class DatabaseConnection
         return $this->pdo;
     }
 }
-
-// class DatabaseConnection
-// {
-//     // public ?PDO $pdo = null;
-    
-//     public function getConnection()
-//     {
-//         $dotenv = Dotenv\Dotenv::createImmutable(__DIR__.'/..');
-//         $dotenv->load();
-        
-//         $env = filter_input_array(INPUT_ENV);
-//         $host = $_ENV['DATABASE_HOST'];
-//         $user = $_ENV['DATABASE_USER'];
-//         $password = $_ENV['DATABASE_PASSWORD'];
-//         $database = $_ENV['DATABASE'];
-//         if ($this->pdo === null) {
-//             $db = new \PDO(
-//                 'mysql:host=' .$host.';dbname='.$database.';charset=utf8',
-//                 $user,
-//                 $password,
-//                 [ \PDO::ATTR_DEFAULT_FETCH_MODE => \PDO::FETCH_ASSOC]
-//             );
-//         }
-//         return $db;
-//     }
-// }
