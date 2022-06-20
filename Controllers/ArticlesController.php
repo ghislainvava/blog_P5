@@ -59,7 +59,7 @@ class ArticlesController
             ]);
             $_SESSION['message'] = "Votre commentaire a bien été ajouté";
             header('Location: /index.php?page=message');
-            die;
+            exit;
         }
         $contentView =  require_once 'Views/show-article.php';
         return ob_get_clean();
@@ -123,7 +123,7 @@ class ArticlesController
             if ($article->author !== $currentUser['id']) {
                 if ($currentUser['admin'] < 1) {
                     header('Location: /index.php?page=home');
-                    die();
+                    exit();
                 }
             }
             $title = utf8_decode($article->title);
@@ -156,7 +156,7 @@ class ArticlesController
                     $this->articleDB->updateOne($article);
                     $_SESSION['message'] = "l'article a bien été modifié";
                     header('Location: /index.php?page=message');
-                    die();
+                    exit();
                 }
                 $this->articleDB->createOne([
                     'title' => $title,
@@ -167,14 +167,14 @@ class ArticlesController
                 ]);
                 $_SESSION['message'] = "l'article a bien été ajouté";
                 header('Location: /index.php?page=message');
-                die();
+                exit();
             }
             if (isset($_id)) {
                 header('Location: /index.php?page=form-article&id='.$_id);
-                die;
+                exit;
             }
             header('Location: /index.php?page=form-article');
-            die();
+            exit();
         }//fin du post
         $contentView = require_once 'Views/form-article.php';
         return ob_get_clean();

@@ -6,7 +6,7 @@
                 <div class="container group-form row w-75 mt-3 ">
                     <label for="title">Titre :</label>
                     <input type="text" name="title" id="title" value="<?=htmlentities($title ?? '')?>">
-                    <p class="text-danger"><?= htmlentities($msgError['errors']['attribut']['title']) ?></p>
+                    <p class="text-danger"><?= html_entity_decode($msgError['errors']['attribut']['title']) ?></p>
                 </div>
                 <div class="container group-form row w-75 ml-2">
                     <label for="chapo">Chapô : </label>
