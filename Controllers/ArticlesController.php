@@ -66,19 +66,23 @@ class ArticlesController
     }
     public function deleteArticle($currentUser)
     {
-        if (!$currentUser) {
+        if ($currentUser['admin'] == false) {
             header('Location: /index.php?page=home');
             exit();
         }
         $get = filter_input_array(INPUT_GET, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
         $_id = $get['id'] ?? '';
+       
         if ($_id) {
             $article = $this->articleDB->fetchOne($_id);
-            if ($article->author == $currentUser['id']) {
-                $this->articleDB->deleteOne($_id);
-                $_SESSION['message'] = "l'article a bien été supprimé";
-            }
+        
+        
+            $this->articleDB->deleteOne($_id);
+            $_SESSION['message'] = "l'article a bien été supprimé";
+            header('Location: /index.php?page=message');
+            exit();
         }
+        $_SESSION['message'] = "l'article n'a pas pu être supprimé";
         header('Location: /index.php?page=message');
         exit();
     }

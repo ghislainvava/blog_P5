@@ -24,7 +24,7 @@
                 <?php //var_dump($articles);
                 foreach ($articles as $article) : ?>
                 <li>
-                    <span><?=htmlentities($article['title'])?></span>
+                    <span><?=utf8_decode($article['title'])?></span>
                     <div>
                         <a href="/index.php?page=form-article&id=<?=htmlentities($article['id']) ?>" class="btn btn-primary">Modifier</a>
                         <a class="btn btn-secondary" href="/index.php?page=delete-article&id=<?=$article['id']?>">Supprimer</a>
@@ -40,7 +40,7 @@
             <?php  foreach ($comments as $comment) : ?>
                 <li>
                     <?php if ($comment->checked < 1) :?>
-                    <p><?=htmlentities($comment->commentaire)?></p>
+                    <p><?=utf8_decode($comment->commentaire)?></p>
                     <a href="/index.php?page=checked&id=<?=htmlentities($comment->id_comment)?>" class="btn btn-primary ">Valider</a>
                     <a class="btn btn-secondary " href="index.php?page=delete-comment&id=<?=htmlentities($comment->id_comment)?>">Supprimer</a> 
                 </li>

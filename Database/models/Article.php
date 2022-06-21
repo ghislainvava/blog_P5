@@ -3,7 +3,6 @@ namespace BlogOC\Database\Models;
 
 class Article
 {
-    public int $_id;
     public string $title;
     public string $image;
     public string $content;

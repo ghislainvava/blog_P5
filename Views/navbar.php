@@ -12,13 +12,17 @@
                     <a class="nav-link text-uppercase" href="index.php?page=articles">Articles</a>
                 </li>
                 <?php if ($currentUser) : ?>
-                <li class="nav-item px-lg-4" >
+                <?php  if ($currentUser['admin'] == 1) : ?>
+                    <li class="nav-item px-lg-4" >
                     <a class="nav-link text-uppercase" href="index.php?page=form-article">Ajouter un article</a>
                 </li>
+                <?php endif; ?>  
+               
                 <li class="nav-item px-lg-4" >
                     <a class="nav-link text-uppercase" href="index.php?page=logout"> Se Déconnecter</a>
-                </li>    
-                <?php elseif (!$currentUser) : ?>
+                </li>  
+                <?php endif ?>    
+                <?php if (!$currentUser) : ?>
                 <li class="nav-item px-lg-4" >
                     <a class="nav-link text-uppercase" href="index.php?page=register">Inscription</a>
                 </li>

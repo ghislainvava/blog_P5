@@ -5,12 +5,12 @@
             <form action = "index.php?page=form-article<?= $_id ? "&id=$_id" : '' ?>"  method="POST" enctype='multipart/form-data'>
                 <div class="container group-form row w-75 mt-3 ">
                     <label for="title">Titre :</label>
-                    <input type="text" name="title" id="title" value="<?=htmlentities($title ?? '')?>">
-                    <p class="text-danger"><?= html_entity_decode($msgError['errors']['attribut']['title']) ?></p>
+                    <input type="text" name="title" id="title" value="<?=utf8_decode($title ?? '')?>">
+                    <p class="text-danger"><?= htmlspecialchars_decode($msgError['errors']['attribut']['title']) ?></p>
                 </div>
                 <div class="container group-form row w-75 ml-2">
                     <label for="chapo">Chapô : </label>
-                    <input type="text" name="chapo" id="chapo" value="<?=htmlentities($chapo ?? '')?>">
+                    <input type="text" name="chapo" id="chapo" value="<?=utf8_decode($chapo ?? '')?>">
                     <p class="text-danger"><?=htmlentities($msgError['errors']['attribut']['chapo'])?></p>
                 </div>
                 <div class="container group-form row w-75 ml-2">
@@ -25,7 +25,7 @@
                 </div>
                 <div class="container group-form row w-75 ml-2">
                     <label for="content">Contenu :</label>
-                    <textarea name="content" id="content"><?=htmlentities($content ?? '')?></textarea>
+                    <textarea name="content" id="content"><?=utf8_decode($content ?? '')?></textarea>
                         <p class="text-danger"><?=htmlentities($msgError['errors']['attribut']['content'])?></p>
                 </div>
                 <div class="container form-actions">
