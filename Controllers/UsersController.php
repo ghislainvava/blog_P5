@@ -53,11 +53,9 @@ class UsersController
                     ]
                 ];
                 $response = $mjet->post(Resources::$Email, ['body' => $body]);
-                $_SESSION['message'] = 'Votre email a bien été envoyé, nous vous répondrons rapidement';
                 header('Location: /index.php?page=message');
                 exit;
             }
-            $_SESSION['message'] = "Votre email n'a pas pu être envoyé, retenté ultérieurement";
             header('Location: /index.php?page=message');
             exit;
         }
@@ -67,7 +65,6 @@ class UsersController
 
     public function log()
     {
-        //ob_start();
         $objet = new MsgError();
         $msgError = $objet->msgError;
         $msgError = $objet->prgPush($msgError); //on recupere les messages d'erreurs sotcoker par PRG
@@ -119,6 +116,10 @@ class UsersController
                 }
                 header("Location: /index.php?page=register");
                 exit();
+            }
+            if ($page === 'login') {
+                header("Location: /index.php?page=login");
+                exit;
             }
             header("Location: /index.php?page=register");
             exit();

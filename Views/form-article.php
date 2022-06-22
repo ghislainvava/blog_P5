@@ -6,12 +6,12 @@
                 <div class="container group-form row w-75 mt-3 ">
                     <label for="title">Titre :</label>
                     <input type="text" name="title" id="title" value="<?=utf8_decode($title ?? '')?>">
-                    <p class="text-danger"><?= htmlspecialchars_decode($msgError['errors']['attribut']['title']) ?></p>
+                    <p class="text-danger"><?= htmlspecialchars($msgError['errors']['attribut']['title']) ?></p>
                 </div>
                 <div class="container group-form row w-75 ml-2">
                     <label for="chapo">Chapô : </label>
                     <input type="text" name="chapo" id="chapo" value="<?=utf8_decode($chapo ?? '')?>">
-                    <p class="text-danger"><?=htmlspecialchars_decode($msgError['errors']['attribut']['chapo'])?></p>
+                    <p class="text-danger"><?=htmlspecialchars($msgError['errors']['attribut']['chapo'])?></p>
                 </div>
                 <div class="container group-form row w-75 ml-2">
                     <label for="image">Image :</label>
@@ -21,12 +21,12 @@
                     <?php else : ?>                
                         <input type="file" name="image" id="image" value="<?=htmlspecialchars_decode($image ?? '')?>">
                         <?php endif; ?>   
-                        <p class="text-danger"><?=htmlspecialchars_decode($msgError['errors']['attribut']['image'])?></p>
+                        <p class="text-danger"><?=htmlspecialchars($msgError['errors']['attribut']['image'])?></p>
                 </div>
                 <div class="container group-form row w-75 ml-2">
                     <label for="content">Contenu :</label>
                     <textarea name="content" id="content"><?=utf8_decode($content ?? '')?></textarea>
-                        <p class="text-danger"><?=htmlspecialchars_decode($msgError['errors']['attribut']['content'])?></p>
+                        <p class="text-danger"><?=htmlspecialchars($msgError['errors']['attribut']['content'])?></p>
                 </div>
                 <div class="container form-actions">
                     <a href="index.php?page=form-article" class="btn btn-secondary" type="button">Annuler</a>

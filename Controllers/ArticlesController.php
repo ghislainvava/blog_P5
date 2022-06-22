@@ -58,7 +58,6 @@ class ArticlesController
                     'commentaire' => $comment['commentaire'],
                     'author' => $comment['author']
             ]);
-            $_SESSION['message'] = "Votre commentaire a bien été ajouté";
             header('Location: /index.php?page=message');
         }
         $contentView =  require_once 'Views/show-article.php';
@@ -78,11 +77,9 @@ class ArticlesController
         
         
             $this->articleDB->deleteOne($_id);
-            $_SESSION['message'] = "l'article a bien été supprimé";
             header('Location: /index.php?page=message');
             exit();
         }
-        $_SESSION['message'] = "l'article n'a pas pu être supprimé";
         header('Location: /index.php?page=message');
         exit();
     }
@@ -129,8 +126,8 @@ class ArticlesController
                     exit();
                 }
             }
-            $title = utf8_decode($article->title);
-            $chapo = utf8_decode($article->chapo);
+            $title = $article->title;
+            $chapo = $article->chapo;
             $image = $article->image;
             $content = utf8_decode($article->content);
         }
@@ -157,7 +154,6 @@ class ArticlesController
                     $article->content = $content;
                     $article->author = $currentUser['id'];
                     $this->articleDB->updateOne($article);
-                    $_SESSION['message'] = "l'article a bien été modifié";
                     header('Location: /index.php?page=message');
                     exit();
                 }
@@ -165,10 +161,9 @@ class ArticlesController
                     'title' => $title,
                     'chapo' => $chapo,
                     'image' => $image,
-                    'content' => utf8_decode($content),
+                    'content' => $content,
                     'author' => $currentUser['id']
                 ]);
-                $_SESSION['message'] = "l'article a bien été ajouté";
                 header('Location: /index.php?page=message');
                 exit();
             }
