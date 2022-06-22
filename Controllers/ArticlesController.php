@@ -15,9 +15,7 @@ class ArticlesController
     }
     public function getProfil($currentUser, $commentDB)
     {
-        // ob_start();
         $get = filter_input_array(INPUT_GET, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-        //$_id = $get['id'] ?? '';
         $articles = $this->articleDB->fetchUserArticle($currentUser['id']);
         $comments = $commentDB->fetchAllComments();
         if (isset($articles) and isset($comments)) {
@@ -27,7 +25,10 @@ class ArticlesController
     }
     public function getAllArticle($currentUser)
     {
-        //ob_start();
+        function escape($string)
+        {
+            return htmlspecialchars($string, ENT_QUOTES, 'UTF_8');
+        }
         $get = filter_input_array(INPUT_GET, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
         $articles = $this->articleDB->fetchAll();
         require_once 'Views/articles.php';
@@ -35,8 +36,6 @@ class ArticlesController
     }
     public function getArticle($currentUser, $commentDB)
     {
-        //ob_start();
-        // $msg = '';
         $server = filter_input_array(INPUT_SERVER);
         $get = filter_input_array(INPUT_GET, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
         $_id = $get['id'] ?? '';
@@ -112,7 +111,6 @@ class ArticlesController
     }
     public function moveArticle($currentUser)
     {
-        //ob_start();
         $objet= new MsgError();
         $msgError = $objet->msgError;
         $msgError = $objet->prgPush($msgError); //on rempli les erreurs du PRG et Placeholder
