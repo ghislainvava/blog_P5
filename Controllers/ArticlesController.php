@@ -60,8 +60,7 @@ class ArticlesController
                     'author' => $comment['author']
             ]);
             $_SESSION['message'] = "Votre commentaire a bien été ajouté";
-            //header('Location: /index.php?page=message');
-            echo "<script type='text/javascript'>document.location.replace('index.php?page=message');</script>";
+            header('Location: /index.php?page=message');
         }
         $contentView =  require_once 'Views/show-article.php';
         return ob_get_clean();
