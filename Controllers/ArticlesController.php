@@ -41,8 +41,6 @@ class ArticlesController
         $get = filter_input_array(INPUT_GET, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
         $_id = $get['id'] ?? '';
         if ($_id) {  //si id de l'article on envoye les données
-            $article = '';
-            $comments = '';
             $article = $this->articleDB->fetchOne($_id);
             $comments = $commentDB->fetchComments($_id);
         }
@@ -62,7 +60,8 @@ class ArticlesController
                     'author' => $comment['author']
             ]);
             $_SESSION['message'] = "Votre commentaire a bien été ajouté";
-            header('Location: /index.php?page=message');
+            //header('Location: /index.php?page=message');
+            echo "<script type='text/javascript'>document.location.replace('index.php?page=message');</script>";
         }
         $contentView =  require_once 'Views/show-article.php';
         return ob_get_clean();
