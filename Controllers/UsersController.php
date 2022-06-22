@@ -26,7 +26,7 @@ class UsersController
     }
     public function home()
     {
-        ob_start();
+        //ob_start();
         $post = filter_input_array(INPUT_POST);
         //$sessionStart = filter_input_array(session_start());
         $mjet = new \Mailjet\Client('d9e8b3ed3950793fc15812123a486784', '56142a2c9ff8ac4a98abf948ef204d8f', true, ['version' => 'v3.1']);
@@ -67,7 +67,7 @@ class UsersController
 
     public function log()
     {
-        ob_start();
+        //ob_start();
         $objet = new MsgError();
         $msgError = $objet->msgError;
         $msgError = $objet->prgPush($msgError); //on recupere les messages d'erreurs sotcoker par PRG

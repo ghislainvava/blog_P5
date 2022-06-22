@@ -9,9 +9,9 @@ use BlogOC\Controllers\UsersController;
 use BlogOC\Controllers\ArticlesController;
 use BlogOC\Controllers\CommentController;
 use BlogOC\Views\Message;
-//use BlogOC\Models\Article;
 use BlogOC\Database\models\CommentDB;
 
+ob_start();
 $db = new DatabaseConnection();
 $pdo = $db->getConnection();
 $get = filter_input_array(INPUT_GET);
@@ -22,11 +22,11 @@ if (!isset($get['page'])) {
 $userDB = new AuthDB($pdo);
 $articleDB = new ArticleDB($pdo);
 $commentDB = new CommentDB($pdo);
+$currentUser  = $currentUser ?? false;
 if ($get['page'] !== 'register' and $get['page'] !== 'login') {
     $currentUser = $userDB->isLoggedIn();
-} else {
-    $currentUser  = $currentUser ?? false;
 }
+
 switch ($get['page']) {
     case 'home':
         $headTitle ='Presentation';

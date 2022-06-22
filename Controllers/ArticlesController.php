@@ -15,17 +15,19 @@ class ArticlesController
     }
     public function getProfil($currentUser, $commentDB)
     {
-        ob_start();
+        // ob_start();
         $get = filter_input_array(INPUT_GET, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-        $_id = $get['id'] ?? '';
+        //$_id = $get['id'] ?? '';
         $articles = $this->articleDB->fetchUserArticle($currentUser['id']);
         $comments = $commentDB->fetchAllComments();
-        require_once 'Views/profil.php';
-        return ob_get_clean();
+        if (isset($articles) and isset($comments)) {
+            require_once 'Views/profil.php';
+            return ob_get_clean();
+        }
     }
     public function getAllArticle($currentUser)
     {
-        ob_start();
+        //ob_start();
         $get = filter_input_array(INPUT_GET, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
         $articles = $this->articleDB->fetchAll();
         require_once 'Views/articles.php';
@@ -33,12 +35,14 @@ class ArticlesController
     }
     public function getArticle($currentUser, $commentDB)
     {
-        ob_start();
-        $msg = '';
+        //ob_start();
+        // $msg = '';
         $server = filter_input_array(INPUT_SERVER);
         $get = filter_input_array(INPUT_GET, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
         $_id = $get['id'] ?? '';
         if ($_id) {  //si id de l'article on envoye les données
+            $article = '';
+            $comments = '';
             $article = $this->articleDB->fetchOne($_id);
             $comments = $commentDB->fetchComments($_id);
         }
@@ -59,7 +63,6 @@ class ArticlesController
             ]);
             $_SESSION['message'] = "Votre commentaire a bien été ajouté";
             header('Location: /index.php?page=message');
-            exit;
         }
         $contentView =  require_once 'Views/show-article.php';
         return ob_get_clean();
@@ -111,7 +114,7 @@ class ArticlesController
     }
     public function moveArticle($currentUser)
     {
-        ob_start();
+        //ob_start();
         $objet= new MsgError();
         $msgError = $objet->msgError;
         $msgError = $objet->prgPush($msgError); //on rempli les erreurs du PRG et Placeholder

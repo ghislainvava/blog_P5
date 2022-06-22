@@ -37,7 +37,6 @@
         <div class="group-form row w75">
             <label for="comment">Ajouter un commentaire</label>
             <textarea class="mt-2 mb-2" name="comment" id="comment"></textarea>   
-            <p class="text-danger"><?=htmlentities($msg)?></p> 
         </div>
         <div class="form-actions">
             <button class="btn btn-primary" type="submit">sauvegarder</button>
