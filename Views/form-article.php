@@ -5,12 +5,12 @@
             <form action = "index.php?page=form-article<?= htmlspecialchars($_id ? "&id=$_id" : '')?>"  method="POST" enctype='multipart/form-data'>
                 <div class="container group-form row w-75 mt-3 ">
                     <label for="title">Titre :</label>
-                    <input type="text" name="title" id="title" value="<?=utf8_decode($title ?? '')?>">
-                    <p class="text-danger"><?= htmlspecialchars($msgError['errors']['attribut']['title']) ?></p>
+                    <input type="text" name="title" id="title" value="<?=htmlspecialchars_decode($title ?? '')?>">
+                    <p class="text-danger"><?= htmlentities($msgError['errors']['attribut']['title']) ?></p>
                 </div>
                 <div class="container group-form row w-75 ml-2">
                     <label for="chapo">Chapô : </label>
-                    <input type="text" name="chapo" id="chapo" value="<?=utf8_decode($chapo ?? '')?>">
+                    <input type="text" name="chapo" id="chapo" value="<?=htmlspecialchars_decode($chapo ?? '')?>">
                     <p class="text-danger"><?=htmlspecialchars($msgError['errors']['attribut']['chapo'])?></p>
                 </div>
                 <div class="container group-form row w-75 ml-2">
@@ -21,7 +21,7 @@
                     <?php else : ?>                
                         <input type="file" name="image" id="image" value="<?=htmlspecialchars($image ?? '')?>">
                         <?php endif; ?>   
-                        <p class="text-danger"><?=htmlspecialchars($msgError['errors']['attribut']['image'])?></p>
+                        <p class="text-danger"><?=htmlentities($msgError['errors']['attribut']['image'])?></p>
                 </div>
                 <div class="container group-form row w-75 ml-2">
                     <label for="content">Contenu :</label>

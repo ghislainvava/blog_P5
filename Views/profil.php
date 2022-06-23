@@ -10,7 +10,7 @@
                 </li>
                 <li class="d-flex">
                     <strong>Nom :</strong> &nbsp &nbsp 
-                    <p><?=htmlspecialchars($currentUser['lastname'])?></p>
+                    <p><?=htmlentities($currentUser['lastname'])?></p>
                 </li>
                 <li class="d-flex">
                     <strong>Email :</strong> &nbsp &nbsp 

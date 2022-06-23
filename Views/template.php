@@ -3,7 +3,7 @@
     <?php include 'Views/head.php';?>
     <body>
         <?php include('Views/navbar.php');?>
-        <?= $contentView ?>
+        <?= htmlspecialchars($contentView)?>
         <?php if ($currentUser) :
         include('Views/footer.php');
         endif; ?>
