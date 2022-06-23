@@ -34,7 +34,7 @@ class CommentDB
         $this->statementReadOne = $pdo->prepare('SELECT comment.id_comment,comment.date_commentaire, comment.author, article.id fROM comment LEFT JOIN  article on comment.id_article = article.id WHERE comment.id_article=:id');
         $this->stmReadOneComment = $pdo->prepare('SELECT comment.id_comment,comment.date_commentaire, comment.author, article.id fROM comment LEFT JOIN  article on comment.id_article = article.id WHERE comment.id_comment=:id');
         $this->stmReadAllComment = $pdo->prepare('SELECT comment.date_commentaire, comment.id_comment, comment.author, comment.commentaire, comment.checked FROM comment LEFT JOIN article ON comment.id_article = article.id');
-        $this->statementReadAll = $pdo->prepare('SELECT comment.date_commentaire, comment.id_comment, comment.author, comment.commentaire, comment.checked FROM comment LEFT JOIN article ON comment.id_article = article.id WHERE comment.id_article =:id ');
+        $this->statementReadAll = $pdo->prepare('SELECT comment.date_commentaire, comment.id_comment, comment.author, comment.commentaire, comment.checked, user.firstname, user.lastname FROM comment LEFT JOIN article ON comment.id_article = article.id LEFT JOIN user ON comment.author = user.id WHERE comment.id_article =:id ');
         $this->statementDelete = $pdo->prepare('DELETE FROM Comment WHERE id_comment=:id');
     }
     public function fetchComments(string $_id) :array //on type pour + de securité

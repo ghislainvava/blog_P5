@@ -10,9 +10,6 @@ class DatabaseConnection
     
     public function getConnection(): PDO
     {
-        $dotenv = Dotenv\Dotenv::createImmutable(__DIR__.'/..');
-        $dotenv->load();
-        
         $env = filter_input_array(INPUT_ENV);
         $host = $_ENV['DATABASE_HOST'];
         $user = $_ENV['DATABASE_USER'];

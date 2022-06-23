@@ -15,7 +15,7 @@ class ArticlesController
     }
     public function getProfil($currentUser, $commentDB)
     {
-        $get = filter_input_array(INPUT_GET, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+        //$get = filter_input_array(INPUT_GET, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
         $articles = $this->articleDB->fetchUserArticle($currentUser['id']);
         $comments = $commentDB->fetchAllComments();
         if (isset($articles) and isset($comments)) {
@@ -29,7 +29,7 @@ class ArticlesController
         {
             return htmlspecialchars($string, ENT_QUOTES, 'UTF_8');
         }
-        $get = filter_input_array(INPUT_GET, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+        //$get = filter_input_array(INPUT_GET, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
         $articles = $this->articleDB->fetchAll();
         require_once 'Views/articles.php';
         return ob_get_clean();

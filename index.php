@@ -12,6 +12,8 @@ use BlogOC\Views\Message;
 use BlogOC\Database\models\CommentDB;
 
 ob_start();
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
+$dotenv->load();
 $db = new DatabaseConnection();
 $pdo = $db->getConnection();
 $get = filter_input_array(INPUT_GET);
