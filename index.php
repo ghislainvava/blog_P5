@@ -57,7 +57,7 @@ switch ($get['page']) {
     case 'articles':
         $headTitle = "Articles";
         $articlesController = new ArticlesController($articleDB);
-        $contentView = $articlesController->getAllArticle($currentUser);
+        $contentView = $articlesController->getAllArticle();
         break;
     case 'show-article':
         $headTitle = "Article";

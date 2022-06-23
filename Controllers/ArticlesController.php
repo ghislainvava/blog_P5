@@ -23,7 +23,7 @@ class ArticlesController
             return ob_get_clean();
         }
     }
-    public function getAllArticle($currentUser)
+    public function getAllArticle()
     {
         function escape($string)
         {
@@ -85,11 +85,12 @@ class ArticlesController
     }
     public function img($msgError, $image)
     {
-        $extension ='';
-        if ($_FILES['image']['name'] !== '') {
-            $tmpName = $_FILES['image']['tmp_name'];
-            $name = $_FILES['image']['name'];
-            $size = $_FILES['image']['size'];
+        // $extension ='';
+        $files = $_FILES['image'] ?? '';
+        if ($files['name'] !== '') {
+            $tmpName = $files['tmp_name'];
+            $name = $files['name'];
+            $size = $files['size'];
             $fileInfo = pathinfo($name);
             $extension = $fileInfo['extension'];
             $allowedExtensions = ['jpg', 'jpeg', 'gif', 'png', 'webp'];

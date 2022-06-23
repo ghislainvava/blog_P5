@@ -2,7 +2,7 @@
     <div class="content">
         <div class="block p-20 form-container mt-5">
             <h1><?= $_id ? 'Modifier' : 'Écrire' ?> un article</h1>
-            <form action = "index.php?page=form-article<?= htmlspecialchars_decode($_id ? "&id=$_id" : '')?>"  method="POST" enctype='multipart/form-data'>
+            <form action = "index.php?page=form-article<?= htmlspecialchars($_id ? "&id=$_id" : '')?>"  method="POST" enctype='multipart/form-data'>
                 <div class="container group-form row w-75 mt-3 ">
                     <label for="title">Titre :</label>
                     <input type="text" name="title" id="title" value="<?=utf8_decode($title ?? '')?>">
@@ -19,7 +19,7 @@
                         <img src="images/<?=$image?>" alt="image choisi"/> 
                     <!-- condition image -->
                     <?php else : ?>                
-                        <input type="file" name="image" id="image" value="<?=htmlspecialchars_decode($image ?? '')?>">
+                        <input type="file" name="image" id="image" value="<?=htmlspecialchars($image ?? '')?>">
                         <?php endif; ?>   
                         <p class="text-danger"><?=htmlspecialchars($msgError['errors']['attribut']['image'])?></p>
                 </div>

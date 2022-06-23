@@ -9,5 +9,7 @@ class Comment
     public string $commentaire;
     public int $author;
     public string $checked;
-    public string $id;//ajouter grace à la jointure
+    public string $_id;//ajouter grace à la jointure
+    public string $firstname;
+    public string $lastname;
 }

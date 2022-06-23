@@ -21,7 +21,7 @@ namespace BlogOC\Controllers;
          $get = filter_input_array(INPUT_GET, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
          $_id = $get['id'] ?? '';
          if ($_id) {
-             $comment = $this->commentDB->delete($_id);
+             $this->commentDB->delete($_id);
              $_SESSION['message'] = "le commentaire a bien été supprimé";
          }
          header('Location: /index.php?page=message');
@@ -36,7 +36,7 @@ namespace BlogOC\Controllers;
          }
          $get = filter_input_array(INPUT_GET, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
          $_id = $get['id'] ?? '';
-         $comment = $this->commentDB->checked($_id);
+         $this->commentDB->checked($_id);
          $_SESSION['message'] = "le commentaire a bien été validé";
          header('Location: /index.php?page=message');
          die();

@@ -24,7 +24,7 @@
             <?php if ($comment->checked > 0) : ?> 
             <div class=" mb-5">
                     <p><?=$comment->commentaire?></p>
-                    <p class="fst-italic">Ecrit le : <?=htmlspecialchars_decode($comment->date_commentaire)?>&nbsp &nbsp par : <?=htmlspecialchars_decode($comment->author)?></p>   
+                    <p class="fst-italic">Ecrit le : <?=htmlspecialchars_decode($comment->date_commentaire)?>&nbsp &nbsp par : <?=htmlspecialchars($comment->firstname).'   '.htmlspecialchars($comment->lastname)?></p>   
                     <p class="text-center">*****</p>
                     <?php if ($currentUser['admin'] == 1) : ?>
                     <div class="action">

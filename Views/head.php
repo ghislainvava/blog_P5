@@ -3,8 +3,7 @@
         <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" /> 
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <meta name="description" content="" />
-        <meta name="author" content="" />
-        <title><?= htmlentities($headTitle)?></title>
+        <meta name="author" content="" />    
         <style> @import url('https://fonts.googleapis.com/css2?family=Dr+Sugiyama&display=swap');</style>
         <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
         <!-- Font Awesome icons (free version)-->

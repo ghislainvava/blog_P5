@@ -18,7 +18,7 @@
             <label for="title">Email :</label>
             <input class="w-50 mt-2"type="email" placeholder="Email" name="email" value="<?= htmlspecialchars($email) ?? '' ?>">
             <?php if ($msgError['errors']['login']['email']) : ?>
-            <p class="text-danger"><?= htmlspecialchars($msgError['errors']['login']['email']) ?></p>
+            <p class="text-danger"><?= htmlentities($msgError['errors']['login']['email']) ?></p>
             <?php endif; ?>
          </div>
         <div class="row mb-5">

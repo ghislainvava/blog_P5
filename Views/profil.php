@@ -6,15 +6,15 @@
             <ul>
                 <li class="d-flex mt-5">
                     <strong>Prénom :</strong>  &nbsp &nbsp 
-                    <p><?= htmlspecialchars_decode($currentUser['firstname'])?></p>
+                    <p><?= htmlspecialchars($currentUser['firstname'])?></p>
                 </li>
                 <li class="d-flex">
                     <strong>Nom :</strong> &nbsp &nbsp 
-                    <p><?=htmlspecialchars_decode($currentUser['lastname'])?></p>
+                    <p><?=htmlspecialchars($currentUser['lastname'])?></p>
                 </li>
                 <li class="d-flex">
                     <strong>Email :</strong> &nbsp &nbsp 
-                    <p><?=htmlspecialchars_decode($currentUser['email'])?></p>
+                    <p><?=htmlspecialchars($currentUser['email'])?></p>
                 </li>
             </ul>
          </div>
@@ -26,8 +26,8 @@
                 <li>
                     <span><?=utf8_decode($article['title'])?></span>
                     <div>
-                        <a href="/index.php?page=form-article&id=<?=htmlspecialchars_decode($article['id']) ?>" class="btn btn-primary">Modifier</a>
-                        <a class="btn btn-secondary" href="/index.php?page=delete-article&id=<?=$article['id']?>">Supprimer</a>
+                        <a href="/index.php?page=form-article&id=<?=htmlspecialchars($article['id']) ?>" class="btn btn-primary">Modifier</a>
+                        <a class="btn btn-secondary" href="/index.php?page=delete-article&id=<?=htmlspecialchars($article['id'])?>">Supprimer</a>
                     </div>
                 </li>
                 <?php endforeach; ?>
@@ -41,8 +41,8 @@
                 <li>
                     <?php if ($comment->checked < 1) :?>
                     <p><?=utf8_decode($comment->commentaire)?></p>
-                    <a href="/index.php?page=checked&id=<?=htmlspecialchars_decode($comment->id_comment)?>" class="btn btn-primary ">Valider</a>
-                    <a class="btn btn-secondary " href="index.php?page=delete-comment&id=<?=htmlspecialchars_decode($comment->id_comment)?>">Supprimer</a> 
+                    <a href="/index.php?page=checked&id=<?=htmlspecialchars($comment->id_comment)?>" class="btn btn-primary ">Valider</a>
+                    <a class="btn btn-secondary " href="index.php?page=delete-comment&id=<?=htmlspecialchars($comment->id_comment)?>">Supprimer</a> 
                 </li>
                 <?php
                 endif;
