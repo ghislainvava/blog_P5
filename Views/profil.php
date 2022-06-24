@@ -21,7 +21,7 @@
         <h2>Arcticles</h2>
         <div>
             <ul>
-                <?php //var_dump($articles);
+                <?php
                 foreach ($articles as $article) : ?>
                 <li>
                     <span><?=utf8_decode($article['title'])?></span>

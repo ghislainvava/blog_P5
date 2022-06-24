@@ -13,7 +13,7 @@ class UsersController
     {
         $this->userDB = $userDB;
     }
-    public function logout($userDB)
+    public function logout(object $userDB)
     {
         $cookie = filter_input_array(INPUT_COOKIE);
         $sessionId = $cookie['session'] ?? '';

@@ -10,7 +10,7 @@ class ArticlesController
     {
         $this->articleDB = $articleDB;
     }
-    public function getProfil($currentUser, $commentDB)
+    public function getProfil($currentUser, object $commentDB)
     {
         $articles = $this->articleDB->fetchUserArticle($currentUser['id']);
         $comments = $commentDB->fetchAllComments();
@@ -27,7 +27,7 @@ class ArticlesController
     }
     public function getArticle($currentUser, $commentDB)
     {
-        if ($currentUser == false) {
+        if ($currentUser === false) {
             $currentUser['admin'] = 0;
         }
         $server = filter_input_array(INPUT_SERVER);
@@ -60,7 +60,7 @@ class ArticlesController
     }
     public function deleteArticle($currentUser)
     {
-        if ($currentUser['admin'] == false) {
+        if ($currentUser['admin'] === false) {
             $_SESSION['message'] = "Vous n'avez pas les droits pour supprimer cet article";
             header('Location: /index.php?page=erreur');
         }
@@ -76,8 +76,7 @@ class ArticlesController
     }
     public function img($msgError, $image)
     {
-        // $extension ='';
-        var_dump($image);
+        $extension ='';
         $files = $_FILES['image'] ?? '';
         if ($files['name'] !== '') {
             $tmpName = $files['tmp_name'];
