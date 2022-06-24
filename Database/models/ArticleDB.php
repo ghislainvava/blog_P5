@@ -76,7 +76,7 @@ class ArticleDB
         $this->statementCreateOne->execute();
         return $this->fetchOne($this->pdo->lastInsertId());
     }
-    public function updateOne($article): Article
+    public function updateOne(Article $article): Article
     {
         $date = date('d-m-y h:i:s');
         $this->statementUpdateOne->bindValue(':title', $article->title);

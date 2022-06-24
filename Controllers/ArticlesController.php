@@ -3,9 +3,6 @@ namespace BlogOC\Controllers;
 
  use BlogOC\Database\MsgError;
 
- //use BlogOC\Database\Models\CommentDB;
- // use BlogOC\Controllers\CommentController;
-
 class ArticlesController
 {
     private $articleDB;
@@ -17,7 +14,7 @@ class ArticlesController
     {
         $articles = $this->articleDB->fetchUserArticle($currentUser['id']);
         $comments = $commentDB->fetchAllComments();
-        if (isset($articles) and isset($comments)) {
+        if (isset($articles) && isset($comments)) {
             require_once 'Views/profil.php';
             return ob_get_clean();
         }
@@ -66,7 +63,6 @@ class ArticlesController
         if ($currentUser['admin'] == false) {
             $_SESSION['message'] = "Vous n'avez pas les droits pour supprimer cet article";
             header('Location: /index.php?page=erreur');
-            ();
         }
         $get = filter_input_array(INPUT_GET, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
         $_id = $get['id'] ?? '';
@@ -74,16 +70,14 @@ class ArticlesController
         if ($_id) {
             $article = $this->articleDB->fetchOne($_id);
             $this->articleDB->deleteOne($_id);
-            $_SESSION['message'] = 'Cet article a bien été supprimé';
-            header('Location: /index.php?page=message');
-            ();
         }
-        header('Location: /index.php?page=erreur');
-        ();
+        $_SESSION['message'] = 'Cet article a bien été supprimé';
+        header('Location: /index.php?page=message');
     }
     public function img($msgError, $image)
     {
-        $extension ='';
+        // $extension ='';
+        var_dump($image);
         $files = $_FILES['image'] ?? '';
         if ($files['name'] !== '') {
             $tmpName = $files['tmp_name'];
@@ -110,7 +104,6 @@ class ArticlesController
         if ($currentUser['admin'] != 1) {
             $_SESSION['message'] = "Vous n'avez pas l'autorisation d'accéder à cette page";
             header('Location: /index.php?page=erreur');
-            ();
         }
         $objet= new MsgError();
         $msgError = $objet->msgError;
@@ -127,13 +120,12 @@ class ArticlesController
             if ($article->author !== $currentUser['id']) {
                 if ($currentUser['admin'] < 1) {
                     header('Location: /index.php?page=home');
-                    ();
                 }
             }
             $title = $article->title;
             $chapo = $article->chapo;
             $image = $article->image;
-            $content = utf8_decode($article->content);
+            $content = $article->content;
         }
         if ($server['REQUEST_METHOD'] === 'POST') {
             $post = filter_input_array(INPUT_POST, [
@@ -144,23 +136,15 @@ class ArticlesController
                     'flags' => FILTER_FLAG_NO_ENCODE_QUOTES
                 ]
             ]);
-            $image = $this->img($msgError, $image);
+            if (empty($image)) {
+                $image = $this->img($msgError, $image);
+            }
             $title = $post['title'] ?? '';
             $chapo = $post['chapo'] ?? '';
             $content = $post['content'] ?? '';
             $msgError = $objet->pushErrorsArticles($msgError, $content, $title, $chapo);
             $error1 = $msgError['errors']['attribut'];
             if (empty(array_filter($error1, fn ($err) => $err !== ''))) {
-                if ($_id) {
-                    $article->title = $title;
-                    $article->chapo = $chapo;
-                    $article->image = $image;
-                    $article->content = $content;
-                    $article->author = $currentUser['id'];
-                    $this->articleDB->updateOne($article);
-                    header('Location: /index.php?page=message');
-                    ();
-                }
                 $this->articleDB->createOne([
                     'title' => $title,
                     'chapo' => $chapo,
@@ -168,15 +152,23 @@ class ArticlesController
                     'content' => $content,
                     'author' => $currentUser['id']
                 ]);
+                $_SESSION['message'] = "L'article a bien été créer !";
+                if ($_id) {
+                    $article->title = $title;
+                    $article->chapo = $chapo;
+                    $article->image = $image;
+                    $article->content = $content;
+                    $article->author = $currentUser['id'];
+                    $this->articleDB->updateOne($article);
+                    $_SESSION['message'] = "L'article a été modifié !";
+                }
                 header('Location: /index.php?page=message');
-                ();
             }
             if (isset($_id)) {
                 header('Location: /index.php?page=form-article&id='.$_id);
                 ;
             }
-            header('Location: /index.php?page=form-article');
-            ();
+            header('Location: /index.php?page=erreur');
         }//fin du post
         $contentView = require_once 'Views/form-article.php';
         return ob_get_clean();

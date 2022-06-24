@@ -25,7 +25,7 @@ $userDB = new AuthDB($pdo);
 $articleDB = new ArticleDB($pdo);
 $commentDB = new CommentDB($pdo);
 $currentUser  = $currentUser ?? false;
-if ($get['page'] !== 'register' and $get['page'] !== 'login') {
+if ($get['page'] !== 'register' && $get['page'] !== 'login') {
     $currentUser = $userDB->isLoggedIn();
 }
 
