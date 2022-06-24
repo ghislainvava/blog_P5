@@ -25,7 +25,7 @@ class ArticlesController
         require_once 'Views/articles.php';
         return ob_get_clean();
     }
-    public function getArticle($currentUser, $commentDB)
+    public function getArticle($currentUser, object $commentDB)
     {
         if ($currentUser === false) {
             $currentUser['admin'] = 0;
