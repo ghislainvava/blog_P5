@@ -3,8 +3,8 @@ namespace BlogOC\Controllers;
 
  use BlogOC\Database\MsgError;
 
- use BlogOC\Database\Models\CommentDB;
-  use BlogOC\Controllers\CommentController;
+ //use BlogOC\Database\Models\CommentDB;
+ // use BlogOC\Controllers\CommentController;
 
 class ArticlesController
 {
@@ -74,8 +74,6 @@ class ArticlesController
        
         if ($_id) {
             $article = $this->articleDB->fetchOne($_id);
-        
-        
             $this->articleDB->deleteOne($_id);
             header('Location: /index.php?page=message');
             exit();
@@ -85,7 +83,7 @@ class ArticlesController
     }
     public function img($msgError, $image)
     {
-        // $extension ='';
+        $extension ='';
         $files = $_FILES['image'] ?? '';
         if ($files['name'] !== '') {
             $tmpName = $files['tmp_name'];
@@ -109,6 +107,11 @@ class ArticlesController
     }
     public function moveArticle($currentUser)
     {
+        if ($currentUser['admin'] != 1) {
+            $_SESSION['message'] = "Vous n'avez pas l'autorisation d'accéder à cette page";
+            header('Location: /index.php?page=erreur');
+            exit();
+        }
         $objet= new MsgError();
         $msgError = $objet->msgError;
         $msgError = $objet->prgPush($msgError); //on rempli les erreurs du PRG et Placeholder

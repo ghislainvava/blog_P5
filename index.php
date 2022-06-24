@@ -87,10 +87,18 @@ switch ($get['page']) {
         $message = new Message();
         $contentView = $message->message();
         break;
+    case 'erreur':
+        $headTitle = "message";
+        include('Views/head.php');
+        $message = new Message();
+        $contentView = $message->erreur();
+        break;
     default:
-        header:('Location: index.php?=message');
+        header:('Location: index.php?=erreur');
         break;
 }
 if ($get['page'] !== 'message') {
-    include('Views/template.php');//sert à structure la page
+    if ($get['page'] !== 'erreur') {
+        include('Views/template.php');//sert à structure la page
+    }
 }
