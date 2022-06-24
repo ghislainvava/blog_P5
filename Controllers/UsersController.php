@@ -21,7 +21,6 @@ class UsersController
             $userDB->logout($sessionId);
             session_destroy();
             header('Location: /index.php?page=login');
-            ;
         }
     }
     public function home()
@@ -52,11 +51,9 @@ class UsersController
                 ];
                 $response = $mjet->post(Resources::$Email, ['body' => $body]);
                 header('Location: /index.php?page=message');
-                ;
             }
             $_SESSION['message'] = "Merci, je vous répondrez dans les meilleurs délais";
             header('Location: /index.php?page=message');
-            ;
         }
         require_once 'Views/home.php';
         return ob_get_clean();
@@ -89,6 +86,7 @@ class UsersController
             $error1 = $msgError['errors']['login'];
             $error2 = $msgError['errors']['name'];
             //recuperer le tableau errors car besoin pour fonctionner
+         
             if (empty(array_filter($error1, fn ($err) => $err !== ''))) {
                 if ($page === 'login') {
                     $user = $this->userDB->getUserFromEmail($email); //je creer un user pour verifier s'il est inscrit
@@ -96,6 +94,7 @@ class UsersController
                         if (password_verify($password, $user['password'])) {
                             $this->userDB->login($user['id']);
                             header('Location: index.php?page=articles');
+                            return;
                         }
                         $msgError['errors']['login']['password'] = $msgError['ERROR_PASSWORD_MISMATCH'];
                     }
