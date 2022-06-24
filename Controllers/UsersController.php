@@ -89,7 +89,6 @@ class UsersController
             $error1 = $msgError['errors']['login'];
             $error2 = $msgError['errors']['name'];
             //recuperer le tableau errors car besoin pour fonctionner
-
             if (empty(array_filter($error1, fn ($err) => $err !== ''))) {
                 if ($page === 'login') {
                     $user = $this->userDB->getUserFromEmail($email); //je creer un user pour verifier s'il est inscrit
@@ -97,7 +96,6 @@ class UsersController
                         if (password_verify($password, $user['password'])) {
                             $this->userDB->login($user['id']);
                             header('Location: index.php?page=articles');
-                            ();
                         }
                         $msgError['errors']['login']['password'] = $msgError['ERROR_PASSWORD_MISMATCH'];
                     }
@@ -111,17 +109,13 @@ class UsersController
                         'password' => $password
                     ]);
                     header('Location: /index.php?page=login');
-                    ();
                 }
                 header("Location: /index.php?page=register");
-                ();
-            }
-            if ($page === 'login') {
-                header("Location: /index.php?page=login");
-                ;
             }
             header("Location: /index.php?page=register");
-            ();
+            if ($page === 'login') {
+                header("Location: /index.php?page=login");
+            }
         } //dans post
         if ($page === 'login') {
             require_once 'Views/login.php';
