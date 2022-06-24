@@ -18,7 +18,7 @@
                 </li>
             </ul>
          </div>
-        <h2>Mes arcticles</h2>
+        <h2>Arcticles</h2>
         <div>
             <ul>
                 <?php //var_dump($articles);
@@ -33,23 +33,26 @@
                 <?php endforeach; ?>
             </ul>
       </div>
-      <?php if ($currentUser['admin'] > 0) : ?>
-      <h2 class="mt-5">Commentaires à valider</h2>  
+      <h2 class="mt-5">Commentaires en attente de validation :</h2>  
       <div>
           <ul>
-            <?php  foreach ($comments as $comment) : ?>
-                <li>
-                    <?php if ($comment->checked < 1) :?>
-                    <p><?=utf8_decode($comment->commentaire)?></p>
-                    <a href="/index.php?page=checked&id=<?=htmlspecialchars($comment->id_comment)?>" class="btn btn-primary ">Valider</a>
-                    <a class="btn btn-secondary " href="index.php?page=delete-comment&id=<?=htmlspecialchars($comment->id_comment)?>">Supprimer</a> 
-                </li>
-                <?php
-                endif;
+                <?php  foreach ($comments as $comment) : ?>
+                    <li>
+                        <?php if ($comment->checked < 1) :
+                        if ($currentUser['id'] == $comment->author) : ?>
+                            <p><?=utf8_decode($comment->commentaire)?></p>
+                            <?php endif;
+                            if ($currentUser['admin'] == 1) : ?>
+                        <p><?=utf8_decode($comment->commentaire)?></p>
+                        <a href="/index.php?page=checked&id=<?=htmlspecialchars($comment->id_comment)?>" class="btn btn-primary ">Valider</a>
+                        <a class="btn btn-secondary " href="index.php?page=delete-comment&id=<?=htmlspecialchars($comment->id_comment)?>">Supprimer</a> 
+                    </li>
+                        <?php endif; endif;
                 endforeach;
-                endif;?>
+            ?>
           </ul>
       </div>
+     
     </div>
 </div>
 

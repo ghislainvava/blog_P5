@@ -82,13 +82,13 @@ switch ($get['page']) {
         $contentView = $commentController->checkedComment($currentUser);
         break;
     case 'message':
-        $headTitle = "message";
+        $headTitle = "Message";
         include('Views/head.php');
         $message = new Message();
         $contentView = $message->message();
         break;
     case 'erreur':
-        $headTitle = "message";
+        $headTitle = "Erreur";
         include('Views/head.php');
         $message = new Message();
         $contentView = $message->erreur();

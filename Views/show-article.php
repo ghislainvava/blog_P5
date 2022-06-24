@@ -10,9 +10,9 @@
         <p class="fst-italic mb-5">Post émis part : <?=htmlspecialchars_decode($article->firstname). ' ' .htmlspecialchars_decode($article->lastname)?>
             <br>Mis à jour le : <?= htmlspecialchars_decode($article->date)?>
         </p>
-        <?php if ($currentUser['admin'] == true) : ?>
+        <?php if ($currentUser['admin'] == 1) : ?>
            <div class="action">
-                <a class="btn btn-secondary" href="index.php?page=delete-article&id=<?=htmlspecialchars_decode($article->id)?>">Supprimer</a> 
+                <a class="btn btn-secondary" href="index.php?page=delete-article&id=<?=htmlspecialchars($article->id)?>">Supprimer</a> 
                 <a class="btn btn-primary" href="index.php?page=form-article&id=<?=htmlspecialchars($article->id)?>">Editer l'article</a>
             </div> 
             <?php endif;?>

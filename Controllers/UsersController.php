@@ -21,14 +21,12 @@ class UsersController
             $userDB->logout($sessionId);
             session_destroy();
             header('Location: /index.php?page=login');
-            exit;
+            ;
         }
     }
     public function home()
     {
-        //ob_start();
         $post = filter_input_array(INPUT_POST);
-        //$sessionStart = filter_input_array(session_start());
         $mjet = new \Mailjet\Client('d9e8b3ed3950793fc15812123a486784', '56142a2c9ff8ac4a98abf948ef204d8f', true, ['version' => 'v3.1']);
         if (!empty($post['name']) && !empty($post['email']) && !empty($post["message"])) {
             $email = htmlspecialchars($post['email']);
@@ -54,10 +52,11 @@ class UsersController
                 ];
                 $response = $mjet->post(Resources::$Email, ['body' => $body]);
                 header('Location: /index.php?page=message');
-                exit;
+                ;
             }
+            $_SESSION['message'] = "Merci, je vous répondrez dans les meilleurs délais";
             header('Location: /index.php?page=message');
-            exit;
+            ;
         }
         require_once 'Views/home.php';
         return ob_get_clean();
@@ -98,7 +97,7 @@ class UsersController
                         if (password_verify($password, $user['password'])) {
                             $this->userDB->login($user['id']);
                             header('Location: index.php?page=articles');
-                            exit();
+                            ();
                         }
                         $msgError['errors']['login']['password'] = $msgError['ERROR_PASSWORD_MISMATCH'];
                     }
@@ -112,17 +111,17 @@ class UsersController
                         'password' => $password
                     ]);
                     header('Location: /index.php?page=login');
-                    exit();
+                    ();
                 }
                 header("Location: /index.php?page=register");
-                exit();
+                ();
             }
             if ($page === 'login') {
                 header("Location: /index.php?page=login");
-                exit;
+                ;
             }
             header("Location: /index.php?page=register");
-            exit();
+            ();
         } //dans post
         if ($page === 'login') {
             require_once 'Views/login.php';

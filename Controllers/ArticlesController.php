@@ -15,7 +15,6 @@ class ArticlesController
     }
     public function getProfil($currentUser, $commentDB)
     {
-        //$get = filter_input_array(INPUT_GET, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
         $articles = $this->articleDB->fetchUserArticle($currentUser['id']);
         $comments = $commentDB->fetchAllComments();
         if (isset($articles) and isset($comments)) {
@@ -25,17 +24,15 @@ class ArticlesController
     }
     public function getAllArticle()
     {
-        function escape($string)
-        {
-            return htmlspecialchars($string, ENT_QUOTES, 'UTF_8');
-        }
-        //$get = filter_input_array(INPUT_GET, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
         $articles = $this->articleDB->fetchAll();
         require_once 'Views/articles.php';
         return ob_get_clean();
     }
     public function getArticle($currentUser, $commentDB)
     {
+        if ($currentUser == false) {
+            $currentUser['admin'] = 0;
+        }
         $server = filter_input_array(INPUT_SERVER);
         $get = filter_input_array(INPUT_GET, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
         $_id = $get['id'] ?? '';
@@ -58,6 +55,7 @@ class ArticlesController
                     'commentaire' => $comment['commentaire'],
                     'author' => $comment['author']
             ]);
+            $_SESSION['message'] = 'Votre commantaire est en attente de validation';
             header('Location: /index.php?page=message');
         }
         $contentView =  require_once 'Views/show-article.php';
@@ -66,8 +64,9 @@ class ArticlesController
     public function deleteArticle($currentUser)
     {
         if ($currentUser['admin'] == false) {
-            header('Location: /index.php?page=home');
-            exit();
+            $_SESSION['message'] = "Vous n'avez pas les droits pour supprimer cet article";
+            header('Location: /index.php?page=erreur');
+            ();
         }
         $get = filter_input_array(INPUT_GET, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
         $_id = $get['id'] ?? '';
@@ -75,11 +74,12 @@ class ArticlesController
         if ($_id) {
             $article = $this->articleDB->fetchOne($_id);
             $this->articleDB->deleteOne($_id);
+            $_SESSION['message'] = 'Cet article a bien été supprimé';
             header('Location: /index.php?page=message');
-            exit();
+            ();
         }
-        header('Location: /index.php?page=message');
-        exit();
+        header('Location: /index.php?page=erreur');
+        ();
     }
     public function img($msgError, $image)
     {
@@ -110,7 +110,7 @@ class ArticlesController
         if ($currentUser['admin'] != 1) {
             $_SESSION['message'] = "Vous n'avez pas l'autorisation d'accéder à cette page";
             header('Location: /index.php?page=erreur');
-            exit();
+            ();
         }
         $objet= new MsgError();
         $msgError = $objet->msgError;
@@ -127,7 +127,7 @@ class ArticlesController
             if ($article->author !== $currentUser['id']) {
                 if ($currentUser['admin'] < 1) {
                     header('Location: /index.php?page=home');
-                    exit();
+                    ();
                 }
             }
             $title = $article->title;
@@ -159,7 +159,7 @@ class ArticlesController
                     $article->author = $currentUser['id'];
                     $this->articleDB->updateOne($article);
                     header('Location: /index.php?page=message');
-                    exit();
+                    ();
                 }
                 $this->articleDB->createOne([
                     'title' => $title,
@@ -169,14 +169,14 @@ class ArticlesController
                     'author' => $currentUser['id']
                 ]);
                 header('Location: /index.php?page=message');
-                exit();
+                ();
             }
             if (isset($_id)) {
                 header('Location: /index.php?page=form-article&id='.$_id);
-                exit;
+                ;
             }
             header('Location: /index.php?page=form-article');
-            exit();
+            ();
         }//fin du post
         $contentView = require_once 'Views/form-article.php';
         return ob_get_clean();
