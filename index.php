@@ -33,7 +33,7 @@ switch ($get['page']) {
     case 'home':
         $headTitle ='Presentation';
         $usersController = new UsersController($userDB);
-        $contentView = $usersController->mail();
+        $contentView = $usersController->home();
         break;
     case 'login':
         $headTitle = "Connection";

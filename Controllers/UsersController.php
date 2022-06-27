@@ -49,8 +49,7 @@ class UsersController
                         ]
                     ]
                 ];
-                $response = $mjet->post(Resources::$Email, ['body' => $body]);
-                $response->success() && var_dump($response->getData());
+                $mjet->post(Resources::$Email, ['body' => $body]);
                 $_SESSION['message'] = "Merci, je vous répondrai dans les plus brefs délais";
                 header('Location: /index.php?page=message');
                 return;
