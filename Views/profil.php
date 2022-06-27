@@ -18,6 +18,7 @@
                 </li>
             </ul>
          </div>
+         <?php if ($currentUser['admin'] == 1) : ?>
         <h2>Arcticles</h2>
         <div>
             <ul>
@@ -33,6 +34,7 @@
                 <?php endforeach; ?>
             </ul>
       </div>
+      <?php endif; ?>
       <h2 class="mt-5">Commentaires en attente de validation :</h2>  
       <div>
           <ul>

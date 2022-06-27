@@ -43,7 +43,7 @@ class ArticleDB
       WHERE id=:id
     ');
         $this->statementReadOne = $pdo->prepare('SELECT article.*, user.firstname, user.lastname FROM article LEFT JOIN user ON article.author = user.id WHERE article.id=:id');
-        $this->statementReadAll = $pdo->prepare('SELECT article.*, user.firstname, user.lastname FROM article LEFT JOIN user ON article.author = user.id');
+        $this->statementReadAll = $pdo->prepare('SELECT article.*, user.firstname, user.lastname FROM article LEFT JOIN user ON article.author = user.id ORDER BY date DESC');
         $this->statementDeleteOne = $pdo->prepare('DELETE FROM article WHERE id=:id');
         $this->statementReadUserAll = $pdo->prepare('SELECT * FROM article WHERE author=:authorId');
     }

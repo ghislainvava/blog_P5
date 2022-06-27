@@ -26,13 +26,14 @@
                     <p><?=$comment->commentaire?></p>
                     <p class="fst-italic">Ecrit le : <?=htmlspecialchars($comment->date_commentaire)?>&nbsp &nbsp par : <?=htmlspecialchars($comment->firstname).'   '.htmlspecialchars($comment->lastname)?></p>   
                     <p class="text-center">*****</p>
-                    <?php if ($currentUser['admin'] == 1) : ?>
+                    <?php if ($currentUser["admin"] == 1) : ?>
                     <div class="action">
                         <a class="btn btn-secondary" href="index.php?page=delete-comment&id=<?=htmlspecialchars_decode($comment->id_comment)?>">Supprimer</a>   
                     </div>
             </div>
         <?php endif; endif; endforeach;?>  
     </div>
+    <?php if (isset($currentUser["id"])) : ?>
     <form class="container" action = "index.php?page=show-article&id=<?=htmlspecialchars_decode($_id)?>"   method="POST" >    
         <div class="group-form row w75">
             <label for="comment">Ajouter un commentaire</label>
@@ -43,4 +44,4 @@
         </div>
     </form>
   </div>
-
+<?php endif;

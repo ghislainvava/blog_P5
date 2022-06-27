@@ -26,7 +26,7 @@ class UsersController
     public function home()
     {
         $post = filter_input_array(INPUT_POST);
-        $mjet = new \Mailjet\Client('d9e8b3ed3950793fc15812123a486784', '56142a2c9ff8ac4a98abf948ef204d8f', true, ['version' => 'v3.1']);
+        $mjet = new \Mailjet\Client('9a8cb37fac4ea2f2e165995e7701d353', 'e4481d77a04e4ce5f94c6bf69bc9604d', true, ['version' => 'v3.1']);
         if (!empty($post['name']) && !empty($post['email']) && !empty($post["message"])) {
             $email = htmlspecialchars($post['email']);
             $message = htmlspecialchars(($post['message']));
@@ -35,12 +35,12 @@ class UsersController
                     'Messages' => [
                         [
                             'From' => [
-                                'Email' => "carcassonneweb@icloud.com",
+                                'Email' => "ghislainvachet@icloud.com",
                                 'Name' => "ghislain"
                             ],
                             'To' => [
                                 [
-                                    'Email' => "carcassonneweb@icloud.com",
+                                    'Email' => "ghislainvachet@icloud.com",
                                     'Name' => "ghislain"
                                 ]
                             ],
@@ -50,10 +50,11 @@ class UsersController
                     ]
                 ];
                 $response = $mjet->post(Resources::$Email, ['body' => $body]);
+                $response->success() && var_dump($response->getData());
+                $_SESSION['message'] = "Merci, je vous répondrai dans les plus brefs délais";
                 header('Location: /index.php?page=message');
+                return;
             }
-            $_SESSION['message'] = "Merci, je vous répondrez dans les meilleurs délais";
-            header('Location: /index.php?page=message');
         }
         require_once 'Views/home.php';
         return ob_get_clean();
@@ -63,9 +64,8 @@ class UsersController
     {
         $objet = new MsgError();
         $msgError = $objet->msgError;
-        $msgError = $objet->prgPush($msgError); //on recupere les messages d'erreurs sotcoker par PRG
+        $msgError = $objet->prgPush($msgError); //on recupere les messages d'erreurs stoké par PRG
         $email = $msgError['placeholder']['login']['email']; //on rempli s'il y a un placeholder enregistré
-        $password = $msgError['placeholder']['login']['password'];
         $lastname = $msgError['placeholder']['name']['lastname'];
         $firstname = $msgError['placeholder']['name']['firstname'];
         $get = filter_input_array(INPUT_GET);
@@ -78,15 +78,14 @@ class UsersController
                 'lastname' => FILTER_SANITIZE_SPECIAL_CHARS,
                 'email' => FILTER_SANITIZE_EMAIL,
             ]);
-            $email = $post['email'] ?? '';
+            $email = $post['email'];
             $password = $post['password'] ?? '';
-            $firstname = $post['firstname'] ?? '';
-            $lastname = $post['lastname'] ?? '';
+            $firstname = $post['firstname'] ;
+            $lastname = $post['lastname'] ;
             $msgError = $objet->pushErrors($msgError, $email, $password, $lastname, $firstname);
             $error1 = $msgError['errors']['login'];
             $error2 = $msgError['errors']['name'];
             //recuperer le tableau errors car besoin pour fonctionner
-         
             if (empty(array_filter($error1, fn ($err) => $err !== ''))) {
                 if ($page === 'login') {
                     $user = $this->userDB->getUserFromEmail($email); //je creer un user pour verifier s'il est inscrit
@@ -107,13 +106,18 @@ class UsersController
                         'email' => $email,
                         'password' => $password
                     ]);
-                    header('Location: /index.php?page=login');
+                    unset($_SESSION['PRG']);
+                    $_SESSION['message'] = 'Vous êtes bien inscrit !';
+                    header('Location: /index.php?page=message');
+                    return;
                 }
                 header("Location: /index.php?page=register");
+                return;
             }
             header("Location: /index.php?page=register");
             if ($page === 'login') {
                 header("Location: /index.php?page=login");
+                return;
             }
         } //dans post
         if ($page === 'login') {

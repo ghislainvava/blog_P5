@@ -103,6 +103,7 @@ class ArticlesController
         if ($currentUser['admin'] != 1) {
             $_SESSION['message'] = "Vous n'avez pas l'autorisation d'accéder à cette page";
             header('Location: /index.php?page=erreur');
+            return;
         }
         $objet= new MsgError();
         $msgError = $objet->msgError;
@@ -116,11 +117,6 @@ class ArticlesController
         $content = $msgError['placeholder']['attribut']['content'];
         if ($_id) {                 //si id de l'article on envoye les données
             $article = $this->articleDB->fetchOne($_id);
-            if ($article->author !== $currentUser['id']) {
-                if ($currentUser['admin'] < 1) {
-                    header('Location: /index.php?page=home');
-                }
-            }
             $title = $article->title;
             $chapo = $article->chapo;
             $image = $article->image;
@@ -138,20 +134,12 @@ class ArticlesController
             if (empty($image)) {
                 $image = $this->img($msgError, $image);
             }
-            $title = $post['title'] ?? '';
+            $title = $post['title'] ?? '';//a supp??
             $chapo = $post['chapo'] ?? '';
             $content = $post['content'] ?? '';
             $msgError = $objet->pushErrorsArticles($msgError, $content, $title, $chapo);
             $error1 = $msgError['errors']['attribut'];
             if (empty(array_filter($error1, fn ($err) => $err !== ''))) {
-                $this->articleDB->createOne([
-                    'title' => $title,
-                    'chapo' => $chapo,
-                    'image' => $image,
-                    'content' => $content,
-                    'author' => $currentUser['id']
-                ]);
-                $_SESSION['message'] = "L'article a bien été créer !";
                 if ($_id) {
                     $article->title = $title;
                     $article->chapo = $chapo;
@@ -160,14 +148,24 @@ class ArticlesController
                     $article->author = $currentUser['id'];
                     $this->articleDB->updateOne($article);
                     $_SESSION['message'] = "L'article a été modifié !";
+                    header('Location: /index.php?page=message');
+                    return;
                 }
+                $this->articleDB->createOne([
+                    'title' => $title,
+                    'chapo' => $chapo,
+                    'image' => $image,
+                    'content' => $content,
+                    'author' => $currentUser['id']
+                ]);
+                $_SESSION['message'] = "L'article a bien été créer !";
                 header('Location: /index.php?page=message');
+                return;
             }
             if (isset($_id)) {
                 header('Location: /index.php?page=form-article&id='.$_id);
-                ;
             }
-            header('Location: /index.php?page=erreur');
+            header('Location: /index.php?page=form-article');
         }//fin du post
         $contentView = require_once 'Views/form-article.php';
         return ob_get_clean();
