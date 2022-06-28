@@ -29,7 +29,7 @@ class Message
                 <div class="alert alert-danger d-flex justify-content-around mt-5" role="alert">
                     <?= $message ?>
                     <a class="btn btn-secondary" href="/index.php?page=home">
-                        home</a>
+                        Accueil</a>
                 </div>  
         <?php
         unset($_SESSION['message']);

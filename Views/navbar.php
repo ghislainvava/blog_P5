@@ -6,7 +6,7 @@
             <ul class="navbar-nav mx-auto">
                  
                 <li class="nav-item px-lg-4">
-                    <a class="nav-link text-uppercase" href="index.php?page=home">Home</a>
+                    <a class="nav-link text-uppercase" href="index.php?page=home">Accueil</a>
                 </li>
                 <li class="nav-item px-lg-4" >
                     <a class="nav-link text-uppercase" href="index.php?page=articles">Articles</a>
